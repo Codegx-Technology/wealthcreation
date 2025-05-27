@@ -5,15 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0c2340" />
   <title>Secrets to Wealth Creation & Leadership in the Marketplace Conference - London</title>
+  <!-- Preload critical resources for faster loading -->
+  <link rel="preload" href="css/styles.css" as="style">
+  <link rel="preload" href="css/responsive.css" as="style">
+  <link rel="preload" href="images/background.jpg" as="image">
+
+  <!-- Critical CSS loaded first -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Non-critical CSS loaded with media query optimization -->
+  <link rel="stylesheet" href="css/forms.css" media="all">
+  <link rel="stylesheet" href="css/sections.css" media="all">
+  <link rel="stylesheet" href="css/animations.css" media="all">
+
+  <!-- External fonts with display=swap for faster loading -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- External CSS Files for Better Performance -->
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/forms.css">
-  <link rel="stylesheet" href="css/sections.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <link rel="stylesheet" href="css/responsive.css">
 </head>
 
 <body>
@@ -269,11 +277,30 @@
     </footer>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDK loaded asynchronously for better performance -->
+  <script async src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script async src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
-  <!-- External JavaScript -->
-  <script src="js/app.js"></script>
+  <!-- External JavaScript with defer for optimal loading -->
+  <script defer src="js/app.js"></script>
+
+  <!-- Critical mobile performance script -->
+  <script>
+    // Immediate mobile optimizations
+    if (window.innerWidth <= 768) {
+      document.documentElement.classList.add('mobile-device');
+      // Disable smooth scrolling on very old mobile browsers
+      if (!('scrollBehavior' in document.documentElement.style)) {
+        document.documentElement.style.scrollBehavior = 'auto';
+      }
+    }
+
+    // Preload critical images for faster loading
+    const criticalImages = ['images/background.jpg', 'images/wealthcreationlondon.png'];
+    criticalImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  </script>
 </body>
 </html>

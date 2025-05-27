@@ -13,32 +13,37 @@ const firebaseConfig = {
 
 // Performance optimization: Preload critical resources
 function preloadCriticalResources() {
-  // Preload hero image
-  const heroImg = new Image();
-  heroImg.src = 'images/background.jpg';
-  
-  // Preload QR code image
-  const qrImg = new Image();
-  qrImg.src = 'images/wealthcreationlondon.png';
-  
-  // Preload other images
-  const bgImg = new Image();
-  bgImg.src = 'images/london_skyline.jpg';
+  // Only preload on desktop or fast connections
+  if (navigator.connection && navigator.connection.effectiveType === '4g' || window.innerWidth > 768) {
+    // Preload hero image
+    const heroImg = new Image();
+    heroImg.src = 'images/background.jpg';
+
+    // Preload QR code image
+    const qrImg = new Image();
+    qrImg.src = 'images/wealthcreationlondon.png';
+
+    // Preload other images only on desktop
+    if (window.innerWidth > 768) {
+      const bgImg = new Image();
+      bgImg.src = 'images/london_skyline.jpg';
+    }
+  }
 }
 
 // Initialize application when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded, initializing application");
-  
+
   // Preload resources for better performance
   preloadCriticalResources();
-  
+
   // Initialize Firebase and form handling
   initializeFirebase();
-  
+
   // Initialize performance optimizations
   initializePerformanceOptimizations();
-  
+
   // Initialize accessibility features
   initializeAccessibility();
 });
@@ -117,7 +122,7 @@ function initializeFirebase() {
 
           // Reset form
           form.reset();
-          
+
           // Track successful submission
           trackEvent('form_submission', 'success', formData.email);
 
@@ -129,10 +134,10 @@ function initializeFirebase() {
             formStatus.textContent = 'There was a problem submitting your registration. Please try again.';
             formStatus.className = 'form-status error';
           }
-          
+
           // Track failed submission
           trackEvent('form_submission', 'error', error.message);
-          
+
         } finally {
           if (submitButton) {
             submitButton.disabled = false;
@@ -148,9 +153,16 @@ function initializeFirebase() {
 
 // Performance optimizations
 function initializePerformanceOptimizations() {
+  // Mobile-first performance optimizations
+  const isMobile = window.innerWidth <= 768;
+  const isSlowConnection = navigator.connection &&
+    (navigator.connection.effectiveType === 'slow-2g' ||
+     navigator.connection.effectiveType === '2g' ||
+     navigator.connection.effectiveType === '3g');
+
   // Lazy load non-critical images
   const lazyImages = document.querySelectorAll('img[data-src]');
-  
+
   if ('IntersectionObserver' in window) {
     const imageObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
@@ -161,6 +173,9 @@ function initializePerformanceOptimizations() {
           imageObserver.unobserve(img);
         }
       });
+    }, {
+      // Adjust root margin based on connection speed
+      rootMargin: isSlowConnection ? '50px' : '100px'
     });
 
     lazyImages.forEach(img => imageObserver.observe(img));
@@ -171,24 +186,50 @@ function initializePerformanceOptimizations() {
     });
   }
 
-  // Optimize animations for mobile
-  if (window.innerWidth <= 768) {
+  // Optimize for mobile devices
+  if (isMobile) {
     document.body.classList.add('mobile-optimized');
+
+    // Disable expensive animations on slow connections
+    if (isSlowConnection) {
+      document.body.classList.add('reduced-motion');
+    }
+
+    // Optimize touch events
+    document.addEventListener('touchstart', function() {}, { passive: true });
+    document.addEventListener('touchmove', function() {}, { passive: true });
   }
 
-  // Debounce resize events
+  // Debounce resize events with better performance
   let resizeTimeout;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(function() {
-      // Handle resize optimizations
-      if (window.innerWidth <= 768) {
-        document.body.classList.add('mobile-optimized');
-      } else {
-        document.body.classList.remove('mobile-optimized');
+      const newIsMobile = window.innerWidth <= 768;
+      if (newIsMobile !== isMobile) {
+        if (newIsMobile) {
+          document.body.classList.add('mobile-optimized');
+        } else {
+          document.body.classList.remove('mobile-optimized');
+        }
       }
-    }, 250);
-  });
+    }, 150); // Reduced timeout for better responsiveness
+  }, { passive: true });
+
+  // Monitor performance on mobile
+  if (isMobile && 'performance' in window) {
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+        console.log(`Mobile load time: ${loadTime}ms`);
+
+        // Track slow loading for optimization
+        if (loadTime > 3000) {
+          trackEvent('performance', 'slow_mobile_load', loadTime);
+        }
+      }, 0);
+    });
+  }
 }
 
 // Accessibility improvements
@@ -236,7 +277,7 @@ function trackEvent(action, category, label) {
       event_label: label
     });
   }
-  
+
   // Console log for development
   console.log(`Event tracked: ${action} - ${category} - ${label}`);
 }

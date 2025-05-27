@@ -1,5 +1,25 @@
 /* Responsive Design - Mobile First Approach */
 
+/* Base mobile-first styles */
+@media (max-width: 480px) {
+  /* Critical mobile optimizations loaded first */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  html {
+    font-size: 14px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+}
+
 /* Tablet and Medium Screens */
 @media (max-width: 992px) {
   .container {
@@ -321,10 +341,62 @@
   .director-info {
     font-size: 0.8rem;
   }
+
+  /* Additional mobile optimizations */
+  .social-links {
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .social-link {
+    min-width: 90px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border-radius: 25px;
+  }
+
+  .qr-code {
+    width: 140px;
+    height: 140px;
+  }
+
+  .learn-content {
+    gap: 15px;
+  }
+
+  .learn-item {
+    padding: 18px 12px;
+    border-radius: 10px;
+  }
+
+  /* Optimize button for mobile */
+  button {
+    width: 100%;
+    min-width: unset;
+    padding: 16px 20px;
+    font-size: 0.95rem;
+    border-radius: 30px;
+  }
+
+  /* Improve mobile form spacing */
+  .form-grid {
+    gap: 15px;
+  }
+
+  .payment-info {
+    padding: 18px 15px;
+    margin-bottom: 25px;
+  }
+
+  .bank-details {
+    gap: 12px;
+  }
 }
 
 /* Performance optimizations for mobile */
 @media (max-width: 768px) {
+  /* Disable expensive visual effects on mobile */
   .container::before,
   .container::after {
     display: none;
@@ -332,7 +404,7 @@
 
   .hero-section::before,
   .hero-section::after {
-    opacity: 0.8;
+    opacity: 0.6;
   }
 
   .payment-info-icon::after {
@@ -341,12 +413,36 @@
 
   /* Optimize background images for mobile */
   body::before {
-    opacity: 0.03;
+    opacity: 0.02;
     background-attachment: scroll;
+    background-size: cover;
+    will-change: auto;
   }
 
   .hero-section {
     background-attachment: scroll !important;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: auto;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Optimize animations for mobile */
+  * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.2s !important;
+  }
+
+  /* Improve scrolling performance */
+  body {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Optimize form performance */
+  input, select, textarea {
+    will-change: auto;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
   }
