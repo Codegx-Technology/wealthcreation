@@ -205,9 +205,11 @@
   }
 
   input, select, textarea {
-    padding: 14px 40px 14px 14px;
-    font-size: 0.95rem;
+    padding: 14px 38px 14px 12px;
+    font-size: 0.9rem;
     border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .input-icon {
@@ -225,8 +227,11 @@
 
   ::placeholder {
     opacity: 0.6;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Ensure labels don't get cut off on very small screens */
@@ -238,6 +243,22 @@
 
     .form-group {
       margin-bottom: 3px;
+    }
+
+    input, select, textarea {
+      padding: 12px 35px 12px 10px;
+      font-size: 0.85rem;
+    }
+
+    ::placeholder {
+      font-size: 0.8rem;
+    }
+
+    .input-icon {
+      right: 10px;
+      font-size: 0.8rem;
+      width: 14px;
+      height: 14px;
     }
   }
 
