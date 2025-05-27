@@ -255,7 +255,7 @@ header:hover {
   border-radius: 16px;
   box-shadow: var(--shadow-lg), 0 0 40px rgba(198, 163, 67, 0.08);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   z-index: 1;
   border: var(--glass-border);
   backdrop-filter: blur(20px);

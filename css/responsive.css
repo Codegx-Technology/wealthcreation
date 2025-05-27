@@ -178,7 +178,7 @@
   }
 
   .input-icon {
-    top: 50%;
+    top: calc(50% + 12px);
     right: 12px;
     font-size: 0.85rem;
     width: 16px;

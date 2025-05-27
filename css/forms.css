@@ -110,6 +110,7 @@
 
 .form-group {
   position: relative;
+  overflow: visible;
 }
 
 .form-group.full-width {
@@ -180,7 +181,7 @@ input:focus, select:focus, textarea:focus {
 
 .input-icon {
   position: absolute;
-  top: 50%;
+  top: calc(50% + 14px);
   right: 16px;
   transform: translateY(-50%);
   color: var(--text-light);
@@ -199,6 +200,7 @@ input:focus, select:focus, textarea:focus {
 .form-group:hover .input-icon {
   color: var(--secondary);
   transform: translateY(-50%) scale(1.1);
+  top: calc(50% + 14px);
 }
 
 .org-input {
