@@ -128,7 +128,7 @@ label {
 
 input, select, textarea {
   width: 100%;
-  padding: 16px 18px;
+  padding: 16px 50px 16px 18px;
   border: 1px solid rgba(225, 225, 225, 0.8);
   border-radius: 10px;
   font-size: 1rem;
@@ -150,8 +150,8 @@ input::before, select::before, textarea::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.1), 
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.1),
     rgba(198, 163, 67, 0.05)
   );
   border-radius: 10px;
@@ -185,6 +185,11 @@ input:focus, select:focus, textarea:focus {
   pointer-events: none;
   transition: all var(--transition-normal);
   z-index: 2;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form-group:hover .input-icon {
@@ -197,7 +202,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .org-icon {
-  right: 20px;
+  right: 18px;
 }
 
 #referenceNumber {
