@@ -195,6 +195,15 @@
     line-height: 1.2;
   }
 
+  /* Switch to mobile labels on small screens */
+  .desktop-label {
+    display: none;
+  }
+
+  .mobile-label {
+    display: inline;
+  }
+
   input, select, textarea {
     padding: 14px 40px 14px 14px;
     font-size: 0.95rem;
