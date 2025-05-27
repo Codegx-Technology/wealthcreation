@@ -127,12 +127,15 @@
   }
 
   .hero-section {
-    height: 30vh;
-    min-height: 200px;
-    margin-bottom: 20px;
+    height: 25vh;
+    min-height: 180px;
+    margin-bottom: 15px;
     background-position: center 10%;
-    margin-top: 10px;
+    margin-top: 8px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background-attachment: scroll;
+    animation: none;
+    background-size: cover;
   }
 
   .container {
@@ -169,21 +172,22 @@
   }
 
   input, select, textarea {
-    padding: 14px 45px 14px 16px;
+    padding: 14px 40px 14px 14px;
     font-size: 0.95rem;
     border-radius: 8px;
   }
 
   .input-icon {
     top: 50%;
-    right: 15px;
-    font-size: 0.9rem;
-    width: 18px;
-    height: 18px;
+    right: 12px;
+    font-size: 0.85rem;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
   }
 
   .org-icon {
-    right: 20px;
+    right: 12px;
   }
 
   ::placeholder {
@@ -333,6 +337,18 @@
 
   .payment-info-icon::after {
     animation: none;
+  }
+
+  /* Optimize background images for mobile */
+  body::before {
+    opacity: 0.03;
+    background-attachment: scroll;
+  }
+
+  .hero-section {
+    background-attachment: scroll !important;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 }
 
