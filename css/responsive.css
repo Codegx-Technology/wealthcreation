@@ -428,11 +428,11 @@
   }
 
   button:hover {
-    color: var(--dark) !important;
+    color: var(--light) !important;
   }
 
   button:hover i {
-    color: var(--dark) !important;
+    color: var(--light) !important;
   }
 
   /* Improve mobile form spacing */

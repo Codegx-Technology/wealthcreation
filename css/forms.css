@@ -322,7 +322,7 @@ button::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+  background: linear-gradient(135deg, #1a4b73 0%, #2563eb 100%);
   opacity: 0;
   transition: opacity var(--transition-normal);
   border-radius: 50px;
@@ -330,9 +330,9 @@ button::before {
 
 button:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow-lg), 0 0 30px rgba(198, 163, 67, 0.3);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(37, 99, 235, 0.3);
   border-color: rgba(255, 255, 255, 0.2);
-  color: var(--dark) !important;
+  color: var(--light) !important;
 }
 
 button:hover::after {
@@ -355,5 +355,5 @@ button i {
 }
 
 button:hover i {
-  color: var(--dark) !important;
+  color: var(--light) !important;
 }
