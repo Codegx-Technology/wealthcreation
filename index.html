@@ -4,11 +4,139 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0c2340" />
+
+  <!-- SEO and Performance Meta Tags -->
+  <meta name="description" content="Register for the exclusive Secrets to Wealth Creation & Leadership Conference in London featuring Dr. Cindy Trimm. Learn proven strategies for financial success and marketplace leadership." />
+  <meta name="keywords" content="wealth creation, leadership, conference, Dr. Cindy Trimm, London, financial success, marketplace, business development" />
+  <meta name="author" content="Suzzy Ltd" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="Secrets to Wealth Creation & Leadership Conference - London" />
+  <meta property="og:description" content="Join Dr. Cindy Trimm and industry leaders for an exclusive conference on wealth creation and marketplace leadership." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://wealthcreation.suzzyevents.com" />
+  <meta property="og:image" content="https://wealthcreation.suzzyevents.com/images/wealthcreationlondon.png" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Secrets to Wealth Creation & Leadership Conference" />
+  <meta name="twitter:description" content="Register now for this exclusive conference featuring Dr. Cindy Trimm" />
+  <meta name="twitter:image" content="https://wealthcreation.suzzyevents.com/images/wealthcreationlondon.png" />
+
+  <!-- Performance and Security Meta Tags -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
   <title>Secrets to Wealth Creation & Leadership in the Marketplace Conference - London</title>
 
-  <!-- CRITICAL: Mobile-first CSS to prevent shaky loading -->
+  <!-- CRITICAL: Inline CSS for above-the-fold content -->
   <style>
-    /* Immediate mobile fixes - loaded before any other CSS */
+    /* Critical CSS for immediate rendering */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #0c2340;
+      --primary-light: #1a3a5f;
+      --secondary: #c6a343;
+      --light: #ffffff;
+      --dark: #051224;
+      --text: #2c3e50;
+      --text-light: #546e7a;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      opacity: 1;
+    }
+
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 25px 0;
+      background-color: rgba(12, 35, 64, 0.92);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(198, 163, 67, 0.2);
+      position: relative;
+      z-index: 10;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--light);
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .logo span {
+      color: #e9c46a;
+    }
+
+    .conference-subtitle {
+      font-size: 1.1rem;
+      color: var(--light);
+      opacity: 0.9;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .guest-speaker {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #e9c46a;
+      letter-spacing: 0.8px;
+      text-align: center;
+      padding: 3px 12px;
+      border-radius: 20px;
+      background: rgba(12, 35, 64, 0.3);
+      border: 1px solid rgba(198, 163, 67, 0.2);
+      display: inline-block;
+    }
+
+    .hero-section {
+      height: 50vh;
+      min-height: 400px;
+      width: 100%;
+      background: linear-gradient(to bottom, rgba(12, 35, 64, 0.2), rgba(12, 35, 64, 0.6)), url('images/background.jpg');
+      background-size: cover;
+      background-position: center 15%;
+      position: relative;
+      margin-bottom: 40px;
+      margin-top: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 50px;
+      border-radius: 16px;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(20px);
+    }
+
+    /* Mobile optimizations - immediate visibility */
     @media (max-width: 768px) {
       * {
         animation: none !important;
@@ -19,54 +147,52 @@
         animation-duration: 0s !important;
       }
 
-      body {
-        opacity: 1 !important;
-        animation: none !important;
-        transform: none !important;
-      }
-
-      .hero-section {
-        animation: none !important;
-        transform: none !important;
-      }
-
-      .container {
-        animation: none !important;
-        transform: none !important;
-        opacity: 1 !important;
-      }
-
-      .social-section,
-      .qr-section,
-      .learn-section,
-      .payment-info,
-      .form-grid,
-      .btn-container,
-      h1, h2, .subtitle {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
-        animation-delay: 0s !important;
-      }
+      body { opacity: 1 !important; }
+      .hero-section { height: 30vh; min-height: 250px; }
+      .container { margin: 30px 20px; padding: 30px 20px; }
+      .logo { font-size: 1.8rem; }
+      .conference-subtitle { font-size: 1rem; }
+      .guest-speaker { font-size: 0.9rem; }
     }
   </style>
-  <!-- Preload critical resources for faster loading -->
-  <link rel="preload" href="css/styles.css" as="style">
-  <link rel="preload" href="css/responsive.css" as="style">
-  <link rel="preload" href="images/background.jpg" as="image">
+  <!-- DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="//www.gstatic.com">
 
-  <!-- Critical CSS loaded first -->
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Preconnect to external domains for faster loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Non-critical CSS loaded with media query optimization -->
-  <link rel="stylesheet" href="css/forms.css" media="all">
-  <link rel="stylesheet" href="css/sections.css" media="all">
-  <link rel="stylesheet" href="css/animations.css" media="all">
+  <!-- Preload critical resources in optimal order -->
+  <link rel="preload" href="css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/responsive.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/forms.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
-  <!-- External fonts with display=swap for faster loading -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Critical CSS loaded synchronously -->
+  <noscript>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+  </noscript>
+
+  <!-- Non-critical CSS loaded asynchronously -->
+  <link rel="preload" href="css/sections.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/animations.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <!-- Fallback for non-critical CSS -->
+  <noscript>
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </noscript>
+
+  <!-- Critical image preloading with responsive considerations -->
+  <link rel="preload" href="images/background.jpg" as="image" media="(min-width: 769px)">
+  <link rel="preload" href="images/wealthcreationlondon.png" as="image">
 </head>
 
 <body>
@@ -322,31 +448,90 @@
     </footer>
   </div>
 
-  <!-- Firebase SDK loaded asynchronously for better performance -->
-  <script async src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script async src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-  <!-- External JavaScript with defer for optimal loading -->
-  <script defer src="js/app.js"></script>
-
-  <!-- Simplified mobile performance script -->
+  <!-- Critical performance script - loads first -->
   <script>
+    // Performance monitoring
+    const perfStart = performance.now();
+
     // Mobile device detection and optimization
-    if (window.innerWidth <= 768) {
+    const isMobile = window.innerWidth <= 768;
+    const isSlowConnection = navigator.connection && (navigator.connection.effectiveType === 'slow-2g' || navigator.connection.effectiveType === '2g');
+
+    if (isMobile) {
       document.documentElement.classList.add('mobile-device');
 
       // Disable smooth scrolling on very old mobile browsers
       if (!('scrollBehavior' in document.documentElement.style)) {
         document.documentElement.style.scrollBehavior = 'auto';
       }
-    } else {
-      // Preload critical images only on desktop for faster loading
+    }
+
+    // Intelligent resource loading based on connection speed
+    if (!isMobile && !isSlowConnection) {
+      // Preload critical images only on desktop with good connection
       const criticalImages = ['images/background.jpg', 'images/wealthcreationlondon.png'];
       criticalImages.forEach(src => {
-        const img = new Image();
-        img.src = src;
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = src;
+        document.head.appendChild(link);
+      });
+    }
+
+    // Performance tracking
+    window.addEventListener('load', () => {
+      const loadTime = performance.now() - perfStart;
+      console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
+
+      // Report slow loading for optimization
+      if (loadTime > 3000) {
+        console.warn('Slow page load detected:', loadTime);
+      }
+    });
+  </script>
+
+  <!-- Service Worker registration for caching -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => console.log('SW registered'))
+          .catch(error => console.log('SW registration failed'));
       });
     }
   </script>
+
+  <!-- Firebase SDK loaded conditionally -->
+  <script>
+    // Only load Firebase on form interaction to save bandwidth
+    let firebaseLoaded = false;
+    function loadFirebase() {
+      if (firebaseLoaded) return;
+      firebaseLoaded = true;
+
+      const script1 = document.createElement('script');
+      script1.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
+      script1.async = true;
+      document.head.appendChild(script1);
+
+      const script2 = document.createElement('script');
+      script2.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js';
+      script2.async = true;
+      document.head.appendChild(script2);
+    }
+
+    // Load Firebase when user interacts with form
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('registrationForm');
+      if (form) {
+        form.addEventListener('focus', loadFirebase, { once: true, passive: true });
+        form.addEventListener('click', loadFirebase, { once: true, passive: true });
+      }
+    });
+  </script>
+
+  <!-- Main application script with defer -->
+  <script defer src="js/app.js"></script>
 </body>
 </html>
