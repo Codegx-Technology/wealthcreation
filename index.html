@@ -246,7 +246,7 @@
         </div>
       </div>
 
-      <form id="registrationForm" action="https://formspree.io/f/your-formspree-id" method="POST">
+      <form id="registrationForm">
         <div class="form-grid">
           <div class="form-group">
             <label for="title">Title</label>
@@ -502,34 +502,9 @@
     }
   </script>
 
-  <!-- Firebase SDK loaded conditionally -->
-  <script>
-    // Only load Firebase on form interaction to save bandwidth
-    let firebaseLoaded = false;
-    function loadFirebase() {
-      if (firebaseLoaded) return;
-      firebaseLoaded = true;
-
-      const script1 = document.createElement('script');
-      script1.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
-      script1.async = true;
-      document.head.appendChild(script1);
-
-      const script2 = document.createElement('script');
-      script2.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js';
-      script2.async = true;
-      document.head.appendChild(script2);
-    }
-
-    // Load Firebase when user interacts with form
-    document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('registrationForm');
-      if (form) {
-        form.addEventListener('focus', loadFirebase, { once: true, passive: true });
-        form.addEventListener('click', loadFirebase, { once: true, passive: true });
-      }
-    });
-  </script>
+  <!-- Firebase SDK loaded for form submissions -->
+  <script async src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script async src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
   <!-- Main application script with defer -->
   <script defer src="js/app.js"></script>

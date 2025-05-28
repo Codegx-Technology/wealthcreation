@@ -13,7 +13,7 @@ This project provides an elegant, user-friendly registration system for conferen
 - **Responsive Design**: Fully responsive layout that works on mobile, tablet, and desktop devices
 - **Form Validation**: Client-side validation ensures all required fields are completed correctly
 - **Real-time Data Storage**: Firebase Firestore integration for secure, real-time data storage
-- **Alternative Form Submission**: Formspree integration as a backup submission method
+- **Secure Data Storage**: Firebase Firestore integration for reliable data management
 - **Modern UI**: Clean, professional interface with elegant animations and color scheme
 - **Error Handling**: Comprehensive error handling with user-friendly messages
 
@@ -27,8 +27,8 @@ This project provides an elegant, user-friendly registration system for conferen
   - Font Awesome 6.4.0
 
 - **Backend/Storage**:
-  - Firebase Firestore (primary data storage)
-  - Formspree (alternative form submission)
+  - Firebase Firestore (secure cloud database)
+  - Real-time data synchronization
 
 - **Deployment**:
   - Netlify (configured for deployment)
@@ -67,16 +67,21 @@ const firebaseConfig = {
 };
 ```
 
-### Formspree Configuration (Alternative)
+### Firebase Security Rules
 
-For Formspree integration:
+Configure Firestore security rules for production:
 
-1. Sign up at [formspree.io](https://formspree.io/)
-2. Create a new form and get your form ID
-3. Replace the placeholder in the form action attribute:
-   ```html
-   <form id="registrationForm" action="https://formspree.io/f/your-formspree-id" method="POST">
-   ```
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /registrations/{document} {
+      allow write: if true; // Allow form submissions
+      allow read: if false; // Restrict reading for privacy
+    }
+  }
+}
+```
 
 ## Usage
 
