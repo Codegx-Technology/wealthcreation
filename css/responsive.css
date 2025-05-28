@@ -481,10 +481,34 @@
     -webkit-backface-visibility: hidden;
   }
 
-  /* Optimize animations for mobile */
+  /* Disable problematic animations on mobile */
+  .hero-section {
+    animation: none !important;
+  }
+
+  .container::before {
+    animation: none !important;
+  }
+
+  .container {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* Simplify animations for mobile */
   * {
-    animation-duration: 0.3s !important;
-    transition-duration: 0.2s !important;
+    animation-duration: 0.2s !important;
+    transition-duration: 0.15s !important;
+  }
+
+  /* Remove staggered loading delays on mobile */
+  body,
+  h1, h2, .subtitle,
+  .payment-info,
+  .form-grid,
+  .btn-container {
+    animation-delay: 0s !important;
+    opacity: 1 !important;
   }
 
   /* Improve scrolling performance */
@@ -498,6 +522,41 @@
     will-change: auto;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
+  }
+
+  /* Prevent layout shifts on mobile */
+  .social-section,
+  .qr-section,
+  .learn-section {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Disable hover effects on mobile */
+  .container:hover,
+  .social-link:hover,
+  .learn-item:hover {
+    transform: none !important;
+  }
+
+  /* Optimize mobile loading */
+  @media (max-width: 480px) {
+    /* Force immediate visibility on mobile */
+    * {
+      animation: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    /* Only keep essential transitions */
+    button,
+    input:focus,
+    select:focus,
+    textarea:focus {
+      transition: background-color 0.1s ease, border-color 0.1s ease !important;
+    }
   }
 }
 

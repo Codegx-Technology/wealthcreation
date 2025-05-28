@@ -35,8 +35,26 @@ function preloadCriticalResources() {
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded, initializing application");
 
-  // Preload resources for better performance
-  preloadCriticalResources();
+  // Check if mobile device
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Immediate mobile optimizations
+    document.body.classList.add('mobile-device');
+
+    // Force immediate visibility on mobile to prevent shaky loading
+    const elements = document.querySelectorAll('*');
+    elements.forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      el.style.animation = 'none';
+    });
+  }
+
+  // Preload resources for better performance (only on desktop or fast connections)
+  if (!isMobile || (navigator.connection && navigator.connection.effectiveType === '4g')) {
+    preloadCriticalResources();
+  }
 
   // Initialize Firebase and form handling
   initializeFirebase();

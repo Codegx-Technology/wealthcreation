@@ -286,21 +286,46 @@
 
   <!-- Critical mobile performance script -->
   <script>
-    // Immediate mobile optimizations
+    // Immediate mobile optimizations to prevent shaky loading
     if (window.innerWidth <= 768) {
       document.documentElement.classList.add('mobile-device');
+
+      // Force immediate visibility on mobile
+      const style = document.createElement('style');
+      style.textContent = `
+        @media (max-width: 768px) {
+          * {
+            animation: none !important;
+            transition: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+          }
+          body {
+            opacity: 1 !important;
+          }
+          .hero-section {
+            animation: none !important;
+          }
+          .container {
+            animation: none !important;
+            transform: none !important;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+
       // Disable smooth scrolling on very old mobile browsers
       if (!('scrollBehavior' in document.documentElement.style)) {
         document.documentElement.style.scrollBehavior = 'auto';
       }
+    } else {
+      // Preload critical images only on desktop for faster loading
+      const criticalImages = ['images/background.jpg', 'images/wealthcreationlondon.png'];
+      criticalImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
     }
-
-    // Preload critical images for faster loading
-    const criticalImages = ['images/background.jpg', 'images/wealthcreationlondon.png'];
-    criticalImages.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
   </script>
 </body>
 </html>
