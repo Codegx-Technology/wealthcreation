@@ -41,14 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (isMobile) {
     // Immediate mobile optimizations
     document.body.classList.add('mobile-device');
-
-    // Force immediate visibility on mobile to prevent shaky loading
-    const elements = document.querySelectorAll('*');
-    elements.forEach(el => {
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-      el.style.animation = 'none';
-    });
+    // CSS handles the rest - no need for JavaScript manipulation
   }
 
   // Preload resources for better performance (only on desktop or fast connections)

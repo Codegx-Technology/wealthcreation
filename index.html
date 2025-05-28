@@ -5,6 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0c2340" />
   <title>Secrets to Wealth Creation & Leadership in the Marketplace Conference - London</title>
+
+  <!-- CRITICAL: Mobile-first CSS to prevent shaky loading -->
+  <style>
+    /* Immediate mobile fixes - loaded before any other CSS */
+    @media (max-width: 768px) {
+      * {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        animation-delay: 0s !important;
+        animation-duration: 0s !important;
+      }
+
+      body {
+        opacity: 1 !important;
+        animation: none !important;
+        transform: none !important;
+      }
+
+      .hero-section {
+        animation: none !important;
+        transform: none !important;
+      }
+
+      .container {
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+
+      .social-section,
+      .qr-section,
+      .learn-section,
+      .payment-info,
+      .form-grid,
+      .btn-container,
+      h1, h2, .subtitle {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        animation-delay: 0s !important;
+      }
+    }
+  </style>
   <!-- Preload critical resources for faster loading -->
   <link rel="preload" href="css/styles.css" as="style">
   <link rel="preload" href="css/responsive.css" as="style">
@@ -284,35 +329,11 @@
   <!-- External JavaScript with defer for optimal loading -->
   <script defer src="js/app.js"></script>
 
-  <!-- Critical mobile performance script -->
+  <!-- Simplified mobile performance script -->
   <script>
-    // Immediate mobile optimizations to prevent shaky loading
+    // Mobile device detection and optimization
     if (window.innerWidth <= 768) {
       document.documentElement.classList.add('mobile-device');
-
-      // Force immediate visibility on mobile
-      const style = document.createElement('style');
-      style.textContent = `
-        @media (max-width: 768px) {
-          * {
-            animation: none !important;
-            transition: none !important;
-            opacity: 1 !important;
-            transform: none !important;
-          }
-          body {
-            opacity: 1 !important;
-          }
-          .hero-section {
-            animation: none !important;
-          }
-          .container {
-            animation: none !important;
-            transform: none !important;
-          }
-        }
-      `;
-      document.head.appendChild(style);
 
       // Disable smooth scrolling on very old mobile browsers
       if (!('scrollBehavior' in document.documentElement.style)) {

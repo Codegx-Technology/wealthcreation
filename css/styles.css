@@ -52,6 +52,15 @@ body {
   }
 }
 
+/* Mobile: Force immediate visibility */
+@media (max-width: 768px) {
+  body {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 body::before {
   content: '';
   position: absolute;
