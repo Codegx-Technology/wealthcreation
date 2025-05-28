@@ -427,6 +427,14 @@
     border-radius: 30px;
   }
 
+  button:hover {
+    color: var(--dark) !important;
+  }
+
+  button:hover i {
+    color: var(--dark) !important;
+  }
+
   /* Improve mobile form spacing */
   .form-grid {
     gap: 18px;

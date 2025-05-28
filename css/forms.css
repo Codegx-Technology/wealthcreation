@@ -332,6 +332,7 @@ button:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lg), 0 0 30px rgba(198, 163, 67, 0.3);
   border-color: rgba(255, 255, 255, 0.2);
+  color: var(--dark) !important;
 }
 
 button:hover::after {
@@ -350,4 +351,9 @@ button:active {
 
 button i {
   margin-left: 10px;
+  transition: color var(--transition-normal);
+}
+
+button:hover i {
+  color: var(--dark) !important;
 }
