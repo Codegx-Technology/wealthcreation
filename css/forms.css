@@ -297,6 +297,12 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  z-index: 1;
+}
+
+button * {
+  position: relative;
+  z-index: 3;
 }
 
 button::after {
@@ -313,6 +319,7 @@ button::after {
     transparent
   );
   transition: left 0.5s ease;
+  z-index: 2;
 }
 
 button::before {
@@ -326,6 +333,7 @@ button::before {
   opacity: 0;
   transition: opacity var(--transition-normal);
   border-radius: 50px;
+  z-index: 1;
 }
 
 button:hover {
