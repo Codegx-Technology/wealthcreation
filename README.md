@@ -109,10 +109,9 @@ The site is configured for deployment on Netlify. To deploy:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
 
-This project is proprietary and owned by Suzzy Ltd. All rights reserved.
+&copy; 2025 Suzzy Ltd | All Rights Reserved 
 
 ---
 
-&copy; 2025 Suzzy Ltd | All Rights Reserved | Developed by Codegx Technologies
+Developed by Codegx Technologies
