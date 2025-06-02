@@ -115,4 +115,4 @@ This project is proprietary and owned by Suzzy Ltd. All rights reserved.
 
 ---
 
-&copy; 2025 Suzzy Ltd | All Rights Reserved
+&copy; 2025 Suzzy Ltd | All Rights Reserved | Developed by Codegx Technologies
