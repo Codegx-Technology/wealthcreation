@@ -79,6 +79,18 @@ function toggleCustomAmount() {
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded, initializing application");
 
+  // Immediate button test
+  const testButton = document.getElementById('submitButton');
+  const testForm = document.getElementById('registrationForm');
+  console.log('🔍 Initial element check:');
+  console.log('Submit button exists:', !!testButton);
+  console.log('Registration form exists:', !!testForm);
+
+  if (testButton) {
+    console.log('Button type:', testButton.type);
+    console.log('Button disabled:', testButton.disabled);
+  }
+
   // Check if mobile device
   const isMobile = window.innerWidth <= 768;
 
@@ -110,6 +122,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize accessibility features
   initializeAccessibility();
+
+  // Initialize form submission (fallback if Firebase fails)
+  initializeFormSubmission();
 });
 
 // Initialize Stripe
@@ -247,6 +262,80 @@ function initializeCustomAmount() {
   }
 }
 
+// Initialize form submission (fallback if Firebase fails)
+function initializeFormSubmission() {
+  const form = document.getElementById('registrationForm');
+  const submitButton = document.getElementById('submitButton');
+  const formStatus = document.getElementById('formStatus');
+
+  console.log('Initializing form submission fallback...');
+  console.log('Form found:', !!form);
+  console.log('Submit button found:', !!submitButton);
+
+  if (!form || !submitButton) {
+    console.error('Critical form elements not found!');
+    return;
+  }
+
+  // Add click event listener to button as backup
+  submitButton.addEventListener('click', function(event) {
+    console.log('🔥 Submit button clicked!');
+    console.log('Event details:', {
+      type: event.type,
+      target: event.target.tagName,
+      buttonType: event.target.type,
+      disabled: event.target.disabled
+    });
+
+    // If the form's submit event doesn't fire, this will
+    if (event.target.type === 'submit') {
+      console.log('Button type is submit - form should handle this');
+    }
+  });
+
+  // Add additional event listeners for debugging
+  submitButton.addEventListener('mousedown', () => console.log('🖱️ Button mousedown'));
+  submitButton.addEventListener('mouseup', () => console.log('🖱️ Button mouseup'));
+  submitButton.addEventListener('focus', () => console.log('🎯 Button focused'));
+  submitButton.addEventListener('blur', () => console.log('🎯 Button blurred'));
+
+  // Add direct form submit listener as backup
+  form.addEventListener('submit', function(event) {
+    console.log('Form submit event fired!');
+
+    // If Firebase form handler isn't working, provide basic functionality
+    if (!window.firebaseFormHandlerActive) {
+      event.preventDefault();
+      console.log('Firebase handler not active, using fallback...');
+
+      if (formStatus) {
+        formStatus.textContent = 'Form submission detected! Please ensure Firebase is loaded for full functionality.';
+        formStatus.className = 'form-status loading';
+        formStatus.style.display = 'block';
+      }
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
+      }
+
+      // Re-enable button after 3 seconds
+      setTimeout(() => {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.innerHTML = 'Complete Registration <i class="fas fa-arrow-right"></i>';
+        }
+        if (formStatus) {
+          formStatus.textContent = 'Please check that all required fields are filled and try again.';
+          formStatus.className = 'form-status error';
+        }
+      }, 3000);
+    }
+  });
+
+  console.log('Form submission fallback initialized');
+}
+
 // Initialize Firebase
 function initializeFirebase() {
   console.log("Initializing Firebase");
@@ -275,10 +364,13 @@ function initializeFirebase() {
       const formStatus = document.getElementById('formStatus');
       const submitButton = document.getElementById('submitButton');
 
+      // Set flag to indicate Firebase handler is active
+      window.firebaseFormHandlerActive = true;
+
       // Form submission event listener
       form.addEventListener('submit', async function(event) {
         event.preventDefault();
-        console.log("Form submitted");
+        console.log("Form submitted via Firebase handler");
 
         // Show loading message
         if (formStatus) {
