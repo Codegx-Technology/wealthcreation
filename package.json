@@ -1,4 +1,5 @@
 {
+
   "name": "wealthform-deploy-ready",
   "version": "1.0.0",
   "description": "A responsive web application for managing registrations for the \"Secrets to Wealth Creation & Leadership in the Marketplace Conference\" in London featuring Dr. Cindy Trimm.",
@@ -18,3 +19,48 @@
     "stripe": "^18.2.1"
   }
 }
+
+  "name": "wealth-creation-registration",
+  "version": "1.0.0",
+  "description": "Registration system for Wealth Creation & Leadership Conference with Stripe integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"Static site - no build required\"",
+    "serve": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "conference",
+    "registration",
+    "stripe",
+    "payment",
+    "firebase",
+    "wealth-creation",
+    "leadership"
+  ],
+  "author": "Codegx Technologies",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "stripe": "^14.0.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Codegx-Technology/wealthcreation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Codegx-Technology/wealthcreation/issues"
+  },
+  "homepage": "https://github.com/Codegx-Technology/wealthcreation#readme"
+}
+

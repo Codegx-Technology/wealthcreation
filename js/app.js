@@ -49,8 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
     preloadCriticalResources();
   }
 
+  // Initialize Stripe integration
+  initializeStripeIntegration();
+
   // Initialize Firebase and form handling
   initializeFirebase();
+
+  // Initialize payment method handling
+  initializePaymentMethods();
 
   // Initialize performance optimizations
   initializePerformanceOptimizations();
@@ -58,6 +64,67 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize accessibility features
   initializeAccessibility();
 });
+
+// Initialize Stripe Integration
+function initializeStripeIntegration() {
+  // Wait for Stripe integration script to load
+  window.addEventListener('load', function() {
+    if (window.StripeIntegration) {
+      // Validate Stripe configuration
+      if (window.StripeIntegration.validateConfig()) {
+        // Initialize Stripe
+        window.StripeIntegration.initialize()
+          .then(success => {
+            if (success) {
+              console.log('Stripe integration initialized successfully');
+            } else {
+              console.warn('Stripe integration failed to initialize');
+            }
+          })
+          .catch(error => {
+            console.error('Error initializing Stripe:', error);
+          });
+      } else {
+        console.warn('Stripe configuration not valid - using bank transfer only');
+      }
+    } else {
+      console.warn('Stripe integration script not loaded');
+    }
+  });
+}
+
+// Initialize payment method handling
+function initializePaymentMethods() {
+  const stripeRadio = document.getElementById('stripe-payment');
+  const bankRadio = document.getElementById('bank-transfer');
+  const stripeSection = document.getElementById('stripe-payment-section');
+  const bankSection = document.getElementById('bank-transfer-section');
+  const amountField = document.getElementById('amount');
+  const referenceField = document.getElementById('referenceNumber');
+
+  function togglePaymentSections() {
+    if (stripeRadio && stripeRadio.checked) {
+      if (stripeSection) stripeSection.style.display = 'block';
+      if (bankSection) bankSection.style.display = 'none';
+      // Make amount and reference optional for Stripe payments
+      if (amountField) amountField.removeAttribute('required');
+      if (referenceField) referenceField.removeAttribute('required');
+    } else {
+      if (stripeSection) stripeSection.style.display = 'none';
+      if (bankSection) bankSection.style.display = 'block';
+      // Make amount and reference required for bank transfers
+      if (amountField) amountField.setAttribute('required', 'required');
+      if (referenceField) referenceField.setAttribute('required', 'required');
+    }
+  }
+
+  // Initial setup
+  togglePaymentSections();
+
+  // Add event listeners
+  if (stripeRadio) stripeRadio.addEventListener('change', togglePaymentSections);
+  if (bankRadio) bankRadio.addEventListener('change', togglePaymentSections);
+}
 
 // Initialize Firebase
 function initializeFirebase() {
@@ -102,21 +169,55 @@ function initializeFirebase() {
         }
 
         try {
-          // Get form data
+          // Get payment method
+          const paymentMethodRadio = document.querySelector('input[name="paymentMethod"]:checked');
+          const paymentMethod = paymentMethodRadio ? paymentMethodRadio.value : 'bank';
+
+          // Get basic form data
           const formData = {
             title: form.title ? form.title.value : '',
             firstName: form.firstName ? form.firstName.value : '',
             secondName: form.secondName ? form.secondName.value : '',
             email: form.email ? form.email.value : '',
             phone: form.phone ? form.phone.value : '',
-            amount: form.amount ? form.amount.value : '',
             org: form.org ? form.org.value : '',
-            referenceNumber: form.referenceNumber ? form.referenceNumber.value : '',
+            paymentMethod: paymentMethod,
             timestamp: new Date().toISOString(),
             source: window.location.hostname,
             userAgent: navigator.userAgent,
             screenResolution: `${screen.width}x${screen.height}`
           };
+
+          if (paymentMethod === 'stripe' && window.StripeIntegration) {
+            // Handle Stripe payment
+            if (formStatus) {
+              formStatus.textContent = 'Processing payment...';
+            }
+
+            try {
+              const paymentResult = await window.StripeIntegration.processPayment(formData);
+
+              if (paymentResult.success) {
+                formData.amount = paymentResult.amount;
+                formData.paymentStatus = paymentResult.status;
+                formData.stripePaymentIntentId = paymentResult.paymentIntentId;
+                formData.referenceNumber = paymentResult.paymentIntentId;
+                formData.currency = paymentResult.currency;
+              } else {
+                throw new Error('Payment processing failed');
+              }
+            } catch (paymentError) {
+              throw new Error(`Payment failed: ${paymentError.message}`);
+            }
+          } else {
+            // Handle bank transfer
+            const manualAmount = document.getElementById('manual-amount');
+            const manualReference = document.getElementById('manual-reference');
+
+            formData.amount = manualAmount ? manualAmount.value : (form.amount ? form.amount.value : '');
+            formData.referenceNumber = manualReference ? manualReference.value : (form.referenceNumber ? form.referenceNumber.value : '');
+            formData.paymentStatus = 'pending_verification';
+          }
 
           console.log("Sending data to Firebase:", formData);
 
@@ -127,12 +228,21 @@ function initializeFirebase() {
           console.log("Document written with ID:", docRef.id);
 
           if (formStatus) {
-            formStatus.textContent = 'Registration successful! Thank you for registering.';
+            if (paymentMethod === 'stripe') {
+              formStatus.textContent = 'Payment successful! Registration complete. Thank you!';
+            } else {
+              formStatus.textContent = 'Registration submitted! Please complete your bank transfer using the details above.';
+            }
             formStatus.className = 'form-status success';
           }
 
           // Reset form
           form.reset();
+
+          // Clear Stripe card element if it exists
+          if (window.StripeIntegration && window.cardElement) {
+            window.cardElement.clear();
+          }
 
           // Track successful submission
           trackEvent('form_submission', 'success', formData.email);

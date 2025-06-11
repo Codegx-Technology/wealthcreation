@@ -366,3 +366,192 @@ button i {
 button:hover i {
   color: var(--light) !important;
 }
+
+/* Payment Method Selection Styles */
+.payment-method-section {
+  margin: 30px 0;
+  padding: 25px;
+  background: linear-gradient(135deg, rgba(12, 35, 64, 0.02), rgba(198, 163, 67, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(198, 163, 67, 0.15);
+  opacity: 0;
+  animation: fadeInStagger 0.8s ease-out forwards;
+  animation-delay: 0.9s;
+}
+
+.payment-method-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.payment-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.payment-method-option {
+  position: relative;
+}
+
+.payment-method-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.payment-method-label {
+  display: block;
+  padding: 20px;
+  border: 2px solid rgba(198, 163, 67, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.payment-method-label:hover {
+  border-color: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(198, 163, 67, 0.15);
+}
+
+.payment-method-option input[type="radio"]:checked + .payment-method-label {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(12, 35, 64, 0.05), rgba(198, 163, 67, 0.1));
+  box-shadow: 0 4px 15px rgba(12, 35, 64, 0.1);
+}
+
+.payment-method-content {
+  text-align: center;
+}
+
+.payment-method-content i {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.payment-method-content span {
+  font-weight: 600;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.payment-method-content small {
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
+/* Stripe Payment Section */
+.stripe-payment-section {
+  margin: 25px 0;
+  padding: 25px;
+  background: linear-gradient(135deg, rgba(12, 35, 64, 0.02), rgba(198, 163, 67, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(198, 163, 67, 0.15);
+  opacity: 0;
+  animation: fadeInStagger 0.8s ease-out forwards;
+  animation-delay: 1.1s;
+}
+
+.stripe-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.amount-selection {
+  margin-bottom: 20px;
+}
+
+.amount-selection label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.amount-selection select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid rgba(198, 163, 67, 0.2);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: var(--primary);
+  transition: all 0.3s ease;
+}
+
+.amount-selection select:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 10px rgba(198, 163, 67, 0.2);
+  outline: none;
+}
+
+.card-element {
+  padding: 15px;
+  border: 2px solid rgba(198, 163, 67, 0.2);
+  border-radius: 8px;
+  background: white;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.card-element:focus-within {
+  border-color: var(--secondary);
+  box-shadow: 0 0 10px rgba(198, 163, 67, 0.2);
+}
+
+.card-errors {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  display: none;
+}
+
+/* Bank Transfer Section */
+.bank-transfer-section {
+  margin: 25px 0;
+  padding: 25px;
+  background: linear-gradient(135deg, rgba(12, 35, 64, 0.02), rgba(198, 163, 67, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(198, 163, 67, 0.15);
+  opacity: 0;
+  animation: fadeInStagger 0.8s ease-out forwards;
+  animation-delay: 1.1s;
+}
+
+.bank-transfer-section .form-group {
+  margin-bottom: 20px;
+}
+
+/* Mobile Responsive for Payment Methods */
+@media (max-width: 768px) {
+  .payment-methods {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .payment-method-label {
+    padding: 15px;
+  }
+
+  .payment-method-content i {
+    font-size: 1.3rem;
+  }
+
+  .stripe-payment-section,
+  .bank-transfer-section,
+  .payment-method-section {
+    padding: 20px 15px;
+    margin: 20px 0;
+  }
+}
