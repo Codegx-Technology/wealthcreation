@@ -1,5 +1,11 @@
 // Wealth Creation Registration Form - Main JavaScript
 
+// Stripe configuration
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51234567890abcdef'; // Replace with your actual Stripe publishable key
+let stripe;
+let elements;
+let cardElement;
+
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCXiak3a4DluvlmBzniR1n7U7hkQ1J1lAM",
@@ -49,8 +55,14 @@ document.addEventListener('DOMContentLoaded', function() {
     preloadCriticalResources();
   }
 
+  // Initialize Stripe
+  initializeStripe();
+
   // Initialize Firebase and form handling
   initializeFirebase();
+
+  // Initialize payment method handling
+  initializePaymentMethods();
 
   // Initialize performance optimizations
   initializePerformanceOptimizations();
@@ -58,6 +70,78 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize accessibility features
   initializeAccessibility();
 });
+
+// Initialize Stripe
+function initializeStripe() {
+  if (typeof Stripe !== 'undefined') {
+    stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    elements = stripe.elements();
+
+    // Create card element
+    cardElement = elements.create('card', {
+      style: {
+        base: {
+          fontSize: '16px',
+          color: '#424770',
+          '::placeholder': {
+            color: '#aab7c4',
+          },
+        },
+        invalid: {
+          color: '#9e2146',
+        },
+      },
+    });
+
+    // Mount card element
+    cardElement.mount('#card-element');
+
+    // Handle real-time validation errors from the card Element
+    cardElement.on('change', ({error}) => {
+      const displayError = document.getElementById('card-errors');
+      if (error) {
+        displayError.textContent = error.message;
+      } else {
+        displayError.textContent = '';
+      }
+    });
+  } else {
+    console.error('Stripe SDK not loaded');
+  }
+}
+
+// Initialize payment method handling
+function initializePaymentMethods() {
+  const stripeRadio = document.getElementById('stripe-payment');
+  const bankRadio = document.getElementById('bank-transfer');
+  const stripeSection = document.getElementById('stripe-payment-section');
+  const bankSection = document.getElementById('bank-transfer-section');
+  const amountField = document.getElementById('amount');
+  const referenceField = document.getElementById('referenceNumber');
+
+  function togglePaymentSections() {
+    if (stripeRadio.checked) {
+      stripeSection.style.display = 'block';
+      bankSection.style.display = 'none';
+      // Make amount and reference optional for Stripe payments
+      if (amountField) amountField.removeAttribute('required');
+      if (referenceField) referenceField.removeAttribute('required');
+    } else {
+      stripeSection.style.display = 'none';
+      bankSection.style.display = 'block';
+      // Make amount and reference required for bank transfers
+      if (amountField) amountField.setAttribute('required', 'required');
+      if (referenceField) referenceField.setAttribute('required', 'required');
+    }
+  }
+
+  // Initial setup
+  togglePaymentSections();
+
+  // Add event listeners
+  if (stripeRadio) stripeRadio.addEventListener('change', togglePaymentSections);
+  if (bankRadio) bankRadio.addEventListener('change', togglePaymentSections);
+}
 
 // Initialize Firebase
 function initializeFirebase() {
@@ -91,7 +175,7 @@ function initializeFirebase() {
 
         // Show loading message
         if (formStatus) {
-          formStatus.textContent = 'Submitting your registration...';
+          formStatus.textContent = 'Processing your registration...';
           formStatus.className = 'form-status loading';
           formStatus.style.display = 'block';
         }
@@ -102,21 +186,79 @@ function initializeFirebase() {
         }
 
         try {
-          // Get form data
+          const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+          // Get basic form data
           const formData = {
             title: form.title ? form.title.value : '',
             firstName: form.firstName ? form.firstName.value : '',
             secondName: form.secondName ? form.secondName.value : '',
             email: form.email ? form.email.value : '',
             phone: form.phone ? form.phone.value : '',
-            amount: form.amount ? form.amount.value : '',
             org: form.org ? form.org.value : '',
-            referenceNumber: form.referenceNumber ? form.referenceNumber.value : '',
+            paymentMethod: paymentMethod,
             timestamp: new Date().toISOString(),
             source: window.location.hostname,
             userAgent: navigator.userAgent,
             screenResolution: `${screen.width}x${screen.height}`
           };
+
+          if (paymentMethod === 'stripe') {
+            // Handle Stripe payment
+            const ticketAmount = document.getElementById('ticket-amount').value;
+            if (!ticketAmount) {
+              throw new Error('Please select a ticket amount');
+            }
+
+            formData.amount = ticketAmount;
+            formData.paymentStatus = 'processing';
+
+            // Create payment intent on server
+            const response = await fetch('/create-payment-intent', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                amount: parseInt(ticketAmount),
+                currency: 'gbp'
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error('Failed to create payment intent');
+            }
+
+            const { clientSecret, paymentIntentId } = await response.json();
+
+            // Confirm payment with Stripe
+            const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
+              payment_method: {
+                card: cardElement,
+                billing_details: {
+                  name: `${formData.firstName} ${formData.secondName}`,
+                  email: formData.email,
+                },
+              }
+            });
+
+            if (error) {
+              throw new Error(error.message);
+            }
+
+            if (paymentIntent.status === 'succeeded') {
+              formData.paymentStatus = 'completed';
+              formData.stripePaymentIntentId = paymentIntent.id;
+              formData.referenceNumber = paymentIntent.id;
+            } else {
+              throw new Error('Payment was not successful');
+            }
+          } else {
+            // Handle bank transfer
+            formData.amount = document.getElementById('manual-amount').value;
+            formData.referenceNumber = document.getElementById('manual-reference').value;
+            formData.paymentStatus = 'pending_verification';
+          }
 
           console.log("Sending data to Firebase:", formData);
 
@@ -127,22 +269,29 @@ function initializeFirebase() {
           console.log("Document written with ID:", docRef.id);
 
           if (formStatus) {
-            formStatus.textContent = 'Registration successful! Thank you for registering.';
+            if (paymentMethod === 'stripe') {
+              formStatus.textContent = 'Payment successful! Registration complete. Thank you!';
+            } else {
+              formStatus.textContent = 'Registration submitted! Please complete your bank transfer using the details above.';
+            }
             formStatus.className = 'form-status success';
           }
 
           // Reset form
           form.reset();
+          if (cardElement) {
+            cardElement.clear();
+          }
 
           // Track successful submission
           trackEvent('form_submission', 'success', formData.email);
 
         } catch (error) {
           // Error
-          console.error('Error adding document:', error);
+          console.error('Error processing registration:', error);
 
           if (formStatus) {
-            formStatus.textContent = 'There was a problem submitting your registration. Please try again.';
+            formStatus.textContent = `Error: ${error.message}. Please try again.`;
             formStatus.className = 'form-status error';
           }
 
