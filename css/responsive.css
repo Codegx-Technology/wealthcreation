@@ -472,6 +472,24 @@
     animation: none;
   }
 
+  /* Ensure FontAwesome icons are always visible on mobile */
+  .fas, .fab, .far, .fal, .fad, .fass, .fasr, .fasl {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "Font Awesome 6 Pro" !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Payment method icons specific mobile fixes */
+  .payment-method-content .fas {
+    font-size: 1.8rem !important;
+    color: var(--primary) !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+    text-align: center !important;
+  }
+
   /* Optimize background images for mobile */
   body::before {
     opacity: 0.02;
