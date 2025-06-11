@@ -45,13 +45,33 @@ function preloadCriticalResources() {
 function toggleCustomAmount() {
   const ticketAmount = document.getElementById('ticket-amount');
   const customSection = document.getElementById('custom-amount-section');
+  const customInput = document.getElementById('custom-amount-input');
+
+  console.log('toggleCustomAmount called, value:', ticketAmount?.value);
 
   if (ticketAmount && customSection) {
     if (ticketAmount.value === 'custom') {
       customSection.style.display = 'block';
+      customSection.style.opacity = '1';
+      if (customInput) {
+        customInput.focus();
+        customInput.setAttribute('required', 'required');
+      }
+      console.log('Custom amount section shown');
     } else {
       customSection.style.display = 'none';
+      customSection.style.opacity = '0';
+      if (customInput) {
+        customInput.removeAttribute('required');
+        customInput.value = '';
+      }
+      console.log('Custom amount section hidden');
     }
+  } else {
+    console.error('toggleCustomAmount: Elements not found', {
+      ticketAmount: !!ticketAmount,
+      customSection: !!customSection
+    });
   }
 }
 
@@ -81,6 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize payment method handling
   initializePaymentMethods();
+
+  // Initialize custom amount functionality
+  initializeCustomAmount();
 
   // Initialize performance optimizations
   initializePerformanceOptimizations();
@@ -202,6 +225,26 @@ function initializePaymentMethods() {
   // Add event listeners
   if (stripeRadio) stripeRadio.addEventListener('change', togglePaymentSections);
   if (bankRadio) bankRadio.addEventListener('change', togglePaymentSections);
+}
+
+// Initialize custom amount functionality
+function initializeCustomAmount() {
+  const ticketAmountSelect = document.getElementById('ticket-amount');
+
+  if (ticketAmountSelect) {
+    // Add event listener for amount selection change
+    ticketAmountSelect.addEventListener('change', function() {
+      console.log('Ticket amount changed to:', this.value);
+      toggleCustomAmount();
+    });
+
+    // Initial call to set correct state
+    toggleCustomAmount();
+
+    console.log('Custom amount functionality initialized');
+  } else {
+    console.warn('Ticket amount select not found - custom amount functionality disabled');
+  }
 }
 
 // Initialize Firebase
