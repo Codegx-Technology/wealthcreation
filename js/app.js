@@ -1,7 +1,11 @@
 // Wealth Creation Registration Form - Main JavaScript
 
-// Stripe configuration
-const STRIPE_PUBLISHABLE_KEY = 'pk_live_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz'; // Replace with your actual Stripe publishable key
+// Production Environment Configuration
+const IS_PRODUCTION = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+const API_BASE_URL = IS_PRODUCTION ? 'https://your-domain.com' : 'http://localhost:3000';
+
+// Stripe configuration - LIVE KEYS (PRODUCTION READY)
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz';
 let stripe;
 let elements;
 let cardElement;
@@ -33,6 +37,20 @@ function preloadCriticalResources() {
     if (window.innerWidth > 768) {
       const bgImg = new Image();
       bgImg.src = 'images/london_skyline.jpg';
+    }
+  }
+}
+
+// Toggle custom amount section
+function toggleCustomAmount() {
+  const ticketAmount = document.getElementById('ticket-amount');
+  const customSection = document.getElementById('custom-amount-section');
+
+  if (ticketAmount && customSection) {
+    if (ticketAmount.value === 'custom') {
+      customSection.style.display = 'block';
+    } else {
+      customSection.style.display = 'none';
     }
   }
 }
@@ -272,7 +290,16 @@ function initializeFirebase() {
               throw new Error('Please select a ticket amount');
             }
 
-            const ticketAmount = ticketAmountElement.value;
+            let ticketAmount = ticketAmountElement.value;
+
+            // Handle custom amount
+            if (ticketAmount === 'custom') {
+              const customAmountElement = document.getElementById('custom-amount-input');
+              if (!customAmountElement || !customAmountElement.value || customAmountElement.value < 1) {
+                throw new Error('Please enter a valid custom amount');
+              }
+              ticketAmount = customAmountElement.value;
+            }
             formData.amount = ticketAmount;
             formData.paymentStatus = 'processing';
 
@@ -285,7 +312,7 @@ function initializeFirebase() {
               let response;
 
               try {
-                response = await fetch('http://localhost:3000/create-payment-intent', {
+                response = await fetch(`${API_BASE_URL}/create-payment-intent`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -383,13 +410,20 @@ function initializeFirebase() {
             formData.paymentStatus = 'pending_verification';
           }
 
+          // Add production metadata
+          formData.environment = IS_PRODUCTION ? 'production' : 'development';
+          formData.userAgent = navigator.userAgent;
+          formData.timestamp = new Date().toISOString();
+          formData.submissionId = `REG_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
           console.log("Sending data to Firebase:", formData);
 
           // Add to Firestore
           const docRef = await db.collection('registrations').add(formData);
 
           // Success
-          console.log("Document written with ID:", docRef.id);
+          console.log("✅ Registration saved with ID:", docRef.id);
+          console.log("📊 Submission ID:", formData.submissionId);
 
           if (formStatus) {
             if (paymentMethod === 'stripe') {

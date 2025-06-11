@@ -13,20 +13,38 @@ import subprocess
 import sys
 from datetime import datetime
 
-# Install stripe if not available
+# Try to import stripe, create a simple fallback if not available
 try:
     import stripe
+    STRIPE_AVAILABLE = True
 except ImportError:
-    print("Installing Stripe Python library...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "stripe"])
-    import stripe
+    print("⚠️ Stripe library not available. Install with: pip3 install stripe")
+    STRIPE_AVAILABLE = False
+
+    # Create a mock stripe module for basic functionality
+    class MockStripe:
+        class error:
+            class StripeError(Exception):
+                pass
+
+        @staticmethod
+        def PaymentIntent():
+            return None
+
+        api_key = None
+
+    stripe = MockStripe()
 
 class LiveStripeHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         # Initialize Stripe with secret key
         stripe_secret = os.getenv('STRIPE_SECRET_KEY', 'sk_live_YOUR_ACTUAL_SECRET_KEY_HERE')
-        
-        if stripe_secret == 'sk_live_YOUR_ACTUAL_SECRET_KEY_HERE':
+
+        if not STRIPE_AVAILABLE:
+            print("❌ ERROR: Stripe library not installed!")
+            print("Install with: pip3 install stripe")
+            self.stripe_configured = False
+        elif stripe_secret == 'sk_live_YOUR_ACTUAL_SECRET_KEY_HERE':
             print("❌ ERROR: STRIPE_SECRET_KEY not configured!")
             print("Please edit .env file and add your real sk_live_... key")
             self.stripe_configured = False
@@ -34,7 +52,7 @@ class LiveStripeHandler(http.server.SimpleHTTPRequestHandler):
             stripe.api_key = stripe_secret
             self.stripe_configured = True
             print(f"✅ Stripe configured with key: {stripe_secret[:12]}...")
-        
+
         super().__init__(*args, **kwargs)
     
     def do_POST(self):
@@ -63,7 +81,10 @@ class LiveStripeHandler(http.server.SimpleHTTPRequestHandler):
                 return
             
             print(f"💳 Creating LIVE payment intent for £{amount} {currency.upper()}")
-            
+
+            if not STRIPE_AVAILABLE:
+                raise Exception("Stripe library not available")
+
             # Create REAL Stripe payment intent
             payment_intent = stripe.PaymentIntent.create(
                 amount=int(amount * 100),  # Convert to pence
