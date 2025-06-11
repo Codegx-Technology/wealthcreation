@@ -1,1 +1,19 @@
- 
+{
+  "name": "wealthform-deploy-ready",
+  "version": "1.0.0",
+  "description": "A responsive web application for managing registrations for the \"Secrets to Wealth Creation & Leadership in the Marketplace Conference\" in London featuring Dr. Cindy Trimm.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10",
+    "stripe": "^18.2.1"
+  }
+}
