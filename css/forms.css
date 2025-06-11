@@ -153,11 +153,39 @@
   }
 
   .payment-method-label {
-    padding: 15px;
+    padding: 18px 15px;
+  }
+
+  .payment-method-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
   }
 
   .payment-method-content i {
-    font-size: 1.3rem;
+    font-size: 1.8rem !important;
+    color: var(--primary) !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    line-height: 1 !important;
+  }
+
+  .payment-method-content span {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: var(--primary) !important;
+    display: block !important;
+    margin-bottom: 5px !important;
+  }
+
+  .payment-method-content small {
+    font-size: 0.8rem !important;
+    color: var(--text-light) !important;
+    display: block !important;
   }
 
   .stripe-payment-section,

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Payment Method Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #0c2340;
+            margin-bottom: 30px;
+        }
+        
+        /* Payment Method Styles */
+        .payment-method-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(12, 35, 64, 0.1), rgba(198, 163, 67, 0.15));
+            border-radius: 12px;
+            border: 2px solid rgba(198, 163, 67, 0.4);
+        }
+        
+        .payment-method-title {
+            font-size: 1.3rem;
+            color: #0c2340;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .payment-method-option {
+            position: relative;
+        }
+        
+        .payment-method-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .payment-method-label {
+            display: block;
+            padding: 18px 15px;
+            border: 2px solid rgba(198, 163, 67, 0.4);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-method-label:hover {
+            border-color: #c6a343;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(198, 163, 67, 0.15);
+        }
+        
+        .payment-method-option input[type="radio"]:checked + .payment-method-label {
+            border-color: #0c2340;
+            background: linear-gradient(135deg, rgba(12, 35, 64, 0.05), rgba(198, 163, 67, 0.1));
+            box-shadow: 0 4px 15px rgba(12, 35, 64, 0.1);
+        }
+        
+        .payment-method-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+        }
+        
+        .payment-method-content i {
+            font-size: 1.8rem !important;
+            color: #0c2340 !important;
+            margin-bottom: 10px !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            line-height: 1 !important;
+        }
+        
+        .payment-method-content span {
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            color: #0c2340 !important;
+            display: block !important;
+            margin-bottom: 5px !important;
+        }
+        
+        .payment-method-content small {
+            font-size: 0.8rem !important;
+            color: #546e7a !important;
+            display: block !important;
+        }
+        
+        /* Ticket prices */
+        .ticket-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .ticket-section h3 {
+            color: #0c2340;
+            margin-bottom: 15px;
+        }
+        
+        .ticket-option {
+            padding: 10px;
+            margin: 10px 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        
+        .debug-info {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📱 Mobile Payment Test</h1>
+        
+        <div class="debug-info">
+            <strong>Screen Width:</strong> <span id="screenWidth"></span>px<br>
+            <strong>Device Type:</strong> <span id="deviceType"></span><br>
+            <strong>FontAwesome Loaded:</strong> <span id="fontAwesome"></span>
+        </div>
+        
+        <!-- Payment Method Selection -->
+        <div class="payment-method-section">
+            <h3 class="payment-method-title">Choose Payment Method</h3>
+            <div class="payment-methods">
+                <div class="payment-method-option">
+                    <input type="radio" id="stripe-payment" name="paymentMethod" value="stripe">
+                    <label for="stripe-payment" class="payment-method-label">
+                        <div class="payment-method-content">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Pay with Card (Stripe)</span>
+                            <small>Secure online payment</small>
+                        </div>
+                    </label>
+                </div>
+                <div class="payment-method-option">
+                    <input type="radio" id="bank-transfer" name="paymentMethod" value="bank" checked>
+                    <label for="bank-transfer" class="payment-method-label">
+                        <div class="payment-method-content">
+                            <i class="fas fa-university"></i>
+                            <span>Bank Transfer</span>
+                            <small>Manual bank transfer</small>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ticket Prices -->
+        <div class="ticket-section">
+            <h3>🎫 Updated Ticket Prices</h3>
+            <div class="ticket-option">Early Bird - £150</div>
+            <div class="ticket-option">Standard - £200</div>
+            <div class="ticket-option">Custom Amount</div>
+        </div>
+        
+        <div class="debug-info">
+            <strong>Icon Test:</strong><br>
+            Credit Card: <i class="fas fa-credit-card"></i><br>
+            University: <i class="fas fa-university"></i><br>
+            Arrow: <i class="fas fa-arrow-right"></i><br>
+            Phone: <i class="fas fa-phone"></i><br>
+            Email: <i class="fas fa-envelope"></i>
+        </div>
+    </div>
+    
+    <script>
+        // Debug information
+        document.getElementById('screenWidth').textContent = window.innerWidth;
+        document.getElementById('deviceType').textContent = window.innerWidth <= 768 ? 'Mobile' : 'Desktop';
+        
+        // Check if FontAwesome is loaded
+        const testIcon = document.createElement('i');
+        testIcon.className = 'fas fa-credit-card';
+        testIcon.style.position = 'absolute';
+        testIcon.style.left = '-9999px';
+        document.body.appendChild(testIcon);
+        
+        setTimeout(() => {
+            const computedStyle = window.getComputedStyle(testIcon);
+            const fontFamily = computedStyle.fontFamily;
+            const isLoaded = fontFamily.includes('Font Awesome') || fontFamily.includes('FontAwesome');
+            document.getElementById('fontAwesome').textContent = isLoaded ? 'Yes' : 'No';
+            document.body.removeChild(testIcon);
+        }, 100);
+        
+        // Test payment method selection
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                console.log('Payment method selected:', this.value);
+                alert('Payment method selected: ' + this.value);
+            });
+        });
+    </script>
+</body>
+</html>
