@@ -1,7 +1,7 @@
 // Wealth Creation Registration Form - Main JavaScript
 
 // Stripe configuration
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_51234567890abcdef'; // Replace with your actual Stripe publishable key
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz'; // Replace with your actual Stripe publishable key
 let stripe;
 let elements;
 let cardElement;
@@ -73,40 +73,81 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize Stripe
 function initializeStripe() {
-  if (typeof Stripe !== 'undefined') {
-    stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-    elements = stripe.elements();
+  try {
+    if (typeof Stripe !== 'undefined') {
+      // Check if we have a valid publishable key
+      if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY.includes('pk_test_51234567890abcdef')) {
+        console.warn('Stripe publishable key not configured - Stripe payments disabled');
+        // Hide Stripe payment option
+        const stripeOption = document.getElementById('stripe-payment');
+        if (stripeOption) {
+          stripeOption.disabled = true;
+          stripeOption.parentElement.style.opacity = '0.5';
+        }
+        // Select bank transfer by default
+        const bankOption = document.getElementById('bank-transfer');
+        if (bankOption) {
+          bankOption.checked = true;
+        }
+        return;
+      }
 
-    // Create card element
-    cardElement = elements.create('card', {
-      style: {
-        base: {
-          fontSize: '16px',
-          color: '#424770',
-          '::placeholder': {
-            color: '#aab7c4',
+      stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+      elements = stripe.elements();
+
+      // Create card element
+      cardElement = elements.create('card', {
+        style: {
+          base: {
+            fontSize: '16px',
+            color: '#424770',
+            '::placeholder': {
+              color: '#aab7c4',
+            },
+          },
+          invalid: {
+            color: '#9e2146',
           },
         },
-        invalid: {
-          color: '#9e2146',
-        },
-      },
-    });
+      });
 
-    // Mount card element
-    cardElement.mount('#card-element');
+      // Mount card element
+      const cardElementContainer = document.getElementById('card-element');
+      if (cardElementContainer) {
+        cardElement.mount('#card-element');
 
-    // Handle real-time validation errors from the card Element
-    cardElement.on('change', ({error}) => {
-      const displayError = document.getElementById('card-errors');
-      if (error) {
-        displayError.textContent = error.message;
+        // Handle real-time validation errors from the card Element
+        cardElement.on('change', ({error}) => {
+          const displayError = document.getElementById('card-errors');
+          if (error) {
+            displayError.textContent = error.message;
+            displayError.style.display = 'block';
+          } else {
+            displayError.textContent = '';
+            displayError.style.display = 'none';
+          }
+        });
+
+        console.log('Stripe initialized successfully');
       } else {
-        displayError.textContent = '';
+        console.error('Card element container not found');
       }
-    });
-  } else {
-    console.error('Stripe SDK not loaded');
+    } else {
+      console.error('Stripe SDK not loaded');
+    }
+  } catch (error) {
+    console.error('Error initializing Stripe:', error);
+    // Disable Stripe option on error
+    const stripeOption = document.getElementById('stripe-payment');
+    if (stripeOption) {
+      stripeOption.disabled = true;
+      stripeOption.parentElement.style.opacity = '0.5';
+    }
+    // Select bank transfer by default
+    const bankOption = document.getElementById('bank-transfer');
+    if (bankOption) {
+      bankOption.checked = true;
+    }
   }
 }
 
@@ -120,18 +161,20 @@ function initializePaymentMethods() {
   const referenceField = document.getElementById('referenceNumber');
 
   function togglePaymentSections() {
-    if (stripeRadio.checked) {
-      stripeSection.style.display = 'block';
-      bankSection.style.display = 'none';
+    if (stripeRadio && stripeRadio.checked) {
+      if (stripeSection) stripeSection.style.display = 'block';
+      if (bankSection) bankSection.style.display = 'none';
       // Make amount and reference optional for Stripe payments
       if (amountField) amountField.removeAttribute('required');
       if (referenceField) referenceField.removeAttribute('required');
+      console.log('Switched to Stripe payment');
     } else {
-      stripeSection.style.display = 'none';
-      bankSection.style.display = 'block';
+      if (stripeSection) stripeSection.style.display = 'none';
+      if (bankSection) bankSection.style.display = 'block';
       // Make amount and reference required for bank transfers
       if (amountField) amountField.setAttribute('required', 'required');
       if (referenceField) referenceField.setAttribute('required', 'required');
+      console.log('Switched to bank transfer');
     }
   }
 
@@ -145,16 +188,19 @@ function initializePaymentMethods() {
 
 // Initialize Firebase
 function initializeFirebase() {
-  // Wait for Firebase SDK to load
-  window.addEventListener('load', function() {
-    console.log("Window loaded, initializing Firebase");
+  console.log("Initializing Firebase");
 
-    // Initialize Firebase
-    if (typeof firebase !== 'undefined') {
+  // Check if Firebase is available
+  if (typeof firebase !== 'undefined') {
+    console.log('Firebase SDK loaded, initializing...');
+
+    try {
       firebase.initializeApp(firebaseConfig);
+      console.log('Firebase app initialized');
 
       // Initialize Firestore
       const db = firebase.firestore();
+      console.log('Firestore initialized');
 
       // Get form elements
       const form = document.getElementById('registrationForm');
@@ -186,16 +232,20 @@ function initializeFirebase() {
         }
 
         try {
-          const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+          // Get payment method - default to bank if not found
+          const paymentMethodElement = document.querySelector('input[name="paymentMethod"]:checked');
+          const paymentMethod = paymentMethodElement ? paymentMethodElement.value : 'bank';
+
+          console.log('Payment method selected:', paymentMethod);
 
           // Get basic form data
           const formData = {
-            title: form.title ? form.title.value : '',
-            firstName: form.firstName ? form.firstName.value : '',
-            secondName: form.secondName ? form.secondName.value : '',
-            email: form.email ? form.email.value : '',
-            phone: form.phone ? form.phone.value : '',
-            org: form.org ? form.org.value : '',
+            title: document.getElementById('title')?.value || '',
+            firstName: document.getElementById('firstName')?.value || '',
+            secondName: document.getElementById('secondName')?.value || '',
+            email: document.getElementById('email')?.value || '',
+            phone: document.getElementById('phone')?.value || '',
+            org: document.getElementById('org')?.value || '',
             paymentMethod: paymentMethod,
             timestamp: new Date().toISOString(),
             source: window.location.hostname,
@@ -203,60 +253,133 @@ function initializeFirebase() {
             screenResolution: `${screen.width}x${screen.height}`
           };
 
+          console.log('Collected form data:', formData);
+
+          // Validate required fields
+          if (!formData.firstName || !formData.secondName || !formData.email || !formData.phone) {
+            throw new Error('Please fill in all required fields (First Name, Last Name, Email, Phone)');
+          }
+
           if (paymentMethod === 'stripe') {
+            // Check if Stripe is properly configured
+            if (typeof stripe === 'undefined' || !stripe) {
+              throw new Error('Stripe payment is not available. Please use bank transfer or contact support.');
+            }
+
             // Handle Stripe payment
-            const ticketAmount = document.getElementById('ticket-amount').value;
-            if (!ticketAmount) {
+            const ticketAmountElement = document.getElementById('ticket-amount');
+            if (!ticketAmountElement || !ticketAmountElement.value) {
               throw new Error('Please select a ticket amount');
             }
 
+            const ticketAmount = ticketAmountElement.value;
             formData.amount = ticketAmount;
             formData.paymentStatus = 'processing';
 
-            // Create payment intent on server
-            const response = await fetch('/create-payment-intent', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                amount: parseInt(ticketAmount),
-                currency: 'gbp'
-              }),
-            });
+            try {
+              console.log('🚀 Starting LIVE Stripe payment process...');
+              console.log('⚠️ WARNING: This will process REAL MONEY!');
 
-            if (!response.ok) {
-              throw new Error('Failed to create payment intent');
-            }
+              // Try to use backend server for real payment processing
+              let useBackend = true;
+              let response;
 
-            const { clientSecret, paymentIntentId } = await response.json();
+              try {
+                response = await fetch('http://localhost:3000/create-payment-intent', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    amount: parseInt(ticketAmount),
+                    currency: 'gbp'
+                  }),
+                });
 
-            // Confirm payment with Stripe
-            const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
-              payment_method: {
-                card: cardElement,
-                billing_details: {
-                  name: `${formData.firstName} ${formData.secondName}`,
-                  email: formData.email,
-                },
+                if (!response.ok) {
+                  useBackend = false;
+                }
+              } catch (fetchError) {
+                console.log('Backend not available, using payment method capture');
+                useBackend = false;
               }
-            });
 
-            if (error) {
-              throw new Error(error.message);
-            }
+              if (useBackend && response) {
+                // Full payment processing with backend
+                const { clientSecret, paymentIntentId } = await response.json();
+                console.log('Payment intent created:', paymentIntentId);
 
-            if (paymentIntent.status === 'succeeded') {
-              formData.paymentStatus = 'completed';
-              formData.stripePaymentIntentId = paymentIntent.id;
-              formData.referenceNumber = paymentIntent.id;
-            } else {
-              throw new Error('Payment was not successful');
+                const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
+                  payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                      name: `${formData.firstName} ${formData.secondName}`,
+                      email: formData.email,
+                      phone: formData.phone,
+                    },
+                  }
+                });
+
+                if (error) {
+                  throw new Error(error.message);
+                }
+
+                if (paymentIntent.status === 'succeeded') {
+                  formData.paymentStatus = 'completed';
+                  formData.stripePaymentIntentId = paymentIntent.id;
+                  formData.referenceNumber = paymentIntent.id;
+                  formData.amount = ticketAmount;
+                  formData.currency = 'gbp';
+                  formData.livePayment = true;
+                  console.log('💰 PAYMENT SUCCESSFUL! Money deducted: £' + ticketAmount);
+                } else {
+                  throw new Error('Payment was not successful');
+                }
+              } else {
+                // Fallback: Payment method capture only
+                const {error: paymentMethodError, paymentMethod} = await stripe.createPaymentMethod({
+                  type: 'card',
+                  card: cardElement,
+                  billing_details: {
+                    name: `${formData.firstName} ${formData.secondName}`,
+                    email: formData.email,
+                    phone: formData.phone,
+                  },
+                });
+
+                if (paymentMethodError) {
+                  throw new Error(paymentMethodError.message);
+                }
+
+                formData.paymentStatus = 'payment_method_created';
+                formData.stripePaymentMethodId = paymentMethod.id;
+                formData.referenceNumber = paymentMethod.id;
+                formData.amount = ticketAmount;
+                formData.currency = 'gbp';
+                formData.livePayment = true;
+                console.log('💳 Payment method captured for manual processing');
+              }
+            } catch (stripeError) {
+              console.error('Stripe payment error:', stripeError);
+              throw new Error('Stripe payment failed. Please try bank transfer instead.');
             }
           } else {
             // Handle bank transfer
-            formData.amount = document.getElementById('manual-amount').value;
-            formData.referenceNumber = document.getElementById('manual-reference').value;
+            const manualAmountElement = document.getElementById('manual-amount');
+            const manualReferenceElement = document.getElementById('manual-reference');
+
+            // For bank transfer, get amount from manual fields or fallback to old amount field
+            const amountValue = manualAmountElement ? manualAmountElement.value :
+                              (form.amount ? form.amount.value : '');
+            const referenceValue = manualReferenceElement ? manualReferenceElement.value :
+                                 (form.referenceNumber ? form.referenceNumber.value : '');
+
+            if (!amountValue || !referenceValue) {
+              throw new Error('Please enter both amount paid and payment reference for bank transfer.');
+            }
+
+            formData.amount = amountValue;
+            formData.referenceNumber = referenceValue;
             formData.paymentStatus = 'pending_verification';
           }
 
@@ -270,7 +393,11 @@ function initializeFirebase() {
 
           if (formStatus) {
             if (paymentMethod === 'stripe') {
-              formStatus.textContent = 'Payment successful! Registration complete. Thank you!';
+              if (formData.livePayment) {
+                formStatus.textContent = '✅ Payment method captured! Your registration is being processed. You will receive confirmation shortly.';
+              } else {
+                formStatus.textContent = 'Payment successful! Registration complete. Thank you!';
+              }
             } else {
               formStatus.textContent = 'Registration submitted! Please complete your bank transfer using the details above.';
             }
@@ -289,10 +416,12 @@ function initializeFirebase() {
         } catch (error) {
           // Error
           console.error('Error processing registration:', error);
+          console.error('Error stack:', error.stack);
 
           if (formStatus) {
-            formStatus.textContent = `Error: ${error.message}. Please try again.`;
+            formStatus.textContent = `Registration Error: ${error.message}`;
             formStatus.className = 'form-status error';
+            formStatus.style.display = 'block';
           }
 
           // Track failed submission
@@ -305,10 +434,13 @@ function initializeFirebase() {
           }
         }
       });
-    } else {
-      console.error("Firebase SDK not loaded");
+
+    } catch (error) {
+      console.error('Error initializing Firebase:', error);
     }
-  });
+  } else {
+    console.error("Firebase SDK not loaded");
+  }
 }
 
 // Performance optimizations

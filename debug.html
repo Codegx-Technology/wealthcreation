@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Registration Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; margin-bottom: 5px; }
+        button { padding: 10px 20px; background: #007cba; color: white; border: none; cursor: pointer; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .loading { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>Debug Registration Form</h1>
+    
+    <form id="debugForm">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <select id="title" name="title">
+                <option value="">Select</option>
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Dr">Dr</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" value="John" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="secondName">Last Name</label>
+            <input type="text" id="secondName" name="secondName" value="Doe" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="john.doe@example.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" value="07123456789" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="org">Organisation</label>
+            <input type="text" id="org" name="org" value="Test Company">
+        </div>
+        
+        <div class="form-group">
+            <label>Payment Method</label>
+            <input type="radio" id="bank-transfer" name="paymentMethod" value="bank" checked>
+            <label for="bank-transfer">Bank Transfer</label>
+        </div>
+        
+        <div class="form-group">
+            <label for="manual-amount">Amount Paid</label>
+            <input type="text" id="manual-amount" name="manualAmount" value="75" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="manual-reference">Payment Reference</label>
+            <input type="text" id="manual-reference" name="manualReference" value="TEST123" required>
+        </div>
+        
+        <button type="submit">Test Registration</button>
+    </form>
+    
+    <div id="status" class="status" style="display: none;"></div>
+    
+    <div id="console-output">
+        <h3>Console Output:</h3>
+        <div id="console-log" style="background: #f5f5f5; padding: 10px; font-family: monospace; white-space: pre-wrap;"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Override console.log to show in page
+        const originalLog = console.log;
+        const originalError = console.error;
+        const consoleOutput = document.getElementById('console-log');
+        
+        function addToConsole(type, ...args) {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = `[${timestamp}] ${type}: ${args.join(' ')}\n`;
+            consoleOutput.textContent += message;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToConsole('LOG', ...args);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToConsole('ERROR', ...args);
+        };
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXiak3a4DluvlmBzniR1n7U7hkQ1J1lAM",
+            authDomain: "wealth-creation-registration.firebaseapp.com",
+            projectId: "wealth-creation-registration",
+            storageBucket: "wealth-creation-registration.firebasestorage.app",
+            messagingSenderId: "440514993252",
+            appId: "1:440514993252:web:47cc825e650523bc515371",
+            measurementId: "G-LXZ6HGN7LF"
+        };
+        
+        console.log('Starting debug form...');
+        
+        // Initialize Firebase
+        let db;
+        try {
+            console.log('Initializing Firebase...');
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log('Firebase initialized successfully');
+        } catch (error) {
+            console.error('Firebase initialization error:', error);
+        }
+        
+        // Form submission
+        document.getElementById('debugForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('Form submitted');
+            
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            status.className = 'status loading';
+            status.textContent = 'Processing...';
+            
+            try {
+                const form = e.target;
+                const formData = {
+                    title: form.title.value,
+                    firstName: form.firstName.value,
+                    secondName: form.secondName.value,
+                    email: form.email.value,
+                    phone: form.phone.value,
+                    org: form.org.value,
+                    paymentMethod: 'bank',
+                    amount: form.manualAmount.value,
+                    referenceNumber: form.manualReference.value,
+                    paymentStatus: 'pending_verification',
+                    timestamp: new Date().toISOString(),
+                    source: 'debug-form'
+                };
+                
+                console.log('Form data:', JSON.stringify(formData, null, 2));
+                
+                if (!db) {
+                    throw new Error('Firebase not initialized');
+                }
+                
+                console.log('Sending to Firestore...');
+                const docRef = await db.collection('registrations').add(formData);
+                console.log('Document written with ID:', docRef.id);
+                
+                status.className = 'status success';
+                status.textContent = 'Registration successful! Document ID: ' + docRef.id;
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                status.className = 'status error';
+                status.textContent = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

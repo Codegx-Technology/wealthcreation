@@ -164,31 +164,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Preload critical resources in optimal order -->
-  <link rel="preload" href="css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="css/responsive.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="css/forms.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-  <!-- Critical CSS loaded synchronously -->
-  <noscript>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/forms.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
-  </noscript>
-
-  <!-- Non-critical CSS loaded asynchronously -->
-  <link rel="preload" href="css/sections.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="css/animations.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-  <!-- Fallback for non-critical CSS -->
-  <noscript>
-    <link rel="stylesheet" href="css/sections.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  </noscript>
+  <!-- Load CSS files normally to avoid FOUC -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Critical image preloading with responsive considerations -->
   <link rel="preload" href="images/background.jpg" as="image" media="(min-width: 769px)">
@@ -322,7 +305,7 @@
           <h3 class="payment-method-title">Choose Payment Method</h3>
           <div class="payment-methods">
             <div class="payment-method-option">
-              <input type="radio" id="stripe-payment" name="paymentMethod" value="stripe" checked>
+              <input type="radio" id="stripe-payment" name="paymentMethod" value="stripe">
               <label for="stripe-payment" class="payment-method-label">
                 <div class="payment-method-content">
                   <i class="fas fa-credit-card"></i>
@@ -332,7 +315,7 @@
               </label>
             </div>
             <div class="payment-method-option">
-              <input type="radio" id="bank-transfer" name="paymentMethod" value="bank">
+              <input type="radio" id="bank-transfer" name="paymentMethod" value="bank" checked>
               <label for="bank-transfer" class="payment-method-label">
                 <div class="payment-method-content">
                   <i class="fas fa-university"></i>
@@ -344,17 +327,22 @@
           </div>
         </div>
 
-        <!-- Stripe Payment Section -->
-        <div id="stripe-payment-section" class="stripe-payment-section">
+        <!-- Stripe Payment Section (hidden by default) -->
+        <div id="stripe-payment-section" class="stripe-payment-section" style="display: none;">
           <h3 class="stripe-title">Secure Payment</h3>
           <div class="amount-selection">
             <label for="ticket-amount">Select Ticket Amount</label>
-            <select id="ticket-amount" name="ticketAmount" required>
+            <select id="ticket-amount" name="ticketAmount" onchange="toggleCustomAmount()">
               <option value="">Select Amount</option>
               <option value="50">Early Bird - £50</option>
               <option value="75">Standard - £75</option>
               <option value="100">VIP - £100</option>
+              <option value="custom">Custom Amount</option>
             </select>
+          </div>
+          <div id="custom-amount-section" class="custom-amount-section" style="display: none;">
+            <label for="custom-amount-input">Enter Custom Amount (£)</label>
+            <input type="number" id="custom-amount-input" name="customAmount" min="1" max="10000" step="1" placeholder="Enter amount">
           </div>
           <div id="card-element" class="card-element">
             <!-- Stripe Elements will create form elements here -->
@@ -362,18 +350,18 @@
           <div id="card-errors" class="card-errors" role="alert"></div>
         </div>
 
-        <!-- Bank Transfer Section (hidden by default) -->
-        <div id="bank-transfer-section" class="bank-transfer-section" style="display: none;">
+        <!-- Bank Transfer Section -->
+        <div id="bank-transfer-section" class="bank-transfer-section">
           <div class="form-group">
-            <label for="manual-amount">Amount Paid</label>
-            <input type="text" id="manual-amount" name="manualAmount" placeholder="Amount (£)" />
+            <label for="manual-amount">Amount Paid *</label>
+            <input type="text" id="manual-amount" name="manualAmount" placeholder="Amount (£)" required />
             <div class="input-icon">
               <i class="fas fa-pound-sign"></i>
             </div>
           </div>
           <div class="form-group">
-            <label for="manual-reference">Payment Reference</label>
-            <input type="text" id="manual-reference" name="manualReference" placeholder="Bank Transfer Reference" />
+            <label for="manual-reference">Payment Reference *</label>
+            <input type="text" id="manual-reference" name="manualReference" placeholder="Bank Transfer Reference" required />
             <div class="input-icon">
               <i class="fas fa-hashtag"></i>
             </div>
@@ -562,11 +550,11 @@
   <!-- Stripe SDK for payment processing -->
   <script src="https://js.stripe.com/v3/"></script>
 
-  <!-- Firebase SDK loaded for form submissions -->
-  <script async src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script async src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDK loaded synchronously to ensure availability -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
-  <!-- Main application script with defer -->
-  <script defer src="js/app.js"></script>
+  <!-- Main application script -->
+  <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Method Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f5f5f5; 
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        /* Payment Method Section */
+        .payment-method-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(12, 35, 64, 0.1), rgba(198, 163, 67, 0.15));
+            border-radius: 12px;
+            border: 2px solid rgba(198, 163, 67, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-method-title {
+            font-size: 1.3rem;
+            color: #0c2340;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .payment-method-option {
+            position: relative;
+        }
+
+        .payment-method-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .payment-method-label {
+            display: block;
+            padding: 20px;
+            border: 2px solid rgba(198, 163, 67, 0.4);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-method-label:hover {
+            border-color: #c6a343;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(198, 163, 67, 0.15);
+        }
+
+        .payment-method-option input[type="radio"]:checked + .payment-method-label {
+            border-color: #0c2340;
+            background: linear-gradient(135deg, rgba(12, 35, 64, 0.05), rgba(198, 163, 67, 0.1));
+            box-shadow: 0 4px 15px rgba(12, 35, 64, 0.1);
+        }
+
+        .payment-method-content {
+            text-align: center;
+        }
+
+        .payment-method-content i {
+            font-size: 1.5rem;
+            color: #0c2340;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .payment-method-content span {
+            font-weight: 600;
+            color: #0c2340;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .payment-method-content small {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .selected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        @media (max-width: 768px) {
+            .payment-methods {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Method Selection Test</h1>
+        <p>This shows what the payment method section should look like on your form:</p>
+        
+        <!-- Payment Method Selection -->
+        <div class="payment-method-section">
+            <h3 class="payment-method-title">Choose Payment Method</h3>
+            <div class="payment-methods">
+                <div class="payment-method-option">
+                    <input type="radio" id="stripe-payment" name="paymentMethod" value="stripe">
+                    <label for="stripe-payment" class="payment-method-label">
+                        <div class="payment-method-content">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Pay with Card (Stripe)</span>
+                            <small>Secure online payment</small>
+                        </div>
+                    </label>
+                </div>
+                <div class="payment-method-option">
+                    <input type="radio" id="bank-transfer" name="paymentMethod" value="bank" checked>
+                    <label for="bank-transfer" class="payment-method-label">
+                        <div class="payment-method-content">
+                            <i class="fas fa-university"></i>
+                            <span>Bank Transfer</span>
+                            <small>Manual bank transfer</small>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="status" class="status selected">
+            Currently selected: <span id="selected-method">Bank Transfer</span>
+        </div>
+
+        <h3>Instructions:</h3>
+        <ol>
+            <li><strong>If you can see this section</strong> - the payment methods should also be visible on your main form</li>
+            <li><strong>If you can't see this section</strong> - there might be a CSS loading issue</li>
+            <li><strong>Try clicking the options above</strong> to test the selection</li>
+        </ol>
+
+        <p><strong>Expected behavior on main form:</strong></p>
+        <ul>
+            <li>✅ <strong>Bank Transfer</strong> should be selected by default</li>
+            <li>✅ You should see "Amount Paid" and "Payment Reference" fields</li>
+            <li>✅ When you select <strong>Stripe</strong>, you should see ticket amount dropdown and card fields</li>
+        </ul>
+
+        <p><a href="http://localhost:8000" target="_blank">← Back to Main Form</a></p>
+    </div>
+
+    <script>
+        // Add interactivity
+        const radios = document.querySelectorAll('input[name="paymentMethod"]');
+        const statusDiv = document.getElementById('selected-method');
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'stripe') {
+                    statusDiv.textContent = 'Pay with Card (Stripe)';
+                } else {
+                    statusDiv.textContent = 'Bank Transfer';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
