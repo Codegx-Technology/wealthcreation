@@ -27,6 +27,42 @@ if (!isMobile && !isSlowConnection) {
   });
 }
 
+// Icon fallback for mobile devices - Force emoji display
+function forceEmojiIcons() {
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    const paymentIcons = document.querySelectorAll('.payment-method-content i');
+
+    paymentIcons.forEach(icon => {
+      if (icon.classList.contains('fa-credit-card')) {
+        icon.innerHTML = '💳';
+        icon.style.fontFamily = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+        icon.classList.add('emoji-fallback');
+      } else if (icon.classList.contains('fa-university')) {
+        icon.innerHTML = '🏦';
+        icon.style.fontFamily = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+        icon.classList.add('emoji-fallback');
+      }
+
+      // Ensure visibility
+      icon.style.fontSize = '2.5rem';
+      icon.style.lineHeight = '1';
+      icon.style.textAlign = 'center';
+      icon.style.color = '#0c2340';
+      icon.style.display = 'block';
+      icon.style.opacity = '1';
+      icon.style.visibility = 'visible';
+      icon.style.zIndex = '100';
+      icon.style.background = 'none';
+      icon.style.border = 'none';
+      icon.style.boxShadow = 'none';
+      icon.style.textShadow = 'none';
+      icon.style.filter = 'none';
+      icon.style.transform = 'none';
+    });
+  }
+}
+
 // Performance tracking
 window.addEventListener('load', () => {
   const loadTime = performance.now() - perfStart;
@@ -36,6 +72,16 @@ window.addEventListener('load', () => {
   if (loadTime > 3000) {
     console.warn('Slow page load detected:', loadTime);
   }
+
+  // Force emoji icons on mobile
+  setTimeout(forceEmojiIcons, 100);
+});
+
+// Also run immediately when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  forceEmojiIcons();
+  // Run again after a short delay
+  setTimeout(forceEmojiIcons, 500);
 });
 
 // Service Worker registration for caching

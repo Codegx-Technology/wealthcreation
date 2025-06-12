@@ -948,10 +948,40 @@ h2 {
     z-index: 10 !important;
   }
 
-  /* Remove any potential white overlays */
+  /* Remove any potential white overlays and pseudo-elements */
   .payment-method-content .fas::before,
-  .payment-method-content .fas::after {
+  .payment-method-content .fas::after,
+  .payment-method-content i::before,
+  .payment-method-content i::after {
     display: none !important;
+    content: none !important;
+    background: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Force icon visibility with emoji fallback */
+  .payment-method-content .fa-credit-card {
+    font-family: "Font Awesome 6 Free", "FontAwesome", sans-serif !important;
+  }
+
+  .payment-method-content .fa-credit-card:empty::after {
+    content: "💳" !important;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+    display: inline-block !important;
+    font-size: inherit !important;
+    color: inherit !important;
+  }
+
+  .payment-method-content .fa-university {
+    font-family: "Font Awesome 6 Free", "FontAwesome", sans-serif !important;
+  }
+
+  .payment-method-content .fa-university:empty::after {
+    content: "🏦" !important;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+    display: inline-block !important;
+    font-size: inherit !important;
+    color: inherit !important;
   }
 
   /* Ensure payment method labels are clickable */
@@ -1251,6 +1281,41 @@ h2 {
     gap: 12px;
   }
 
+  /* Force emoji display on mobile as immediate fallback */
+  .payment-method-content .fa-credit-card {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+  }
+
+  .payment-method-content .fa-credit-card::after {
+    content: "💳" !important;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+    display: inline-block !important;
+    font-size: 2.5rem !important;
+    color: var(--primary) !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 101 !important;
+  }
+
+  .payment-method-content .fa-university {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+  }
+
+  .payment-method-content .fa-university::after {
+    content: "🏦" !important;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+    display: inline-block !important;
+    font-size: 2.5rem !important;
+    color: var(--primary) !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 101 !important;
+  }
+
   .payment-method-label {
     padding: 12px 10px !important;
     min-height: 70px !important;
@@ -1271,7 +1336,7 @@ h2 {
   }
 
   .payment-method-content i {
-    font-size: 2rem !important;
+    font-size: 2.5rem !important;
     color: var(--primary) !important;
     margin: 0 0 8px 0 !important;
     padding: 0 !important;
@@ -1279,7 +1344,7 @@ h2 {
     opacity: 1 !important;
     visibility: visible !important;
     line-height: 1 !important;
-    font-family: "Font Awesome 6 Free" !important;
+    font-family: "Font Awesome 6 Free", "FontAwesome", "Apple Color Emoji", "Segoe UI Emoji", sans-serif !important;
     font-weight: 900 !important;
     text-align: center !important;
     background: none !important;
@@ -1289,8 +1354,46 @@ h2 {
     width: auto !important;
     height: auto !important;
     position: relative !important;
-    z-index: 10 !important;
+    z-index: 100 !important;
     box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  /* Remove all pseudo-elements that could create white overlays */
+  .payment-method-content i::before,
+  .payment-method-content i::after,
+  .payment-method-content .fas::before,
+  .payment-method-content .fas::after {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Force emoji fallback on mobile */
+  .payment-method-content .fa-credit-card:not(.fa-loaded) {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+  }
+
+  .payment-method-content .fa-credit-card:not(.fa-loaded)::after {
+    content: "💳" !important;
+    display: inline-block !important;
+    font-size: 2.5rem !important;
+    color: var(--primary) !important;
+  }
+
+  .payment-method-content .fa-university:not(.fa-loaded) {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+  }
+
+  .payment-method-content .fa-university:not(.fa-loaded)::after {
+    content: "🏦" !important;
+    display: inline-block !important;
+    font-size: 2.5rem !important;
+    color: var(--primary) !important;
   }
 
   .payment-method-content span {
