@@ -30,18 +30,25 @@ if (!isMobile && !isSlowConnection) {
 // Icon fallback for mobile devices - Force emoji display
 function forceEmojiIcons() {
   const isMobile = window.innerWidth <= 768;
+  console.log('🔧 forceEmojiIcons called - isMobile:', isMobile, 'width:', window.innerWidth);
+
   if (isMobile) {
     const paymentIcons = document.querySelectorAll('.payment-method-content i');
+    console.log('📱 Found payment icons:', paymentIcons.length);
 
-    paymentIcons.forEach(icon => {
+    paymentIcons.forEach((icon, index) => {
+      console.log(`🎯 Processing icon ${index}:`, icon.className);
+
       if (icon.classList.contains('fa-credit-card')) {
         icon.innerHTML = '💳';
         icon.style.fontFamily = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
         icon.classList.add('emoji-fallback');
+        console.log('💳 Set credit card emoji');
       } else if (icon.classList.contains('fa-university')) {
         icon.innerHTML = '🏦';
         icon.style.fontFamily = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
         icon.classList.add('emoji-fallback');
+        console.log('🏦 Set bank emoji');
       }
 
       // Ensure visibility
@@ -49,7 +56,9 @@ function forceEmojiIcons() {
       icon.style.lineHeight = '1';
       icon.style.textAlign = 'center';
       icon.style.color = '#0c2340';
-      icon.style.display = 'block';
+      icon.style.display = 'flex';
+      icon.style.alignItems = 'center';
+      icon.style.justifyContent = 'center';
       icon.style.opacity = '1';
       icon.style.visibility = 'visible';
       icon.style.zIndex = '100';
@@ -60,6 +69,10 @@ function forceEmojiIcons() {
       icon.style.filter = 'none';
       icon.style.transform = 'none';
     });
+
+    console.log('✅ Mobile emoji icons applied');
+  } else {
+    console.log('💻 Desktop view - skipping emoji icons');
   }
 }
 

@@ -1309,13 +1309,10 @@ h2 {
 
   /* Simple emoji icons for mobile - no FontAwesome complications */
   .payment-method-content i {
-    display: none !important; /* Hide FontAwesome completely on mobile */
-  }
-
-  .payment-method-content::before {
-    content: "💳";
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
     font-size: 2.5rem !important;
-    margin-right: 16px !important;
+    font-weight: normal !important;
+    font-style: normal !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1324,12 +1321,30 @@ h2 {
     background: linear-gradient(135deg, rgba(12, 35, 64, 0.1), rgba(198, 163, 67, 0.15)) !important;
     border-radius: 14px !important;
     border: 2px solid rgba(198, 163, 67, 0.2) !important;
+    margin-right: 16px !important;
     flex-shrink: 0 !important;
+    color: transparent !important;
+    text-align: center !important;
+    line-height: 1 !important;
   }
 
-  /* Bank transfer icon */
-  .payment-method-option:nth-child(2) .payment-method-content::before {
+  /* Force emoji content directly */
+  .payment-method-content .fa-credit-card {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+  }
+
+  .payment-method-content .fa-credit-card::before {
+    content: "💳" !important;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+    color: #0c2340 !important;
+    font-size: 2.5rem !important;
+  }
+
+  .payment-method-content .fa-university::before {
     content: "🏦" !important;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+    color: #0c2340 !important;
+    font-size: 2.5rem !important;
   }
 
   .payment-method-content span {

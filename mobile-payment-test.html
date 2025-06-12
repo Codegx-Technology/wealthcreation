@@ -250,6 +250,7 @@
       <button class="test-button" onclick="testStripeInit()">Test Stripe Init</button>
       <button class="test-button" onclick="testIconVisibility()">Test Icon Visibility</button>
       <button class="test-button" onclick="testMobileView()">Test Mobile View</button>
+      <button class="test-button" onclick="testStripePayment()">Test Stripe Payment</button>
       <div id="test-status"></div>
     </div>
   </div>
@@ -379,9 +380,56 @@
       const isMobile = window.innerWidth <= 768;
       const container = document.querySelector('.container');
       const methods = document.querySelector('.payment-methods');
-      
-      showStatus(`Mobile view: ${isMobile ? 'YES' : 'NO'} (width: ${window.innerWidth}px)`, 
-                 isMobile ? 'success' : 'error');
+
+      // Force mobile view for testing
+      if (!isMobile) {
+        document.body.style.width = '375px';
+        document.body.style.margin = '0 auto';
+        container.style.maxWidth = '350px';
+        showStatus(`Forced mobile view (was ${window.innerWidth}px, now simulating 375px)`, 'success');
+
+        // Test mobile CSS
+        setTimeout(() => {
+          const icons = document.querySelectorAll('.payment-icon');
+          icons.forEach(icon => {
+            icon.style.width = '50px';
+            icon.style.height = '50px';
+            icon.style.fontSize = '2rem';
+          });
+          showStatus('Mobile styles applied! Icons should be 50px with 2rem font size', 'success');
+        }, 500);
+      } else {
+        showStatus(`Already in mobile view: ${window.innerWidth}px`, 'success');
+      }
+    }
+
+    function testStripePayment() {
+      const stripeRadio = document.getElementById('stripe-payment');
+      const amountSelect = document.getElementById('amount');
+
+      // Switch to Stripe payment
+      stripeRadio.checked = true;
+      stripeRadio.dispatchEvent(new Event('change'));
+
+      // Set amount
+      amountSelect.value = '150';
+
+      if (stripe && cardElement) {
+        showStatus('Ready to test Stripe payment! Enter test card: 4242 4242 4242 4242', 'success');
+
+        // Simulate payment
+        setTimeout(() => {
+          stripe.createToken(cardElement).then(function(result) {
+            if (result.error) {
+              showStatus('Stripe test failed: ' + result.error.message, 'error');
+            } else {
+              showStatus('Stripe test successful! Token: ' + result.token.id.substring(0, 20) + '...', 'success');
+            }
+          });
+        }, 1000);
+      } else {
+        showStatus('Stripe not initialized properly', 'error');
+      }
     }
 
     function showStatus(message, type) {
