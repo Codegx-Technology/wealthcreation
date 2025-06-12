@@ -79,6 +79,19 @@ function toggleCustomAmount() {
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded, initializing application");
 
+  // Check for duplicate payment method titles and remove them
+  const paymentTitles = document.querySelectorAll('.payment-method-title');
+  console.log('🔍 Payment method titles found:', paymentTitles.length);
+
+  if (paymentTitles.length > 1) {
+    console.log('⚠️ Multiple payment method titles detected, removing duplicates...');
+    // Keep only the first one and remove the rest
+    for (let i = 1; i < paymentTitles.length; i++) {
+      paymentTitles[i].remove();
+      console.log('🗑️ Removed duplicate payment method title');
+    }
+  }
+
   // Immediate button test
   const testButton = document.getElementById('submitButton');
   const testForm = document.getElementById('registrationForm');
