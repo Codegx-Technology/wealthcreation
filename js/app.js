@@ -453,50 +453,74 @@ function initializeFirebase() {
               throw new Error('Stripe payment is not available. Please use bank transfer or contact support.');
             }
 
-            // Handle Stripe payment
+            // Handle Stripe payment - get amount from ticket selection or custom input
+            let ticketAmount;
             const ticketAmountElement = document.getElementById('ticket-amount');
-            if (!ticketAmountElement || !ticketAmountElement.value) {
-              throw new Error('Please select a ticket amount');
-            }
 
-            let ticketAmount = ticketAmountElement.value;
-
-            // Handle custom amount
-            if (ticketAmount === 'custom') {
-              const customAmountElement = document.getElementById('custom-amount-input');
-              if (!customAmountElement || !customAmountElement.value || customAmountElement.value < 1) {
-                throw new Error('Please enter a valid custom amount');
+            if (ticketAmountElement && ticketAmountElement.value) {
+              if (ticketAmountElement.value === 'custom') {
+                // Handle custom amount
+                const customAmountElement = document.getElementById('custom-amount-input');
+                if (!customAmountElement || !customAmountElement.value || parseFloat(customAmountElement.value) < 1) {
+                  throw new Error('Please enter a valid custom amount (minimum £1)');
+                }
+                ticketAmount = parseFloat(customAmountElement.value);
+              } else {
+                // Handle predefined ticket amounts
+                ticketAmount = parseFloat(ticketAmountElement.value);
               }
-              ticketAmount = customAmountElement.value;
+            } else {
+              // Fallback: check if there's a custom amount input directly
+              const customAmountElement = document.getElementById('custom-amount-input');
+              if (customAmountElement && customAmountElement.value && parseFloat(customAmountElement.value) >= 1) {
+                ticketAmount = parseFloat(customAmountElement.value);
+              } else {
+                throw new Error('Please select a ticket amount or enter a custom amount');
+              }
             }
+
+            if (!ticketAmount || ticketAmount < 1) {
+              throw new Error('Please enter a valid amount (minimum £1)');
+            }
+
             formData.amount = ticketAmount;
             formData.paymentStatus = 'processing';
 
             try {
               console.log('🚀 Starting LIVE Stripe payment process...');
-              console.log('⚠️ WARNING: This will process REAL MONEY!');
+              console.log(`⚠️ WARNING: This will charge £${ticketAmount} to the customer's card!`);
+              console.log('💰 REAL MONEY TRANSACTION IN PROGRESS...');
+
+              // Convert amount to pence for Stripe (Stripe uses smallest currency unit)
+              const amountInPence = Math.round(ticketAmount * 100);
+              console.log(`Amount: £${ticketAmount} = ${amountInPence} pence`);
 
               // Try to use backend server for real payment processing
               let useBackend = true;
               let response;
 
               try {
+                console.log('Attempting to connect to payment backend...');
                 response = await fetch(`${API_BASE_URL}/create-payment-intent`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    amount: parseInt(ticketAmount),
-                    currency: 'gbp'
+                    amount: amountInPence,
+                    currency: 'gbp',
+                    customer_email: formData.email,
+                    customer_name: `${formData.firstName} ${formData.secondName}`,
+                    description: `Wealth Creation Event Registration - £${ticketAmount}`
                   }),
                 });
 
                 if (!response.ok) {
+                  console.log('Backend response not OK, falling back to direct payment');
                   useBackend = false;
                 }
               } catch (fetchError) {
-                console.log('Backend not available, using payment method capture');
+                console.log('Backend not available, using direct Stripe payment');
                 useBackend = false;
               }
 
@@ -504,6 +528,7 @@ function initializeFirebase() {
                 // Full payment processing with backend
                 const { clientSecret, paymentIntentId } = await response.json();
                 console.log('Payment intent created:', paymentIntentId);
+                console.log('💳 Confirming payment with customer card...');
 
                 const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
                   payment_method: {
@@ -517,7 +542,8 @@ function initializeFirebase() {
                 });
 
                 if (error) {
-                  throw new Error(error.message);
+                  console.error('Payment confirmation error:', error);
+                  throw new Error(`Payment failed: ${error.message}`);
                 }
 
                 if (paymentIntent.status === 'succeeded') {
@@ -527,12 +553,19 @@ function initializeFirebase() {
                   formData.amount = ticketAmount;
                   formData.currency = 'gbp';
                   formData.livePayment = true;
-                  console.log('💰 PAYMENT SUCCESSFUL! Money deducted: £' + ticketAmount);
+                  formData.chargedAmount = ticketAmount;
+                  console.log('🎉 PAYMENT SUCCESSFUL! Money charged: £' + ticketAmount);
+                  console.log('💰 Customer has been charged and should receive bank notification');
+                  console.log('📧 Payment confirmation will be sent to:', formData.email);
                 } else {
-                  throw new Error('Payment was not successful');
+                  throw new Error(`Payment was not successful. Status: ${paymentIntent.status}`);
                 }
               } else {
-                // Fallback: Payment method capture only
+                // Direct payment processing without backend (for live payments)
+                console.log('🔄 Processing direct payment without backend...');
+                console.log('⚠️ Note: For live payments, you should use a backend server');
+
+                // Create payment method first
                 const {error: paymentMethodError, paymentMethod} = await stripe.createPaymentMethod({
                   type: 'card',
                   card: cardElement,
@@ -544,16 +577,22 @@ function initializeFirebase() {
                 });
 
                 if (paymentMethodError) {
-                  throw new Error(paymentMethodError.message);
+                  throw new Error(`Card validation failed: ${paymentMethodError.message}`);
                 }
 
-                formData.paymentStatus = 'payment_method_created';
+                // For live payments, you would typically create a payment intent on your backend
+                // This is a simplified version that captures the payment method
+                formData.paymentStatus = 'payment_method_captured';
                 formData.stripePaymentMethodId = paymentMethod.id;
                 formData.referenceNumber = paymentMethod.id;
                 formData.amount = ticketAmount;
                 formData.currency = 'gbp';
                 formData.livePayment = true;
-                console.log('💳 Payment method captured for manual processing');
+                formData.requiresManualProcessing = true;
+
+                console.log('💳 Payment method captured successfully');
+                console.log('⚠️ Manual processing required to complete payment');
+                console.log('🔧 Payment method ID:', paymentMethod.id);
               }
             } catch (stripeError) {
               console.error('Stripe payment error:', stripeError);
@@ -596,10 +635,12 @@ function initializeFirebase() {
 
           if (formStatus) {
             if (paymentMethod === 'stripe') {
-              if (formData.livePayment) {
-                formStatus.textContent = '✅ Payment method captured! Your registration is being processed. You will receive confirmation shortly.';
+              if (formData.paymentStatus === 'completed') {
+                formStatus.textContent = `🎉 Payment Successful! £${ticketAmount} has been charged to your card. You will receive confirmation emails shortly.`;
+              } else if (formData.requiresManualProcessing) {
+                formStatus.textContent = `⚠️ Payment method captured. Manual processing required to complete £${ticketAmount} charge. You will be contacted shortly.`;
               } else {
-                formStatus.textContent = 'Payment successful! Registration complete. Thank you!';
+                formStatus.textContent = '✅ Payment processed! Your registration is complete. Confirmation emails will be sent shortly.';
               }
             } else {
               formStatus.textContent = 'Registration submitted! Please complete your bank transfer using the details above.';
