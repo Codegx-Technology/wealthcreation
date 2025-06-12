@@ -259,34 +259,50 @@ function initializePaymentMethods() {
   console.log('Bank section found:', !!bankSection);
 
   function togglePaymentSections() {
-    console.log('Toggling payment sections...');
+    console.log('🔄 Toggling payment sections with smooth transitions...');
 
     if (stripeRadio && stripeRadio.checked) {
+      // Show Stripe section with animation
       if (stripeSection) {
+        stripeSection.classList.remove('hidden');
+        stripeSection.classList.add('show');
         stripeSection.style.display = 'block';
-        console.log('Showing Stripe section');
+        console.log('✨ Showing Stripe section with animation');
       }
+      // Hide bank section with animation
       if (bankSection) {
-        bankSection.style.display = 'none';
-        console.log('Hiding bank section');
+        bankSection.classList.add('hidden');
+        bankSection.classList.remove('show');
+        setTimeout(() => {
+          bankSection.style.display = 'none';
+        }, 500); // Wait for animation to complete
+        console.log('🎭 Hiding bank section with animation');
       }
       // Make manual amount and reference optional for Stripe payments
       if (manualAmountField) manualAmountField.removeAttribute('required');
       if (manualReferenceField) manualReferenceField.removeAttribute('required');
-      console.log('✅ Switched to Stripe payment');
+      console.log('💳 Switched to Stripe payment');
     } else {
+      // Hide Stripe section with animation
       if (stripeSection) {
-        stripeSection.style.display = 'none';
-        console.log('Hiding Stripe section');
+        stripeSection.classList.add('hidden');
+        stripeSection.classList.remove('show');
+        setTimeout(() => {
+          stripeSection.style.display = 'none';
+        }, 500); // Wait for animation to complete
+        console.log('🎭 Hiding Stripe section with animation');
       }
+      // Show bank section with animation
       if (bankSection) {
+        bankSection.classList.remove('hidden');
+        bankSection.classList.add('show');
         bankSection.style.display = 'block';
-        console.log('Showing bank section');
+        console.log('✨ Showing bank section with animation');
       }
       // Make manual amount and reference required for bank transfers
       if (manualAmountField) manualAmountField.setAttribute('required', 'required');
       if (manualReferenceField) manualReferenceField.setAttribute('required', 'required');
-      console.log('✅ Switched to bank transfer');
+      console.log('🏦 Switched to bank transfer');
     }
   }
 

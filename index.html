@@ -223,9 +223,11 @@
               <input type="radio" id="stripe-payment" name="paymentMethod" value="stripe">
               <label for="stripe-payment" class="payment-method-label">
                 <div class="payment-method-content">
-                  <i class="fas fa-credit-card"></i>
-                  <span>Pay with Card (Stripe)</span>
-                  <small>Secure online payment</small>
+                  <i class="fas fa-credit-card" aria-hidden="true"></i>
+                  <div class="payment-text">
+                    <span>Pay with Card (Stripe)</span>
+                    <small>Secure online payment</small>
+                  </div>
                 </div>
               </label>
             </div>
@@ -233,9 +235,11 @@
               <input type="radio" id="bank-transfer" name="paymentMethod" value="bank" checked>
               <label for="bank-transfer" class="payment-method-label">
                 <div class="payment-method-content">
-                  <i class="fas fa-university"></i>
-                  <span>Bank Transfer</span>
-                  <small>Manual bank transfer</small>
+                  <i class="fas fa-university" aria-hidden="true"></i>
+                  <div class="payment-text">
+                    <span>Bank Transfer</span>
+                    <small>Manual bank transfer</small>
+                  </div>
                 </div>
               </label>
             </div>
