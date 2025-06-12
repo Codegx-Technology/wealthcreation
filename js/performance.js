@@ -79,10 +79,22 @@ window.addEventListener('load', () => {
 
 // Also run immediately when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, forcing emoji icons...');
   forceEmojiIcons();
   // Run again after a short delay
   setTimeout(forceEmojiIcons, 500);
+  // Run again after longer delay to catch late-loading elements
+  setTimeout(forceEmojiIcons, 2000);
 });
+
+// Run immediately if DOM is already loaded
+if (document.readyState === 'loading') {
+  // DOM is still loading
+} else {
+  // DOM is already loaded
+  console.log('DOM already loaded, forcing emoji icons immediately...');
+  forceEmojiIcons();
+}
 
 // Service Worker registration for caching
 if ('serviceWorker' in navigator) {

@@ -1274,46 +1274,73 @@ h2 {
   margin-bottom: 20px;
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - Simplified for better visibility */
 @media (max-width: 768px) {
+  .payment-method-section {
+    padding: 16px;
+    margin: 20px 0;
+  }
+
+  .payment-method-title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
   .payment-methods {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
-  /* Force emoji display on mobile as immediate fallback */
-  .payment-method-content .fa-credit-card {
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+  .payment-method-label {
+    padding: 16px 20px !important;
+    min-height: 90px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
   }
 
-  .payment-method-content .fa-credit-card::after {
-    content: "💳" !important;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-    display: inline-block !important;
+  .payment-method-content {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  /* Simple emoji icons for mobile - no FontAwesome complications */
+  .payment-method-content i {
+    display: none !important; /* Hide FontAwesome completely on mobile */
+  }
+
+  .payment-method-content::before {
+    content: "💳";
     font-size: 2.5rem !important;
-    color: var(--primary) !important;
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    z-index: 101 !important;
+    margin-right: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 55px !important;
+    height: 55px !important;
+    background: linear-gradient(135deg, rgba(12, 35, 64, 0.1), rgba(198, 163, 67, 0.15)) !important;
+    border-radius: 14px !important;
+    border: 2px solid rgba(198, 163, 67, 0.2) !important;
+    flex-shrink: 0 !important;
   }
 
-  .payment-method-content .fa-university {
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-  }
-
-  .payment-method-content .fa-university::after {
+  /* Bank transfer icon */
+  .payment-method-option:nth-child(2) .payment-method-content::before {
     content: "🏦" !important;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-    display: inline-block !important;
-    font-size: 2.5rem !important;
-    color: var(--primary) !important;
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    z-index: 101 !important;
+  }
+
+  .payment-method-content span {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .payment-method-content small {
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
   }
 
   .payment-method-label {

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Payment Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .payment-method-section {
+      margin: 20px 0;
+    }
+
+    .payment-method-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #0c2340;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .payment-method-option {
+      position: relative;
+    }
+
+    .payment-method-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .payment-method-label {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+      min-height: 80px;
+    }
+
+    .payment-method-label:hover {
+      border-color: #c6a343;
+      box-shadow: 0 4px 12px rgba(198, 163, 67, 0.15);
+    }
+
+    .payment-method-option input[type="radio"]:checked + .payment-method-label {
+      border-color: #0c2340;
+      background: rgba(12, 35, 64, 0.05);
+    }
+
+    .payment-method-option input[type="radio"]:checked + .payment-method-label::after {
+      content: '✓';
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      width: 24px;
+      height: 24px;
+      background: #0c2340;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .payment-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, rgba(12, 35, 64, 0.1), rgba(198, 163, 67, 0.15));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      font-size: 2rem;
+      border: 2px solid rgba(198, 163, 67, 0.2);
+    }
+
+    .payment-text {
+      flex: 1;
+    }
+
+    .payment-text span {
+      display: block;
+      font-weight: bold;
+      color: #0c2340;
+      margin-bottom: 4px;
+    }
+
+    .payment-text small {
+      color: #666;
+      font-size: 0.85rem;
+    }
+
+    .test-section {
+      margin: 20px 0;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .test-button {
+      background: #0c2340;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 8px 4px;
+      font-size: 14px;
+    }
+
+    .test-button:hover {
+      background: #1a3a5f;
+    }
+
+    .status {
+      margin: 12px 0;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .stripe-section {
+      display: none;
+      margin: 16px 0;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    #card-element {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      margin: 12px 0;
+    }
+
+    .amount-selection {
+      margin: 12px 0;
+    }
+
+    .amount-selection select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-align: center; color: #0c2340; margin-bottom: 20px;">Mobile Payment Test</h1>
+    
+    <!-- Payment Method Selection -->
+    <div class="payment-method-section">
+      <h3 class="payment-method-title">Choose Payment Method</h3>
+      <div class="payment-methods">
+        <div class="payment-method-option">
+          <input type="radio" id="stripe-payment" name="paymentMethod" value="stripe">
+          <label for="stripe-payment" class="payment-method-label">
+            <div class="payment-icon">💳</div>
+            <div class="payment-text">
+              <span>Pay with Card (Stripe)</span>
+              <small>Secure online payment</small>
+            </div>
+          </label>
+        </div>
+        <div class="payment-method-option">
+          <input type="radio" id="bank-transfer" name="paymentMethod" value="bank" checked>
+          <label for="bank-transfer" class="payment-method-label">
+            <div class="payment-icon">🏦</div>
+            <div class="payment-text">
+              <span>Bank Transfer</span>
+              <small>Manual bank transfer</small>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stripe Payment Section -->
+    <div id="stripe-section" class="stripe-section">
+      <h4>Stripe Payment</h4>
+      <div class="amount-selection">
+        <label for="amount">Amount (£)</label>
+        <select id="amount">
+          <option value="">Select Amount</option>
+          <option value="150">Early Bird - £150</option>
+          <option value="200">Standard - £200</option>
+        </select>
+      </div>
+      <div id="card-element">
+        <!-- Stripe Elements will create form elements here -->
+      </div>
+      <div id="card-errors" style="color: red; font-size: 14px; margin-top: 8px;"></div>
+    </div>
+
+    <!-- Test Section -->
+    <div class="test-section">
+      <h4>Test Functions</h4>
+      <button class="test-button" onclick="testPaymentMethodSwitch()">Test Payment Switch</button>
+      <button class="test-button" onclick="testStripeInit()">Test Stripe Init</button>
+      <button class="test-button" onclick="testIconVisibility()">Test Icon Visibility</button>
+      <button class="test-button" onclick="testMobileView()">Test Mobile View</button>
+      <div id="test-status"></div>
+    </div>
+  </div>
+
+  <!-- Stripe SDK -->
+  <script src="https://js.stripe.com/v3/"></script>
+  
+  <script>
+    // Test Stripe configuration
+    const STRIPE_TEST_KEY = 'pk_test_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz';
+    let stripe;
+    let elements;
+    let cardElement;
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', function() {
+      initializePaymentMethods();
+      initializeStripe();
+    });
+
+    function initializePaymentMethods() {
+      const stripeRadio = document.getElementById('stripe-payment');
+      const bankRadio = document.getElementById('bank-transfer');
+      const stripeSection = document.getElementById('stripe-section');
+
+      function togglePaymentSections() {
+        if (stripeRadio.checked) {
+          stripeSection.style.display = 'block';
+          console.log('Switched to Stripe payment');
+        } else {
+          stripeSection.style.display = 'none';
+          console.log('Switched to bank transfer');
+        }
+      }
+
+      stripeRadio.addEventListener('change', togglePaymentSections);
+      bankRadio.addEventListener('change', togglePaymentSections);
+      
+      // Initial setup
+      togglePaymentSections();
+    }
+
+    function initializeStripe() {
+      try {
+        if (typeof Stripe !== 'undefined') {
+          stripe = Stripe(STRIPE_TEST_KEY);
+          elements = stripe.elements();
+
+          cardElement = elements.create('card', {
+            style: {
+              base: {
+                fontSize: '16px',
+                color: '#424770',
+                '::placeholder': {
+                  color: '#aab7c4',
+                },
+              },
+            },
+          });
+
+          cardElement.mount('#card-element');
+          
+          cardElement.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+              displayError.textContent = event.error.message;
+            } else {
+              displayError.textContent = '';
+            }
+          });
+
+          console.log('Stripe initialized successfully');
+          showStatus('Stripe initialized successfully', 'success');
+        } else {
+          throw new Error('Stripe SDK not loaded');
+        }
+      } catch (error) {
+        console.error('Error initializing Stripe:', error);
+        showStatus('Error initializing Stripe: ' + error.message, 'error');
+      }
+    }
+
+    // Test functions
+    function testPaymentMethodSwitch() {
+      const stripeRadio = document.getElementById('stripe-payment');
+      const bankRadio = document.getElementById('bank-transfer');
+      
+      // Switch to Stripe
+      stripeRadio.checked = true;
+      stripeRadio.dispatchEvent(new Event('change'));
+      
+      setTimeout(() => {
+        // Switch back to bank
+        bankRadio.checked = true;
+        bankRadio.dispatchEvent(new Event('change'));
+        showStatus('Payment method switching works!', 'success');
+      }, 1000);
+    }
+
+    function testStripeInit() {
+      if (stripe && cardElement) {
+        showStatus('Stripe is properly initialized and ready', 'success');
+      } else {
+        showStatus('Stripe initialization failed', 'error');
+      }
+    }
+
+    function testIconVisibility() {
+      const icons = document.querySelectorAll('.payment-icon');
+      let visibleCount = 0;
+      
+      icons.forEach(icon => {
+        const style = window.getComputedStyle(icon);
+        if (style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0') {
+          visibleCount++;
+        }
+      });
+      
+      if (visibleCount === icons.length) {
+        showStatus(`All ${visibleCount} payment icons are visible!`, 'success');
+      } else {
+        showStatus(`Only ${visibleCount} of ${icons.length} icons are visible`, 'error');
+      }
+    }
+
+    function testMobileView() {
+      const isMobile = window.innerWidth <= 768;
+      const container = document.querySelector('.container');
+      const methods = document.querySelector('.payment-methods');
+      
+      showStatus(`Mobile view: ${isMobile ? 'YES' : 'NO'} (width: ${window.innerWidth}px)`, 
+                 isMobile ? 'success' : 'error');
+    }
+
+    function showStatus(message, type) {
+      const statusDiv = document.getElementById('test-status');
+      statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+    }
+  </script>
+</body>
+</html>

@@ -249,33 +249,65 @@ function initializePaymentMethods() {
   const bankRadio = document.getElementById('bank-transfer');
   const stripeSection = document.getElementById('stripe-payment-section');
   const bankSection = document.getElementById('bank-transfer-section');
-  const amountField = document.getElementById('amount');
-  const referenceField = document.getElementById('referenceNumber');
+  const manualAmountField = document.getElementById('manual-amount');
+  const manualReferenceField = document.getElementById('manual-reference');
+
+  console.log('Initializing payment methods...');
+  console.log('Stripe radio found:', !!stripeRadio);
+  console.log('Bank radio found:', !!bankRadio);
+  console.log('Stripe section found:', !!stripeSection);
+  console.log('Bank section found:', !!bankSection);
 
   function togglePaymentSections() {
+    console.log('Toggling payment sections...');
+
     if (stripeRadio && stripeRadio.checked) {
-      if (stripeSection) stripeSection.style.display = 'block';
-      if (bankSection) bankSection.style.display = 'none';
-      // Make amount and reference optional for Stripe payments
-      if (amountField) amountField.removeAttribute('required');
-      if (referenceField) referenceField.removeAttribute('required');
-      console.log('Switched to Stripe payment');
+      if (stripeSection) {
+        stripeSection.style.display = 'block';
+        console.log('Showing Stripe section');
+      }
+      if (bankSection) {
+        bankSection.style.display = 'none';
+        console.log('Hiding bank section');
+      }
+      // Make manual amount and reference optional for Stripe payments
+      if (manualAmountField) manualAmountField.removeAttribute('required');
+      if (manualReferenceField) manualReferenceField.removeAttribute('required');
+      console.log('✅ Switched to Stripe payment');
     } else {
-      if (stripeSection) stripeSection.style.display = 'none';
-      if (bankSection) bankSection.style.display = 'block';
-      // Make amount and reference required for bank transfers
-      if (amountField) amountField.setAttribute('required', 'required');
-      if (referenceField) referenceField.setAttribute('required', 'required');
-      console.log('Switched to bank transfer');
+      if (stripeSection) {
+        stripeSection.style.display = 'none';
+        console.log('Hiding Stripe section');
+      }
+      if (bankSection) {
+        bankSection.style.display = 'block';
+        console.log('Showing bank section');
+      }
+      // Make manual amount and reference required for bank transfers
+      if (manualAmountField) manualAmountField.setAttribute('required', 'required');
+      if (manualReferenceField) manualReferenceField.setAttribute('required', 'required');
+      console.log('✅ Switched to bank transfer');
     }
   }
 
   // Initial setup
   togglePaymentSections();
 
-  // Add event listeners
-  if (stripeRadio) stripeRadio.addEventListener('change', togglePaymentSections);
-  if (bankRadio) bankRadio.addEventListener('change', togglePaymentSections);
+  // Add event listeners with debugging
+  if (stripeRadio) {
+    stripeRadio.addEventListener('change', function() {
+      console.log('🔄 Stripe radio changed, checked:', this.checked);
+      togglePaymentSections();
+    });
+  }
+  if (bankRadio) {
+    bankRadio.addEventListener('change', function() {
+      console.log('🔄 Bank radio changed, checked:', this.checked);
+      togglePaymentSections();
+    });
+  }
+
+  console.log('Payment method initialization complete');
 }
 
 // Initialize custom amount functionality
