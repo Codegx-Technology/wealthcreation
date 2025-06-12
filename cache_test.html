@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache Test - Payment Icons</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Force fresh CSS load with timestamp -->
+    <link rel="stylesheet" href="css/styles.css?v=20250101&t=1735736000">
+    <link rel="stylesheet" href="css/responsive.css?v=20250101&t=1735736000">
+    <link rel="stylesheet" href="css/forms.css?v=20250101&t=1735736000">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            padding: 20px;
+            background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%);
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .test-header {
+            text-align: center;
+            color: #0c2340;
+            margin-bottom: 30px;
+        }
+        .cache-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2196f3;
+        }
+        .icon-test-section {
+            margin: 25px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        .icon-test-title {
+            font-weight: bold;
+            color: #0c2340;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        .icon-debug {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        .clear-cache-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        .reload-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        .test-result {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .result-pass { background: #d4edda; color: #155724; }
+        .result-fail { background: #f8d7da; color: #721c24; }
+        .result-info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🔍 Cache Test - Payment Icons</h1>
+            <p>Testing if payment method icons are visible after cache clearing</p>
+        </div>
+
+        <div class="cache-info">
+            <h3>🗂️ Cache Information</h3>
+            <p><strong>Page Load Time:</strong> <span id="loadTime"></span></p>
+            <p><strong>CSS Version:</strong> 20250101 (with timestamp)</p>
+            <p><strong>Cache Headers:</strong> no-cache, no-store, must-revalidate</p>
+            <p><strong>Browser:</strong> <span id="browserInfo"></span></p>
+        </div>
+
+        <div class="icon-test-section">
+            <div class="icon-test-title">🎯 Payment Method Icons Test</div>
+            
+            <!-- Actual Payment Method Section -->
+            <div class="payment-method-section">
+                <h3 class="payment-method-title">Choose Payment Method</h3>
+                <div class="payment-methods">
+                    <div class="payment-method-option">
+                        <input type="radio" id="stripe-payment-test" name="paymentMethodTest" value="stripe">
+                        <label for="stripe-payment-test" class="payment-method-label">
+                            <div class="payment-method-content">
+                                <i class="fas fa-credit-card" id="stripe-icon"></i>
+                                <span>Pay with Card (Stripe)</span>
+                                <small>Secure online payment</small>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="payment-method-option">
+                        <input type="radio" id="bank-transfer-test" name="paymentMethodTest" value="bank" checked>
+                        <label for="bank-transfer-test" class="payment-method-label">
+                            <div class="payment-method-content">
+                                <i class="fas fa-university" id="bank-icon"></i>
+                                <span>Bank Transfer</span>
+                                <small>Manual bank transfer</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="icon-debug" id="iconDebugInfo">
+                Analyzing icons...
+            </div>
+
+            <div id="iconTestResult" class="test-result"></div>
+        </div>
+
+        <div class="cache-info">
+            <h3>🔧 Cache Control Actions</h3>
+            <button class="clear-cache-btn" onclick="clearCacheAndReload()">🗑️ Clear Cache & Reload</button>
+            <button class="reload-btn" onclick="hardReload()">🔄 Hard Reload (Ctrl+F5)</button>
+            <button class="reload-btn" onclick="location.reload(true)">↻ Force Reload</button>
+            <p><small>If icons are still not visible, try opening in incognito/private mode</small></p>
+        </div>
+    </div>
+
+    <script>
+        const loadStart = performance.now();
+
+        function clearCacheAndReload() {
+            // Clear various cache types
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) {
+                        caches.delete(name);
+                    }
+                    console.log('Service Worker caches cleared');
+                });
+            }
+            
+            // Clear localStorage and sessionStorage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Reload with cache busting
+            const timestamp = Date.now();
+            window.location.href = `${window.location.pathname}?nocache=${timestamp}&v=20250101`;
+        }
+
+        function hardReload() {
+            // Simulate Ctrl+F5
+            window.location.reload(true);
+        }
+
+        function analyzeIcons() {
+            const stripeIcon = document.getElementById('stripe-icon');
+            const bankIcon = document.getElementById('bank-icon');
+            const debugInfo = document.getElementById('iconDebugInfo');
+            const testResult = document.getElementById('iconTestResult');
+            
+            let debugText = 'Icon Analysis:\n';
+            let visibleIcons = 0;
+            let issues = [];
+
+            // Analyze Stripe icon
+            if (stripeIcon) {
+                const stripeStyle = window.getComputedStyle(stripeIcon);
+                const stripeRect = stripeIcon.getBoundingClientRect();
+                
+                debugText += `\nStripe Icon (fa-credit-card):\n`;
+                debugText += `- Color: ${stripeStyle.color}\n`;
+                debugText += `- Font-family: ${stripeStyle.fontFamily}\n`;
+                debugText += `- Font-size: ${stripeStyle.fontSize}\n`;
+                debugText += `- Opacity: ${stripeStyle.opacity}\n`;
+                debugText += `- Visibility: ${stripeStyle.visibility}\n`;
+                debugText += `- Display: ${stripeStyle.display}\n`;
+                debugText += `- Size: ${stripeRect.width}x${stripeRect.height}\n`;
+                debugText += `- Background: ${stripeStyle.background}\n`;
+                
+                if (stripeStyle.opacity !== '0' && stripeStyle.visibility !== 'hidden' && stripeRect.width > 0) {
+                    visibleIcons++;
+                } else {
+                    issues.push('Stripe icon not visible');
+                }
+            } else {
+                issues.push('Stripe icon element not found');
+            }
+
+            // Analyze Bank icon
+            if (bankIcon) {
+                const bankStyle = window.getComputedStyle(bankIcon);
+                const bankRect = bankIcon.getBoundingClientRect();
+                
+                debugText += `\nBank Icon (fa-university):\n`;
+                debugText += `- Color: ${bankStyle.color}\n`;
+                debugText += `- Font-family: ${bankStyle.fontFamily}\n`;
+                debugText += `- Font-size: ${bankStyle.fontSize}\n`;
+                debugText += `- Opacity: ${bankStyle.opacity}\n`;
+                debugText += `- Visibility: ${bankStyle.visibility}\n`;
+                debugText += `- Display: ${bankStyle.display}\n`;
+                debugText += `- Size: ${bankRect.width}x${bankRect.height}\n`;
+                debugText += `- Background: ${bankStyle.background}\n`;
+                
+                if (bankStyle.opacity !== '0' && bankStyle.visibility !== 'hidden' && bankRect.width > 0) {
+                    visibleIcons++;
+                } else {
+                    issues.push('Bank icon not visible');
+                }
+            } else {
+                issues.push('Bank icon element not found');
+            }
+
+            debugInfo.textContent = debugText;
+
+            // Show results
+            if (visibleIcons === 2) {
+                testResult.className = 'test-result result-pass';
+                testResult.textContent = '✅ SUCCESS: Both payment icons are visible and working properly!';
+            } else if (visibleIcons === 1) {
+                testResult.className = 'test-result result-info';
+                testResult.textContent = `⚠️ PARTIAL: Only ${visibleIcons}/2 icons visible. Issues: ${issues.join(', ')}`;
+            } else {
+                testResult.className = 'test-result result-fail';
+                testResult.textContent = `❌ FAILED: No icons visible. Issues: ${issues.join(', ')}. Try clearing cache.`;
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadTime = performance.now() - loadStart;
+            document.getElementById('loadTime').textContent = `${loadTime.toFixed(2)}ms`;
+            document.getElementById('browserInfo').textContent = navigator.userAgent.split(' ')[0];
+            
+            console.log('Cache test page loaded');
+            console.log('CSS files loaded with version 20250101');
+            
+            // Analyze icons after a delay to ensure CSS is loaded
+            setTimeout(analyzeIcons, 1000);
+        });
+    </script>
+</body>
+</html>

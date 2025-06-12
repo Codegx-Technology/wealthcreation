@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Diagnostic - Payment Method Icons</title>
+    
+    <!-- Force fresh load with cache busting -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Load CSS with version numbers -->
+    <link rel="stylesheet" href="css/styles.css?v=20250101">
+    <link rel="stylesheet" href="css/responsive.css?v=20250101">
+    <link rel="stylesheet" href="css/forms.css?v=20250101">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .diagnostic-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .test-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+        }
+        .icon-row {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .icon-test {
+            font-size: 2rem;
+            margin-right: 20px;
+            width: 50px;
+            text-align: center;
+        }
+        .icon-info {
+            flex: 1;
+        }
+        .icon-details {
+            font-family: monospace;
+            font-size: 0.9rem;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 10px 0;
+        }
+        .status-good { color: #28a745; font-weight: bold; }
+        .status-bad { color: #dc3545; font-weight: bold; }
+        .status-warning { color: #ffc107; font-weight: bold; }
+        
+        /* Test the actual payment method styles */
+        .payment-method-test {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-container">
+        <h1>🔍 Payment Method Icons Diagnostic</h1>
+        <p>This page will help identify why payment method icons might not be visible.</p>
+        
+        <!-- Basic FontAwesome Test -->
+        <div class="test-section">
+            <div class="test-title">1. Basic FontAwesome Test</div>
+            
+            <div class="icon-row">
+                <div class="icon-test">
+                    <i class="fas fa-credit-card" id="basic-stripe"></i>
+                </div>
+                <div class="icon-info">
+                    <strong>Stripe Icon (fa-credit-card)</strong>
+                    <div class="icon-details" id="basic-stripe-details">Analyzing...</div>
+                </div>
+            </div>
+            
+            <div class="icon-row">
+                <div class="icon-test">
+                    <i class="fas fa-university" id="basic-bank"></i>
+                </div>
+                <div class="icon-info">
+                    <strong>Bank Icon (fa-university)</strong>
+                    <div class="icon-details" id="basic-bank-details">Analyzing...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Method Styled Test -->
+        <div class="test-section">
+            <div class="test-title">2. Payment Method Styled Test</div>
+            
+            <div class="payment-method-test">
+                <div class="payment-method-section">
+                    <h3 class="payment-method-title">Choose Payment Method</h3>
+                    <div class="payment-methods">
+                        <div class="payment-method-option">
+                            <input type="radio" id="stripe-test" name="paymentTest" value="stripe">
+                            <label for="stripe-test" class="payment-method-label">
+                                <div class="payment-method-content">
+                                    <i class="fas fa-credit-card" id="styled-stripe"></i>
+                                    <span>Pay with Card (Stripe)</span>
+                                    <small>Secure online payment</small>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="payment-method-option">
+                            <input type="radio" id="bank-test" name="paymentTest" value="bank" checked>
+                            <label for="bank-test" class="payment-method-label">
+                                <div class="payment-method-content">
+                                    <i class="fas fa-university" id="styled-bank"></i>
+                                    <span>Bank Transfer</span>
+                                    <small>Manual bank transfer</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="icon-details" id="styled-icons-details">Analyzing styled icons...</div>
+            </div>
+        </div>
+
+        <!-- CSS Loading Test -->
+        <div class="test-section">
+            <div class="test-title">3. CSS Loading Test</div>
+            <div id="css-loading-results">Checking CSS files...</div>
+        </div>
+
+        <!-- Mobile View Test -->
+        <div class="test-section">
+            <div class="test-title">4. Mobile View Test</div>
+            <div id="mobile-test-results">Checking mobile styles...</div>
+        </div>
+
+        <!-- Solutions -->
+        <div class="test-section">
+            <div class="test-title">5. Solutions</div>
+            <div id="solutions">
+                <p><strong>If icons are not visible, try these solutions:</strong></p>
+                <ol>
+                    <li><button onclick="clearCacheAndReload()">Clear Cache & Reload</button></li>
+                    <li><button onclick="location.reload(true)">Hard Reload (Ctrl+F5)</button></li>
+                    <li><button onclick="openIncognito()">Open in Incognito/Private Mode</button></li>
+                    <li><button onclick="testFontAwesome()">Test FontAwesome Loading</button></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function analyzeIcon(iconElement, detailsElementId, iconName) {
+            const detailsElement = document.getElementById(detailsElementId);
+            
+            if (!iconElement) {
+                detailsElement.innerHTML = `<span class="status-bad">❌ Icon element not found</span>`;
+                return false;
+            }
+
+            const style = window.getComputedStyle(iconElement);
+            const rect = iconElement.getBoundingClientRect();
+            
+            const isVisible = style.opacity !== '0' && 
+                             style.visibility !== 'hidden' && 
+                             style.display !== 'none' &&
+                             rect.width > 0 && 
+                             rect.height > 0;
+
+            let details = `
+                <strong>${iconName} Analysis:</strong><br>
+                Color: ${style.color}<br>
+                Font-family: ${style.fontFamily}<br>
+                Font-size: ${style.fontSize}<br>
+                Font-weight: ${style.fontWeight}<br>
+                Opacity: ${style.opacity}<br>
+                Visibility: ${style.visibility}<br>
+                Display: ${style.display}<br>
+                Size: ${rect.width.toFixed(1)}x${rect.height.toFixed(1)}px<br>
+                Background: ${style.background}<br>
+                Z-index: ${style.zIndex}<br>
+                Position: ${style.position}<br>
+            `;
+
+            if (isVisible) {
+                details = `<span class="status-good">✅ Icon is visible</span><br>` + details;
+            } else {
+                details = `<span class="status-bad">❌ Icon is NOT visible</span><br>` + details;
+                
+                // Add specific issues
+                if (style.opacity === '0') details += `<br><span class="status-bad">Issue: Opacity is 0</span>`;
+                if (style.visibility === 'hidden') details += `<br><span class="status-bad">Issue: Visibility is hidden</span>`;
+                if (style.display === 'none') details += `<br><span class="status-bad">Issue: Display is none</span>`;
+                if (rect.width === 0 || rect.height === 0) details += `<br><span class="status-bad">Issue: Size is 0</span>`;
+            }
+
+            detailsElement.innerHTML = details;
+            return isVisible;
+        }
+
+        function checkCSSLoading() {
+            const cssResults = document.getElementById('css-loading-results');
+            const stylesheets = document.styleSheets;
+            let results = '<strong>CSS Files Status:</strong><br>';
+            
+            for (let i = 0; i < stylesheets.length; i++) {
+                const sheet = stylesheets[i];
+                const href = sheet.href || 'inline styles';
+                
+                try {
+                    const rules = sheet.cssRules || sheet.rules;
+                    results += `<span class="status-good">✅ ${href} - ${rules.length} rules loaded</span><br>`;
+                } catch (e) {
+                    results += `<span class="status-bad">❌ ${href} - Failed to load or access</span><br>`;
+                }
+            }
+            
+            cssResults.innerHTML = results;
+        }
+
+        function checkMobileView() {
+            const mobileResults = document.getElementById('mobile-test-results');
+            const isMobile = window.innerWidth <= 768;
+            
+            let results = `<strong>Screen Info:</strong><br>`;
+            results += `Width: ${window.innerWidth}px<br>`;
+            results += `Height: ${window.innerHeight}px<br>`;
+            results += `Device Type: ${isMobile ? 'Mobile' : 'Desktop'}<br>`;
+            results += `User Agent: ${navigator.userAgent.substring(0, 50)}...<br>`;
+            
+            mobileResults.innerHTML = results;
+        }
+
+        function clearCacheAndReload() {
+            // Clear various cache types
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) {
+                        caches.delete(name);
+                    }
+                });
+            }
+            
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Reload with timestamp
+            const timestamp = Date.now();
+            window.location.href = `${window.location.pathname}?nocache=${timestamp}`;
+        }
+
+        function openIncognito() {
+            alert('Please manually open this page in an incognito/private browser window to test without cache.');
+        }
+
+        function testFontAwesome() {
+            const testIcon = document.createElement('i');
+            testIcon.className = 'fas fa-test';
+            testIcon.style.fontSize = '2rem';
+            document.body.appendChild(testIcon);
+            
+            setTimeout(() => {
+                const style = window.getComputedStyle(testIcon);
+                alert(`FontAwesome Test:\nFont-family: ${style.fontFamily}\nFont-weight: ${style.fontWeight}`);
+                document.body.removeChild(testIcon);
+            }, 100);
+        }
+
+        // Run diagnostics when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Running payment icon diagnostics...');
+            
+            setTimeout(() => {
+                // Test basic icons
+                analyzeIcon(document.getElementById('basic-stripe'), 'basic-stripe-details', 'Basic Stripe');
+                analyzeIcon(document.getElementById('basic-bank'), 'basic-bank-details', 'Basic Bank');
+                
+                // Test styled icons
+                const styledStripe = analyzeIcon(document.getElementById('styled-stripe'), 'styled-icons-details', 'Styled Stripe');
+                const styledBank = analyzeIcon(document.getElementById('styled-bank'), 'styled-icons-details', 'Styled Bank');
+                
+                // Check CSS loading
+                checkCSSLoading();
+                
+                // Check mobile view
+                checkMobileView();
+                
+                // Overall result
+                const overallResult = styledStripe && styledBank ? 
+                    '<span class="status-good">✅ All payment icons are working correctly!</span>' :
+                    '<span class="status-bad">❌ Some payment icons have issues. Check the analysis above.</span>';
+                
+                document.getElementById('styled-icons-details').innerHTML += '<br><br><strong>Overall Result:</strong><br>' + overallResult;
+                
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
