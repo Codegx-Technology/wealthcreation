@@ -1623,9 +1623,9 @@ input:focus, select:focus, textarea:focus {
 .btn-container {
   text-align: center;
   margin-top: 40px;
-  opacity: 0;
+  opacity: 1; /* Always visible for functionality */
   animation: fadeInStagger 0.8s ease-out forwards;
-  animation-delay: 1.2s;
+  animation-delay: 0.2s; /* Reduced delay for faster visibility */
 }
 
 .form-note {
@@ -1659,6 +1659,9 @@ button {
   pointer-events: auto;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  display: inline-block; /* Ensure button is displayed */
+  visibility: visible; /* Force visibility */
+  opacity: 1; /* Always visible */
 }
 
 button * {
@@ -2290,9 +2293,9 @@ footer {
   }
 
   .btn-container {
-    opacity: 0;
+    opacity: 1; /* Always visible for functionality */
     animation: fadeInStagger 0.8s ease-out forwards;
-    animation-delay: 1.2s;
+    animation-delay: 0.2s; /* Faster visibility */
   }
 
   .hero-section {
