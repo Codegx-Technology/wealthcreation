@@ -453,6 +453,11 @@ function initializeFirebase() {
               throw new Error('Stripe payment is not available. Please use bank transfer or contact support.');
             }
 
+            // Check if card element is available
+            if (!cardElement) {
+              throw new Error('Card details not entered. Please enter your card information.');
+            }
+
             // Handle Stripe payment - get amount from ticket selection or custom input
             let ticketAmount;
             const ticketAmountElement = document.getElementById('ticket-amount');
