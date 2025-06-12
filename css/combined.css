@@ -1404,28 +1404,105 @@ h2 {
   margin-bottom: 20px;
 }
 
-/* Simple Mobile Responsive */
+/* Simple Mobile Responsive - Force Visibility */
 @media (max-width: 768px) {
+  /* Force payment method section to be visible */
   .payment-method-section {
-    padding: 16px;
-    margin: 20px 0;
+    padding: 16px !important;
+    margin: 20px 0 !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: #f8f9fa !important;
+    border: 1px solid #ddd !important;
+    border-radius: 12px !important;
+  }
+
+  .payment-method-title {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-size: 1.2rem !important;
+    color: #0c2340 !important;
+    margin-bottom: 16px !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+  }
+
+  .payment-methods {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .payment-method-option {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .payment-method-label {
+    display: flex !important;
+    align-items: center !important;
+    padding: 14px 16px !important;
+    border: 2px solid #ddd !important;
+    border-radius: 8px !important;
+    background: white !important;
+    min-height: 70px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .payment-method-content {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .payment-icon {
-    width: 45px;
-    height: 45px;
-    font-size: 1.3rem;
+    width: 45px !important;
+    height: 45px !important;
+    font-size: 1.3rem !important;
+    background: #f0f8ff !important;
+    border: 2px solid #c6a343 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .payment-text {
+    flex: 1 !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .payment-text span {
-    font-size: 0.95rem;
+    display: block !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    color: #0c2340 !important;
+    margin-bottom: 4px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .payment-text small {
-    font-size: 0.8rem;
+    display: block !important;
+    font-size: 0.8rem !important;
+    color: #666 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
-
-  /* Clean mobile styles - no complex overrides */
 
   /* Mobile payment info improvements */
   .payment-info {

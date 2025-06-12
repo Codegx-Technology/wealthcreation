@@ -390,20 +390,48 @@
 
       // Force mobile view for testing
       if (!isMobile) {
+        // Simulate mobile viewport
+        const viewport = document.querySelector('meta[name="viewport"]');
+        if (viewport) {
+          viewport.setAttribute('content', 'width=375, initial-scale=1.0');
+        }
+
         document.body.style.width = '375px';
         document.body.style.margin = '0 auto';
         container.style.maxWidth = '350px';
+
+        // Apply mobile CSS classes
+        document.body.classList.add('mobile-test');
+
         showStatus(`Forced mobile view (was ${window.innerWidth}px, now simulating 375px)`, 'success');
 
-        // Test mobile CSS
+        // Test if payment method elements are visible
         setTimeout(() => {
+          const paymentSection = document.querySelector('.payment-method-section');
+          const paymentTitle = document.querySelector('.payment-method-title');
+          const paymentMethods = document.querySelector('.payment-methods');
           const icons = document.querySelectorAll('.payment-icon');
-          icons.forEach(icon => {
-            icon.style.width = '50px';
-            icon.style.height = '50px';
-            icon.style.fontSize = '2rem';
-          });
-          showStatus('Mobile styles applied! Icons should be 50px with 2rem font size', 'success');
+
+          let visibilityReport = [];
+
+          if (paymentSection) {
+            const style = window.getComputedStyle(paymentSection);
+            visibilityReport.push(`Section: ${style.display !== 'none' ? 'VISIBLE' : 'HIDDEN'}`);
+          }
+
+          if (paymentTitle) {
+            const style = window.getComputedStyle(paymentTitle);
+            visibilityReport.push(`Title: ${style.display !== 'none' ? 'VISIBLE' : 'HIDDEN'}`);
+          }
+
+          if (paymentMethods) {
+            const style = window.getComputedStyle(paymentMethods);
+            visibilityReport.push(`Methods: ${style.display !== 'none' ? 'VISIBLE' : 'HIDDEN'}`);
+          }
+
+          visibilityReport.push(`Icons: ${icons.length} found`);
+
+          showStatus('Mobile test: ' + visibilityReport.join(', '), 'success');
         }, 500);
       } else {
         showStatus(`Already in mobile view: ${window.innerWidth}px`, 'success');
