@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Debug - Payment Icons & Button Test</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .debug-title {
+            color: #0c2340;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #c6a343;
+            padding-bottom: 10px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .test-pass { background: #d4edda; color: #155724; }
+        .test-fail { background: #f8d7da; color: #721c24; }
+        .icon-test {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+        .icon-test i {
+            font-size: 2rem;
+            margin-right: 15px;
+            color: #0c2340;
+        }
+        .email-test {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .button-test {
+            background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 0;
+            min-width: 250px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .mobile-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-section">
+        <h2 class="debug-title">📱 Mobile Debug Test Page</h2>
+        <div class="mobile-info">
+            <strong>Screen Width:</strong> <span id="screenWidth"></span>px<br>
+            <strong>Device Type:</strong> <span id="deviceType"></span><br>
+            <strong>User Agent:</strong> <span id="userAgent"></span>
+        </div>
+    </div>
+
+    <div class="debug-section">
+        <h3 class="debug-title">🎯 Payment Method Icons Test</h3>
+        <div class="icon-test">
+            <i class="fas fa-credit-card"></i>
+            <div>
+                <strong>Stripe Icon (fa-credit-card)</strong><br>
+                <small>Should be clearly visible without white padding</small>
+            </div>
+        </div>
+        <div class="icon-test">
+            <i class="fas fa-university"></i>
+            <div>
+                <strong>Bank Transfer Icon (fa-university)</strong><br>
+                <small>Should be clearly visible without white padding</small>
+            </div>
+        </div>
+        <div id="iconTest" class="test-result"></div>
+    </div>
+
+    <div class="debug-section">
+        <h3 class="debug-title">📧 Email Field Test</h3>
+        <input type="email" class="email-test" placeholder="test@verylongemailaddress.com" value="user@verylongdomainname.co.uk">
+        <input type="email" class="email-test" placeholder="Enter your email" value="john.doe@companywithverylongname.com">
+        <div id="emailTest" class="test-result"></div>
+    </div>
+
+    <div class="debug-section">
+        <h3 class="debug-title">🔘 Registration Button Test</h3>
+        <button class="button-test" id="testButton" onclick="testButtonClick()">
+            Complete Registration <i class="fas fa-arrow-right"></i>
+        </button>
+        <div id="buttonTest" class="test-result"></div>
+        <div id="clickCount">Click Count: 0</div>
+    </div>
+
+    <div class="debug-section">
+        <h3 class="debug-title">🎨 Actual Payment Method Section</h3>
+        <div class="payment-method-section">
+            <h3 class="payment-method-title">Choose Payment Method</h3>
+            <div class="payment-methods">
+                <div class="payment-method-option">
+                    <input type="radio" id="stripe-payment" name="paymentMethod" value="stripe">
+                    <label for="stripe-payment" class="payment-method-label">
+                        <div class="payment-method-content">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Pay with Card (Stripe)</span>
+                            <small>Secure online payment</small>
+                        </div>
+                    </label>
+                </div>
+                <div class="payment-method-option">
+                    <input type="radio" id="bank-transfer" name="paymentMethod" value="bank" checked>
+                    <label for="bank-transfer" class="payment-method-label">
+                        <div class="payment-method-content">
+                            <i class="fas fa-university"></i>
+                            <span>Bank Transfer</span>
+                            <small>Manual bank transfer</small>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        
+        function testButtonClick() {
+            clickCount++;
+            document.getElementById('clickCount').textContent = `Click Count: ${clickCount}`;
+            document.getElementById('buttonTest').className = 'test-result test-pass';
+            document.getElementById('buttonTest').textContent = '✅ Button is working! Click registered.';
+        }
+
+        // Device info
+        document.getElementById('screenWidth').textContent = window.innerWidth;
+        document.getElementById('deviceType').textContent = window.innerWidth <= 768 ? 'Mobile' : 'Desktop';
+        document.getElementById('userAgent').textContent = navigator.userAgent.substring(0, 50) + '...';
+
+        // Test icon visibility
+        setTimeout(() => {
+            const icons = document.querySelectorAll('.fas');
+            let visibleIcons = 0;
+            icons.forEach(icon => {
+                const style = window.getComputedStyle(icon);
+                if (style.opacity !== '0' && style.visibility !== 'hidden') {
+                    visibleIcons++;
+                }
+            });
+            
+            const iconResult = document.getElementById('iconTest');
+            if (visibleIcons >= 4) {
+                iconResult.className = 'test-result test-pass';
+                iconResult.textContent = `✅ Icons visible: ${visibleIcons} icons detected`;
+            } else {
+                iconResult.className = 'test-result test-fail';
+                iconResult.textContent = `❌ Icons issue: Only ${visibleIcons} icons visible`;
+            }
+        }, 1000);
+
+        // Test email field
+        setTimeout(() => {
+            const emailFields = document.querySelectorAll('.email-test');
+            let emailIssues = 0;
+            emailFields.forEach(field => {
+                if (field.scrollWidth > field.clientWidth) {
+                    emailIssues++;
+                }
+            });
+            
+            const emailResult = document.getElementById('emailTest');
+            if (emailIssues === 0) {
+                emailResult.className = 'test-result test-pass';
+                emailResult.textContent = '✅ Email fields are properly sized';
+            } else {
+                emailResult.className = 'test-result test-fail';
+                emailResult.textContent = `❌ Email field issues: ${emailIssues} fields have overflow`;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

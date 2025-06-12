@@ -219,9 +219,16 @@
 
   /* Specific email field improvements */
   input[type="email"] {
-    font-size: 0.85rem;
-    padding: 14px 38px 14px 10px;
-    letter-spacing: -0.02em;
+    font-size: 0.8rem !important;
+    padding: 12px 35px 12px 8px !important;
+    letter-spacing: -0.03em !important;
+    word-break: break-all !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .input-icon {
@@ -268,9 +275,16 @@
 
     /* Extra small screen email field */
     input[type="email"] {
-      font-size: 0.8rem;
-      padding: 12px 35px 12px 8px;
-      letter-spacing: -0.03em;
+      font-size: 0.75rem !important;
+      padding: 10px 30px 10px 6px !important;
+      letter-spacing: -0.04em !important;
+      word-break: break-all !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
     }
 
     ::placeholder {
@@ -506,18 +520,32 @@
 
   /* Payment method icons specific mobile fixes */
   .payment-method-content .fas {
-    font-size: 1.8rem !important;
+    font-size: 2rem !important;
     color: var(--primary) !important;
-    margin-bottom: 10px !important;
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
     display: block !important;
     text-align: center !important;
     font-family: "Font Awesome 6 Free" !important;
     font-weight: 900 !important;
     background: none !important;
+    border: none !important;
+    box-shadow: none !important;
     -webkit-text-fill-color: var(--primary) !important;
     -webkit-background-clip: initial !important;
     opacity: 1 !important;
     visibility: visible !important;
+    line-height: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+
+  /* Remove any potential white overlays */
+  .payment-method-content .fas::before,
+  .payment-method-content .fas::after {
+    display: none !important;
   }
 
   /* Ensure payment method labels are clickable */
