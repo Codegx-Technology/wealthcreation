@@ -89,6 +89,20 @@ document.addEventListener('DOMContentLoaded', function() {
   if (testButton) {
     console.log('Button type:', testButton.type);
     console.log('Button disabled:', testButton.disabled);
+    console.log('Button innerHTML:', testButton.innerHTML);
+    console.log('Button style.display:', testButton.style.display);
+    console.log('Button offsetWidth:', testButton.offsetWidth);
+    console.log('Button offsetHeight:', testButton.offsetHeight);
+
+    // Test button visibility and clickability
+    const buttonRect = testButton.getBoundingClientRect();
+    console.log('Button position:', {
+      top: buttonRect.top,
+      left: buttonRect.left,
+      width: buttonRect.width,
+      height: buttonRect.height,
+      visible: buttonRect.width > 0 && buttonRect.height > 0
+    });
   }
 
   // Check if mobile device
@@ -294,8 +308,18 @@ function initializeFormSubmission() {
       type: event.type,
       target: event.target.tagName,
       buttonType: event.target.type,
-      disabled: event.target.disabled
+      disabled: event.target.disabled,
+      formId: form.id,
+      buttonId: event.target.id
     });
+
+    // Visual feedback for user
+    const formStatus = document.getElementById('formStatus');
+    if (formStatus) {
+      formStatus.textContent = '✅ Button clicked! Processing...';
+      formStatus.className = 'form-status loading';
+      formStatus.style.display = 'block';
+    }
 
     // If the form's submit event doesn't fire, this will
     if (event.target.type === 'submit') {
