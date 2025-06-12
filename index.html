@@ -31,130 +31,7 @@
 
   <title>Secrets to Wealth Creation & Leadership in the Marketplace Conference - London</title>
 
-  <!-- CRITICAL: Inline CSS for above-the-fold content -->
-  <style>
-    /* Critical CSS for immediate rendering */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --primary: #0c2340;
-      --primary-light: #1a3a5f;
-      --secondary: #c6a343;
-      --light: #ffffff;
-      --dark: #051224;
-      --text: #2c3e50;
-      --text-light: #546e7a;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
-      color: var(--text);
-      line-height: 1.7;
-      min-height: 100vh;
-      opacity: 1;
-    }
-
-    .page-wrapper {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    header {
-      padding: 25px 0;
-      background-color: rgba(12, 35, 64, 0.92);
-      backdrop-filter: blur(15px);
-      border-bottom: 1px solid rgba(198, 163, 67, 0.2);
-      position: relative;
-      z-index: 10;
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0 20px;
-    }
-
-    .logo {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--light);
-      letter-spacing: 1.5px;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    .logo span {
-      color: #e9c46a;
-    }
-
-    .conference-subtitle {
-      font-size: 1.1rem;
-      color: var(--light);
-      opacity: 0.9;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    .guest-speaker {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #e9c46a;
-      letter-spacing: 0.8px;
-      text-align: center;
-      padding: 3px 12px;
-      border-radius: 20px;
-      background: rgba(12, 35, 64, 0.3);
-      border: 1px solid rgba(198, 163, 67, 0.2);
-      display: inline-block;
-    }
-
-    .hero-section {
-      height: 50vh;
-      min-height: 400px;
-      width: 100%;
-      background: linear-gradient(to bottom, rgba(12, 35, 64, 0.2), rgba(12, 35, 64, 0.6)), url('images/background.jpg');
-      background-size: cover;
-      background-position: center 15%;
-      position: relative;
-      margin-bottom: 40px;
-      margin-top: 20px;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 60px auto;
-      background: rgba(255, 255, 255, 0.92);
-      padding: 50px;
-      border-radius: 16px;
-      position: relative;
-      z-index: 1;
-      backdrop-filter: blur(20px);
-    }
-
-    /* Mobile optimizations - immediate visibility */
-    @media (max-width: 768px) {
-      * {
-        animation: none !important;
-        transition: none !important;
-        opacity: 1 !important;
-        transform: none !important;
-        animation-delay: 0s !important;
-        animation-duration: 0s !important;
-      }
-
-      body { opacity: 1 !important; }
-      .hero-section { height: 30vh; min-height: 250px; }
-      .container { margin: 30px 20px; padding: 30px 20px; }
-      .logo { font-size: 1.8rem; }
-      .conference-subtitle { font-size: 1rem; }
-      .guest-speaker { font-size: 0.9rem; }
-    }
-  </style>
+  <!-- All CSS moved to external files for better debugging -->
   <!-- DNS prefetch for external resources -->
   <link rel="dns-prefetch" href="//fonts.googleapis.com">
   <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -163,6 +40,9 @@
   <!-- Preconnect to external domains for faster loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Critical CSS for immediate rendering -->
+  <link rel="stylesheet" href="css/critical.css">
 
   <!-- Combined CSS for better performance -->
   <link rel="stylesheet" href="css/combined.css?v=20250101">
@@ -365,8 +245,8 @@
 
         <div id="formStatus" class="form-status"></div>
 
-        <div class="btn-container">
-          <button type="submit" id="submitButton">Complete Registration <i class="fas fa-arrow-right"></i></button>
+        <div class="btn-container" style="opacity: 1 !important; display: block !important; visibility: visible !important;">
+          <button type="submit" id="submitButton" style="opacity: 1 !important; display: inline-block !important; visibility: visible !important; min-width: 250px !important; min-height: 48px !important; padding: 18px 40px !important;">Complete Registration <i class="fas fa-arrow-right"></i></button>
           <p class="form-note">By registering, you agree to our terms and conditions</p>
         </div>
       </form>
@@ -488,80 +368,9 @@
     </footer>
   </div>
 
-  <!-- Critical performance script - loads first -->
-  <script>
-    // Performance monitoring
-    const perfStart = performance.now();
-
-    // Mobile device detection and optimization
-    const isMobile = window.innerWidth <= 768;
-    const isSlowConnection = navigator.connection && (navigator.connection.effectiveType === 'slow-2g' || navigator.connection.effectiveType === '2g');
-
-    if (isMobile) {
-      document.documentElement.classList.add('mobile-device');
-
-      // Disable smooth scrolling on very old mobile browsers
-      if (!('scrollBehavior' in document.documentElement.style)) {
-        document.documentElement.style.scrollBehavior = 'auto';
-      }
-    }
-
-    // Intelligent resource loading based on connection speed
-    if (!isMobile && !isSlowConnection) {
-      // Preload critical images only on desktop with good connection
-      const criticalImages = ['images/background.jpg', 'images/wealthcreationlondon.png'];
-      criticalImages.forEach(src => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.href = src;
-        document.head.appendChild(link);
-      });
-    }
-
-    // Performance tracking
-    window.addEventListener('load', () => {
-      const loadTime = performance.now() - perfStart;
-      console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
-
-      // Report slow loading for optimization
-      if (loadTime > 3000) {
-        console.warn('Slow page load detected:', loadTime);
-      }
-    });
-  </script>
-
-  <!-- Service Worker registration for caching -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(registration => console.log('SW registered'))
-          .catch(error => console.log('SW registration failed'));
-      });
-    }
-  </script>
-
-  <!-- Load scripts asynchronously for better performance -->
-  <script>
-    // Async script loader
-    function loadScript(src, callback) {
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      script.onload = callback;
-      document.head.appendChild(script);
-    }
-
-    // Load critical scripts in order
-    loadScript('https://js.stripe.com/v3/', function() {
-      loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js', function() {
-        loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js', function() {
-          // Load main app after dependencies
-          loadScript('js/app.js');
-        });
-      });
-    });
-  </script>
+  <!-- All JavaScript moved to external files for better debugging -->
+  <script src="js/performance.js"></script>
+</body>
+</html>
 </body>
 </html>

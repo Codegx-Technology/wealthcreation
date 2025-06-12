@@ -133,17 +133,17 @@
 
         function testFormElements() {
             log('🔍 Testing form elements in iframe...');
-            
+
             // Create iframe to test the main page
             const iframe = document.createElement('iframe');
             iframe.src = '/';
             iframe.style.display = 'none';
             document.body.appendChild(iframe);
-            
+
             iframe.onload = function() {
                 try {
                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                    
+
                     // Test form existence
                     const form = iframeDoc.getElementById('registrationForm');
                     if (form) {
@@ -151,7 +151,7 @@
                     } else {
                         log('❌ Registration form NOT found in DOM');
                     }
-                    
+
                     // Test button existence
                     const button = iframeDoc.getElementById('submitButton');
                     if (button) {
@@ -159,9 +159,32 @@
                         log(`📋 Button type: ${button.type}`);
                         log(`📋 Button disabled: ${button.disabled}`);
                         log(`📋 Button innerHTML: ${button.innerHTML}`);
-                        
+
+                        // DETAILED CSS DEBUGGING
+                        const computedStyle = iframeDoc.defaultView.getComputedStyle(button);
+                        log(`🔍 CSS Debug - display: ${computedStyle.display}`);
+                        log(`🔍 CSS Debug - visibility: ${computedStyle.visibility}`);
+                        log(`🔍 CSS Debug - opacity: ${computedStyle.opacity}`);
+                        log(`🔍 CSS Debug - width: ${computedStyle.width}`);
+                        log(`🔍 CSS Debug - height: ${computedStyle.height}`);
+                        log(`🔍 CSS Debug - position: ${computedStyle.position}`);
+                        log(`🔍 CSS Debug - z-index: ${computedStyle.zIndex}`);
+
+                        // Check parent container
+                        const btnContainer = button.parentElement;
+                        if (btnContainer) {
+                            const containerStyle = iframeDoc.defaultView.getComputedStyle(btnContainer);
+                            log(`🔍 Container Debug - display: ${containerStyle.display}`);
+                            log(`🔍 Container Debug - opacity: ${containerStyle.opacity}`);
+                            log(`🔍 Container Debug - width: ${containerStyle.width}`);
+                            log(`🔍 Container Debug - height: ${containerStyle.height}`);
+                        }
+
                         // Test button visibility
                         const rect = button.getBoundingClientRect();
+                        log(`🔍 BoundingRect - width: ${rect.width}, height: ${rect.height}`);
+                        log(`🔍 BoundingRect - top: ${rect.top}, left: ${rect.left}`);
+
                         if (rect.width > 0 && rect.height > 0) {
                             log('✅ Button is visible');
                             updateStatus('✅ Form elements are working', 'success');
@@ -173,12 +196,12 @@
                         log('❌ Submit button NOT found in DOM');
                         updateStatus('❌ Submit button missing', 'error');
                     }
-                    
+
                 } catch (error) {
                     log(`❌ Error accessing iframe content: ${error.message}`);
                     updateStatus('❌ Cannot access form elements', 'error');
                 }
-                
+
                 // Clean up
                 document.body.removeChild(iframe);
             };

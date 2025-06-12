@@ -1,0 +1,213 @@
+/* Critical CSS for immediate rendering - Above the fold content */
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+:root {
+  --primary: #0c2340;
+  --primary-light: #1a3a5f;
+  --secondary: #c6a343;
+  --light: #ffffff;
+  --dark: #051224;
+  --text: #2c3e50;
+  --text-light: #546e7a;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+  opacity: 1;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  padding: 25px 0;
+  background-color: rgba(12, 35, 64, 0.92);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(198, 163, 67, 0.2);
+  position: relative;
+  z-index: 10;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--light);
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.logo span {
+  color: #e9c46a;
+}
+
+.conference-subtitle {
+  font-size: 1.1rem;
+  color: var(--light);
+  opacity: 0.9;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.guest-speaker {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e9c46a;
+  letter-spacing: 0.8px;
+  text-align: center;
+  padding: 3px 12px;
+  border-radius: 20px;
+  background: rgba(12, 35, 64, 0.3);
+  border: 1px solid rgba(198, 163, 67, 0.2);
+  display: inline-block;
+}
+
+.hero-section {
+  height: 50vh;
+  min-height: 400px;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(12, 35, 64, 0.2), rgba(12, 35, 64, 0.6)), url('../images/background.jpg');
+  background-size: cover;
+  background-position: center 15%;
+  position: relative;
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 60px auto;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 50px;
+  border-radius: 16px;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(20px);
+}
+
+/* CRITICAL: Button must be immediately visible - Override all animations */
+.btn-container {
+  text-align: center !important;
+  margin-top: 40px !important;
+  opacity: 1 !important;
+  display: block !important;
+  visibility: visible !important;
+  animation: none !important;
+  animation-delay: 0s !important;
+  transform: none !important;
+}
+
+button, #submitButton {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%) !important;
+  color: var(--light) !important;
+  border: none !important;
+  padding: 18px 40px !important;
+  border-radius: 50px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-width: 250px !important;
+  min-height: 48px !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  position: relative !important;
+  z-index: 100 !important;
+  animation: none !important;
+  animation-delay: 0s !important;
+  transform: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Override any desktop animations that hide elements */
+@media (min-width: 769px) {
+  .btn-container {
+    opacity: 1 !important;
+    animation: none !important;
+    animation-delay: 0s !important;
+  }
+
+  button, #submitButton {
+    opacity: 1 !important;
+    display: inline-block !important;
+    visibility: visible !important;
+  }
+}
+
+/* Mobile optimizations - immediate visibility */
+@media (max-width: 768px) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+  }
+
+  body { 
+    opacity: 1 !important; 
+  }
+  
+  .hero-section { 
+    height: 30vh; 
+    min-height: 250px; 
+  }
+  
+  .container { 
+    margin: 30px 20px; 
+    padding: 30px 20px; 
+  }
+  
+  .logo { 
+    font-size: 1.8rem; 
+  }
+  
+  .conference-subtitle { 
+    font-size: 1rem; 
+  }
+  
+  .guest-speaker { 
+    font-size: 0.9rem; 
+  }
+
+  .btn-container {
+    opacity: 1 !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  button {
+    width: 100%;
+    min-width: unset;
+    padding: 16px 30px;
+    font-size: 1rem;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
