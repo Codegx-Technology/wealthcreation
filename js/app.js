@@ -79,43 +79,43 @@ function toggleCustomAmount() {
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded, initializing application");
 
+  // Ensure critical elements exist before proceeding
+  const form = document.getElementById('registrationForm');
+  const submitButton = document.getElementById('submitButton');
+
+  if (!form || !submitButton) {
+    console.error('Critical form elements missing - retrying in 500ms');
+    setTimeout(() => {
+      if (document.getElementById('registrationForm') && document.getElementById('submitButton')) {
+        initializeApp();
+      } else {
+        console.error('Form elements still missing after retry');
+      }
+    }, 500);
+    return;
+  }
+
+  initializeApp();
+});
+
+function initializeApp() {
+
   // Check for duplicate payment method titles and remove them
   const paymentTitles = document.querySelectorAll('.payment-method-title');
-  console.log('🔍 Payment method titles found:', paymentTitles.length);
-
   if (paymentTitles.length > 1) {
-    console.log('⚠️ Multiple payment method titles detected, removing duplicates...');
     // Keep only the first one and remove the rest
     for (let i = 1; i < paymentTitles.length; i++) {
       paymentTitles[i].remove();
-      console.log('🗑️ Removed duplicate payment method title');
     }
   }
 
-  // Immediate button test
+  // Quick element check
   const testButton = document.getElementById('submitButton');
   const testForm = document.getElementById('registrationForm');
-  console.log('🔍 Initial element check:');
-  console.log('Submit button exists:', !!testButton);
-  console.log('Registration form exists:', !!testForm);
 
-  if (testButton) {
-    console.log('Button type:', testButton.type);
-    console.log('Button disabled:', testButton.disabled);
-    console.log('Button innerHTML:', testButton.innerHTML);
-    console.log('Button style.display:', testButton.style.display);
-    console.log('Button offsetWidth:', testButton.offsetWidth);
-    console.log('Button offsetHeight:', testButton.offsetHeight);
-
-    // Test button visibility and clickability
-    const buttonRect = testButton.getBoundingClientRect();
-    console.log('Button position:', {
-      top: buttonRect.top,
-      left: buttonRect.left,
-      width: buttonRect.width,
-      height: buttonRect.height,
-      visible: buttonRect.width > 0 && buttonRect.height > 0
-    });
+  if (!testButton || !testForm) {
+    console.error('Critical form elements missing!');
+    return;
   }
 
   // Check if mobile device
@@ -132,7 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.style.pointerEvents = 'auto';
         submitButton.style.touchAction = 'manipulation';
         submitButton.style.webkitTapHighlightColor = 'transparent';
-        console.log('Mobile button optimizations applied');
       }
     }, 100);
   }
@@ -162,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize form submission (fallback if Firebase fails)
   initializeFormSubmission();
-});
+}
 
 // Initialize Stripe
 function initializeStripe() {
@@ -317,14 +316,12 @@ function initializeFormSubmission() {
   // Add click event listener to button as backup
   submitButton.addEventListener('click', function(event) {
     console.log('🔥 Submit button clicked!');
-    console.log('Event details:', {
-      type: event.type,
-      target: event.target.tagName,
-      buttonType: event.target.type,
-      disabled: event.target.disabled,
-      formId: form.id,
-      buttonId: event.target.id
-    });
+
+    // Prevent double submission
+    if (submitButton.disabled) {
+      event.preventDefault();
+      return;
+    }
 
     // Visual feedback for user
     const formStatus = document.getElementById('formStatus');
@@ -334,9 +331,14 @@ function initializeFormSubmission() {
       formStatus.style.display = 'block';
     }
 
-    // If the form's submit event doesn't fire, this will
+    // If button type is submit, let the form handle it
     if (event.target.type === 'submit') {
-      console.log('Button type is submit - form should handle this');
+      console.log('Button type is submit - form will handle submission');
+      // Don't prevent default - let form submit naturally
+    } else {
+      // If not a submit button, manually trigger form submission
+      event.preventDefault();
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     }
   });
 

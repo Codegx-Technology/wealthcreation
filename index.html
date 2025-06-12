@@ -164,14 +164,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Load CSS files normally to avoid FOUC -->
-  <link rel="stylesheet" href="css/styles.css?v=20250101">
-  <link rel="stylesheet" href="css/responsive.css?v=20250101">
-  <link rel="stylesheet" href="css/forms.css?v=20250101">
-  <link rel="stylesheet" href="css/sections.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Combined CSS for better performance -->
+  <link rel="stylesheet" href="css/combined.css?v=20250101">
+
+  <!-- Load fonts asynchronously for better performance -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"></noscript>
+
+  <!-- Load only essential FontAwesome icons -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
   <!-- Critical image preloading with responsive considerations -->
   <link rel="preload" href="images/background.jpg" as="image" media="(min-width: 769px)">
@@ -540,14 +542,26 @@
     }
   </script>
 
-  <!-- Stripe SDK for payment processing -->
-  <script src="https://js.stripe.com/v3/"></script>
+  <!-- Load scripts asynchronously for better performance -->
+  <script>
+    // Async script loader
+    function loadScript(src, callback) {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = callback;
+      document.head.appendChild(script);
+    }
 
-  <!-- Firebase SDK loaded synchronously to ensure availability -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-  <!-- Main application script -->
-  <script src="js/app.js"></script>
+    // Load critical scripts in order
+    loadScript('https://js.stripe.com/v3/', function() {
+      loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js', function() {
+        loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js', function() {
+          // Load main app after dependencies
+          loadScript('js/app.js');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
