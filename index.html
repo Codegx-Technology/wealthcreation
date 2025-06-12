@@ -58,6 +58,45 @@
   <!-- Critical image preloading with responsive considerations -->
   <link rel="preload" href="images/background.jpg" as="image" media="(min-width: 769px)">
   <link rel="preload" href="images/wealthcreationlondon.png" as="image">
+
+  <!-- NUCLEAR BUTTON FIX - Inline styles to override everything -->
+  <style>
+    /* Force button visibility with maximum specificity */
+    .btn-container,
+    div.btn-container,
+    #submitButton,
+    button#submitButton,
+    button[type="submit"] {
+      opacity: 1 !important;
+      display: block !important;
+      visibility: visible !important;
+      width: auto !important;
+      height: auto !important;
+      min-width: 250px !important;
+      min-height: 48px !important;
+      padding: 18px 40px !important;
+      margin: 0 auto !important;
+      position: relative !important;
+      z-index: 9999 !important;
+      background: #0c2340 !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 50px !important;
+      cursor: pointer !important;
+      font-size: 1.1rem !important;
+      font-weight: 600 !important;
+      text-align: center !important;
+      animation: none !important;
+      animation-delay: 0s !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    .btn-container {
+      text-align: center !important;
+      margin-top: 40px !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -208,7 +247,7 @@
           <h3 class="stripe-title">Secure Payment</h3>
           <div class="amount-selection">
             <label for="ticket-amount">Select Ticket Amount</label>
-            <select id="ticket-amount" name="ticketAmount" onchange="toggleCustomAmount()">
+            <select id="ticket-amount" name="ticketAmount">
               <option value="">Select Amount</option>
               <option value="150">Early Bird - £150</option>
               <option value="200">Standard - £200</option>
@@ -370,5 +409,8 @@
 
   <!-- All JavaScript moved to external files for better debugging -->
   <script src="js/performance.js"></script>
+
+  <!-- Direct reference to main app for immediate loading -->
+  <script src="js/app.js" defer></script>
 </body>
 </html>
