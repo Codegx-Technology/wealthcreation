@@ -1163,18 +1163,7 @@ h2 {
   overflow: hidden;
 }
 
-.payment-method-label::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(12, 35, 64, 0.02), rgba(198, 163, 67, 0.05));
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: 1;
-}
+/* Removed ::before pseudo-element that was creating white overlay on icons */
 
 .payment-method-label:hover {
   border-color: var(--secondary);
@@ -1182,9 +1171,7 @@ h2 {
   box-shadow: 0 12px 40px rgba(198, 163, 67, 0.2);
 }
 
-.payment-method-label:hover::before {
-  opacity: 1;
-}
+/* Removed hover effect for ::before pseudo-element */
 
 .payment-method-option input[type="radio"]:checked + .payment-method-label {
   border-color: var(--primary);
@@ -1263,6 +1250,30 @@ h2 {
   position: relative !important;
   z-index: 10 !important;
   flex-shrink: 0 !important;
+}
+
+/* Ensure icons are always on top and visible - no white overlays */
+.payment-method-content i {
+  z-index: 999 !important;
+  position: relative !important;
+}
+
+.payment-method-content i::before,
+.payment-method-content i::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
+  opacity: 0 !important;
+}
+
+/* Remove any potential white overlays from all payment method elements */
+.payment-method-label *::before,
+.payment-method-label *::after,
+.payment-method-content *::before,
+.payment-method-content *::after {
+  background: transparent !important;
+  opacity: 0 !important;
+  display: none !important;
 }
 
 .payment-method-content .payment-text {
@@ -1576,12 +1587,15 @@ h2 {
   .payment-method-content i::before,
   .payment-method-content i::after,
   .payment-method-content .fas::before,
-  .payment-method-content .fas::after {
+  .payment-method-content .fas::after,
+  .payment-method-label::before,
+  .payment-method-label::after {
     display: none !important;
     content: none !important;
     background: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
+    z-index: -1 !important;
   }
 
   /* Force emoji fallback on mobile */
