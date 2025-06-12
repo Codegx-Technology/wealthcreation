@@ -1109,33 +1109,30 @@ h2 {
 }
 /* Payment Info and Form Styles */
 
-/* Payment Method Selection - Enhanced with Perfect Centering */
+/* Simple Payment Method Selection */
 .payment-method-section {
   margin: 30px 0;
-  padding: 25px;
-  background: linear-gradient(135deg, rgba(12, 35, 64, 0.08), rgba(198, 163, 67, 0.12));
-  border-radius: 16px;
-  border: 2px solid rgba(198, 163, 67, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #ddd;
 }
 
 .payment-method-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.4rem;
-  color: var(--primary);
-  margin-bottom: 24px;
-  font-weight: 700;
+  font-size: 1.3rem;
+  color: #0c2340;
+  margin-bottom: 20px;
+  font-weight: 600;
   text-align: center;
-  letter-spacing: -0.02em;
 }
 
 .payment-methods {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
+/* Simple Payment Method Cards */
 .payment-method-option {
   position: relative;
 }
@@ -1144,136 +1141,89 @@ h2 {
   position: absolute;
   opacity: 0;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
 }
 
 .payment-method-label {
   display: flex;
-  padding: 20px 24px;
-  border: 2px solid rgba(198, 163, 67, 0.3);
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  min-height: 100px;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
+  padding: 16px 20px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  min-height: 80px;
 }
-
-/* Removed ::before pseudo-element that was creating white overlay on icons */
 
 .payment-method-label:hover {
-  border-color: var(--secondary);
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 40px rgba(198, 163, 67, 0.2);
+  border-color: #c6a343;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Removed hover effect for ::before pseudo-element */
-
 .payment-method-option input[type="radio"]:checked + .payment-method-label {
-  border-color: var(--primary);
-  background: linear-gradient(135deg, rgba(12, 35, 64, 0.08), rgba(198, 163, 67, 0.15));
-  box-shadow: 0 8px 32px rgba(12, 35, 64, 0.15);
-  transform: translateY(-2px) scale(1.01);
+  border-color: #0c2340;
+  background: #f0f8ff;
 }
 
 .payment-method-option input[type="radio"]:checked + .payment-method-label::after {
   content: '✓';
   position: absolute;
-  top: 16px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  background: var(--primary);
+  top: 12px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  background: #0c2340;
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: bold;
-  z-index: 10;
-  animation: checkmarkPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-@keyframes checkmarkPop {
-  0% {
-    transform: scale(0) rotate(-180deg);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.2) rotate(-90deg);
-  }
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
-  }
 }
 
 .payment-method-content {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 16px;
   width: 100%;
-  padding: 0;
-  margin: 0;
-  position: relative;
-  z-index: 2;
-  gap: 20px;
+}
+
+/* Simple Payment Icons */
+.payment-icon {
+  width: 50px;
+  height: 50px;
+  background: #f0f8ff;
+  border: 2px solid #c6a343;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .payment-method-content i {
-  font-size: 3rem !important;
-  color: var(--primary) !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 70px !important;
-  height: 70px !important;
-  background: linear-gradient(135deg, rgba(12, 35, 64, 0.1), rgba(198, 163, 67, 0.15)) !important;
-  border-radius: 18px !important;
-  border: 2px solid rgba(198, 163, 67, 0.25) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  font-family: "Font Awesome 6 Free", "FontAwesome", "Apple Color Emoji", "Segoe UI Emoji", sans-serif !important;
-  font-weight: 900 !important;
-  font-style: normal !important;
-  line-height: 1 !important;
-  text-align: center !important;
-  position: relative !important;
-  z-index: 10 !important;
-  flex-shrink: 0 !important;
+  display: none; /* Hide FontAwesome icons completely */
 }
 
-/* Ensure icons are always on top and visible - no white overlays */
-.payment-method-content i {
-  z-index: 999 !important;
-  position: relative !important;
+.payment-text {
+  flex: 1;
 }
 
-.payment-method-content i::before,
-.payment-method-content i::after {
-  display: none !important;
-  content: none !important;
-  background: transparent !important;
-  opacity: 0 !important;
+.payment-text span {
+  display: block;
+  font-weight: 600;
+  color: #0c2340;
+  margin-bottom: 4px;
+  font-size: 1rem;
 }
 
-/* Remove any potential white overlays from all payment method elements */
-.payment-method-label *::before,
-.payment-method-label *::after,
-.payment-method-content *::before,
-.payment-method-content *::after {
-  background: transparent !important;
-  opacity: 0 !important;
-  display: none !important;
+.payment-text small {
+  color: #666;
+  font-size: 0.85rem;
 }
 
 .payment-method-content .payment-text {
@@ -1454,186 +1404,28 @@ h2 {
   margin-bottom: 20px;
 }
 
-/* Mobile Responsive - Simplified for better visibility */
+/* Simple Mobile Responsive */
 @media (max-width: 768px) {
   .payment-method-section {
     padding: 16px;
     margin: 20px 0;
   }
 
-  .payment-method-title {
+  .payment-icon {
+    width: 45px;
+    height: 45px;
     font-size: 1.3rem;
-    margin-bottom: 20px;
-    text-align: center;
   }
 
-  .payment-methods {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  .payment-text span {
+    font-size: 0.95rem;
   }
 
-  .payment-method-label {
-    padding: 16px 20px !important;
-    min-height: 90px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
+  .payment-text small {
+    font-size: 0.8rem;
   }
 
-  .payment-method-content {
-    display: flex !important;
-    align-items: center !important;
-    width: 100% !important;
-  }
-
-  /* Simple emoji icons for mobile - no FontAwesome complications */
-  .payment-method-content i {
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-    font-size: 2.5rem !important;
-    font-weight: normal !important;
-    font-style: normal !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 55px !important;
-    height: 55px !important;
-    background: linear-gradient(135deg, rgba(12, 35, 64, 0.1), rgba(198, 163, 67, 0.15)) !important;
-    border-radius: 14px !important;
-    border: 2px solid rgba(198, 163, 67, 0.2) !important;
-    margin-right: 16px !important;
-    flex-shrink: 0 !important;
-    color: transparent !important;
-    text-align: center !important;
-    line-height: 1 !important;
-  }
-
-  /* Force emoji content directly */
-  .payment-method-content .fa-credit-card {
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-  }
-
-  .payment-method-content .fa-credit-card::before {
-    content: "💳" !important;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-    color: #0c2340 !important;
-    font-size: 2.5rem !important;
-  }
-
-  .payment-method-content .fa-university::before {
-    content: "🏦" !important;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-    color: #0c2340 !important;
-    font-size: 2.5rem !important;
-  }
-
-  .payment-method-content span {
-    font-size: 1.05rem !important;
-    font-weight: 700 !important;
-    margin-bottom: 4px !important;
-  }
-
-  .payment-method-content small {
-    font-size: 0.85rem !important;
-    font-weight: 500 !important;
-  }
-
-  .payment-method-label {
-    padding: 12px 10px !important;
-    min-height: 70px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  .payment-method-content {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  .payment-method-content i {
-    font-size: 2.5rem !important;
-    color: var(--primary) !important;
-    margin: 0 0 8px 0 !important;
-    padding: 0 !important;
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    line-height: 1 !important;
-    font-family: "Font Awesome 6 Free", "FontAwesome", "Apple Color Emoji", "Segoe UI Emoji", sans-serif !important;
-    font-weight: 900 !important;
-    text-align: center !important;
-    background: none !important;
-    border: none !important;
-    -webkit-text-fill-color: var(--primary) !important;
-    -webkit-background-clip: initial !important;
-    width: auto !important;
-    height: auto !important;
-    position: relative !important;
-    z-index: 100 !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    filter: none !important;
-    transform: none !important;
-  }
-
-  /* Remove all pseudo-elements that could create white overlays */
-  .payment-method-content i::before,
-  .payment-method-content i::after,
-  .payment-method-content .fas::before,
-  .payment-method-content .fas::after,
-  .payment-method-label::before,
-  .payment-method-label::after {
-    display: none !important;
-    content: none !important;
-    background: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    z-index: -1 !important;
-  }
-
-  /* Force emoji fallback on mobile */
-  .payment-method-content .fa-credit-card:not(.fa-loaded) {
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-  }
-
-  .payment-method-content .fa-credit-card:not(.fa-loaded)::after {
-    content: "💳" !important;
-    display: inline-block !important;
-    font-size: 2.5rem !important;
-    color: var(--primary) !important;
-  }
-
-  .payment-method-content .fa-university:not(.fa-loaded) {
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-  }
-
-  .payment-method-content .fa-university:not(.fa-loaded)::after {
-    content: "🏦" !important;
-    display: inline-block !important;
-    font-size: 2.5rem !important;
-    color: var(--primary) !important;
-  }
-
-  .payment-method-content span {
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: var(--primary) !important;
-    display: block !important;
-    margin-bottom: 5px !important;
-  }
-
-  .payment-method-content small {
-    font-size: 0.8rem !important;
-    color: var(--text-light) !important;
-    display: block !important;
-  }
+  /* Clean mobile styles - no complex overrides */
 
   /* Mobile payment info improvements */
   .payment-info {
