@@ -210,6 +210,18 @@
     border-radius: 8px;
     width: 100%;
     box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Specific email field improvements */
+  input[type="email"] {
+    font-size: 0.85rem;
+    padding: 14px 38px 14px 10px;
+    letter-spacing: -0.02em;
   }
 
   .input-icon {
@@ -248,6 +260,17 @@
     input, select, textarea {
       padding: 12px 35px 12px 10px;
       font-size: 0.85rem;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Extra small screen email field */
+    input[type="email"] {
+      font-size: 0.8rem;
+      padding: 12px 35px 12px 8px;
+      letter-spacing: -0.03em;
     }
 
     ::placeholder {
@@ -488,6 +511,30 @@
     margin-bottom: 10px !important;
     display: block !important;
     text-align: center !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--primary) !important;
+    -webkit-background-clip: initial !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Ensure payment method labels are clickable */
+  .payment-method-label {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(198, 163, 67, 0.2) !important;
+  }
+
+  /* Button mobile improvements */
+  button {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    min-height: 48px !important;
+    padding: 16px 30px !important;
+    font-size: 1rem !important;
   }
 
   /* Optimize background images for mobile */

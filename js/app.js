@@ -97,7 +97,17 @@ document.addEventListener('DOMContentLoaded', function() {
   if (isMobile) {
     // Immediate mobile optimizations
     document.body.classList.add('mobile-device');
-    // CSS handles the rest - no need for JavaScript manipulation
+
+    // Ensure button is properly clickable on mobile
+    setTimeout(() => {
+      const submitButton = document.getElementById('submitButton');
+      if (submitButton) {
+        submitButton.style.pointerEvents = 'auto';
+        submitButton.style.touchAction = 'manipulation';
+        submitButton.style.webkitTapHighlightColor = 'transparent';
+        console.log('Mobile button optimizations applied');
+      }
+    }, 100);
   }
 
   // Preload resources for better performance (only on desktop or fast connections)

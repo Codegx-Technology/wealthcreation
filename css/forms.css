@@ -63,9 +63,13 @@
 
 .payment-method-content i {
   font-size: 1.5rem;
-  color: var(--primary);
+  color: var(--primary) !important;
   margin-bottom: 8px;
-  display: block;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
 }
 
 .payment-method-content span {
@@ -172,6 +176,12 @@
     opacity: 1 !important;
     visibility: visible !important;
     line-height: 1 !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--primary) !important;
+    -webkit-background-clip: initial !important;
   }
 
   .payment-method-content span {
@@ -393,6 +403,10 @@ input, select, textarea {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 input::before, select::before, textarea::before {
@@ -533,6 +547,9 @@ button {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: 10;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button * {
@@ -648,5 +665,38 @@ button:hover i {
   .custom-amount-section input {
     padding: 10px 12px;
     font-size: 0.95rem;
+  }
+
+  /* Mobile form improvements */
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Email field specific mobile styling */
+  input[type="email"] {
+    font-size: 0.85rem !important;
+    padding: 14px 38px 14px 10px !important;
+    letter-spacing: -0.02em !important;
+    word-break: break-all !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Button mobile styling */
+  button {
+    min-width: 200px !important;
+    padding: 16px 30px !important;
+    font-size: 1rem !important;
+    min-height: 48px !important;
+  }
+
+  /* Ensure payment icons are visible */
+  .payment-method-content i.fas {
+    color: var(--primary) !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--primary) !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
   }
 }
