@@ -2,7 +2,7 @@
 
 // Production Environment Configuration
 const IS_PRODUCTION = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-const API_BASE_URL = IS_PRODUCTION ? 'https://your-domain.com' : 'http://localhost:3000';
+const API_BASE_URL = IS_PRODUCTION ? '/.netlify/functions' : 'http://localhost:8888/.netlify/functions';
 
 // Stripe configuration - LIVE KEYS (PRODUCTION READY)
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz';
