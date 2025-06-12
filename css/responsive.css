@@ -219,16 +219,19 @@
 
   /* Specific email field improvements */
   input[type="email"] {
-    font-size: 0.8rem !important;
+    font-size: 0.85rem !important;
     padding: 12px 35px 12px 8px !important;
-    letter-spacing: -0.03em !important;
-    word-break: break-all !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    letter-spacing: -0.02em !important;
+    word-break: normal !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
     max-width: 100% !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    line-height: 1.2 !important;
+    height: auto !important;
+    min-height: 44px !important;
   }
 
   .input-icon {
@@ -275,16 +278,19 @@
 
     /* Extra small screen email field */
     input[type="email"] {
-      font-size: 0.75rem !important;
+      font-size: 0.8rem !important;
       padding: 10px 30px 10px 6px !important;
-      letter-spacing: -0.04em !important;
-      word-break: break-all !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
+      letter-spacing: -0.02em !important;
+      word-break: normal !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
       max-width: 100% !important;
       width: 100% !important;
       box-sizing: border-box !important;
+      line-height: 1.2 !important;
+      height: auto !important;
+      min-height: 40px !important;
     }
 
     ::placeholder {

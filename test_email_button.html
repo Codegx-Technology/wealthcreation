@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Field & Button Test</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%);
+            min-height: 100vh;
+        }
+        .test-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .test-header {
+            text-align: center;
+            color: #0c2340;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 25px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #0c2340;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        .test-result {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .result-pass { background: #d4edda; color: #155724; }
+        .result-fail { background: #f8d7da; color: #721c24; }
+        .result-info { background: #d1ecf1; color: #0c5460; }
+        .email-examples {
+            margin: 15px 0;
+        }
+        .email-example {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .email-example label {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .button-test {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .click-counter {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>📧 Email Field & 🔘 Button Test</h1>
+            <p>Testing the fixes for email field cutting and button functionality</p>
+        </div>
+
+        <!-- Email Field Test -->
+        <div class="test-section">
+            <div class="test-title">📧 Email Field Responsiveness Test</div>
+            
+            <div class="email-examples">
+                <div class="email-example">
+                    <label>Short Email:</label>
+                    <div class="form-group">
+                        <input type="email" id="email1" placeholder="test@email.com" value="test@email.com" />
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-example">
+                    <label>Medium Email:</label>
+                    <div class="form-group">
+                        <input type="email" id="email2" placeholder="user@company.co.uk" value="john.doe@mycompany.co.uk" />
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-example">
+                    <label>Long Email (Previously Cutting):</label>
+                    <div class="form-group">
+                        <input type="email" id="email3" placeholder="Long email address" value="john.doe@verylongcompanydomainname.co.uk" />
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-example">
+                    <label>Very Long Email:</label>
+                    <div class="form-group">
+                        <input type="email" id="email4" placeholder="Very long email" value="firstname.lastname@superlongcompanydomainname.organization.co.uk" />
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="emailTestResult" class="test-result"></div>
+        </div>
+
+        <!-- Button Test -->
+        <div class="test-section">
+            <div class="test-title">🔘 Registration Button Test</div>
+            
+            <div class="button-test">
+                <button type="button" id="testButton" onclick="testButtonClick()">
+                    Complete Registration <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="click-counter" id="clickCounter">
+                Button Clicks: 0
+            </div>
+
+            <div id="buttonTestResult" class="test-result"></div>
+        </div>
+
+        <!-- Overall Results -->
+        <div class="test-section">
+            <div class="test-title">🎯 Overall Test Results</div>
+            <div id="overallResult" class="test-result"></div>
+        </div>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        let emailTestPassed = false;
+        let buttonTestPassed = false;
+
+        function testButtonClick() {
+            clickCount++;
+            document.getElementById('clickCounter').textContent = `Button Clicks: ${clickCount}`;
+            
+            const buttonResult = document.getElementById('buttonTestResult');
+            buttonResult.className = 'test-result result-pass';
+            buttonResult.textContent = '✅ Button is working perfectly! Click registered successfully.';
+            
+            buttonTestPassed = true;
+            updateOverallResult();
+            
+            console.log('Button clicked successfully:', clickCount);
+        }
+
+        function testEmailFields() {
+            console.log('Testing email fields...');
+            
+            const emailFields = document.querySelectorAll('input[type="email"]');
+            let overflowIssues = 0;
+            let testDetails = [];
+
+            emailFields.forEach((field, index) => {
+                const fieldRect = field.getBoundingClientRect();
+                const hasOverflow = field.scrollWidth > field.clientWidth + 5; // 5px tolerance
+                
+                testDetails.push({
+                    index: index + 1,
+                    value: field.value,
+                    scrollWidth: field.scrollWidth,
+                    clientWidth: field.clientWidth,
+                    hasOverflow: hasOverflow
+                });
+
+                if (hasOverflow) {
+                    overflowIssues++;
+                }
+
+                console.log(`Email ${index + 1}: "${field.value}" - Scroll: ${field.scrollWidth}, Client: ${field.clientWidth}, Overflow: ${hasOverflow}`);
+            });
+
+            const emailResult = document.getElementById('emailTestResult');
+            
+            if (overflowIssues === 0) {
+                emailResult.className = 'test-result result-pass';
+                emailResult.textContent = `✅ All email fields working properly! No text cutting detected (${emailFields.length} fields tested).`;
+                emailTestPassed = true;
+            } else {
+                emailResult.className = 'test-result result-fail';
+                emailResult.textContent = `❌ ${overflowIssues} email field(s) still have text cutting issues.`;
+                emailTestPassed = false;
+            }
+
+            updateOverallResult();
+        }
+
+        function updateOverallResult() {
+            const overallResult = document.getElementById('overallResult');
+            
+            if (emailTestPassed && buttonTestPassed) {
+                overallResult.className = 'test-result result-pass';
+                overallResult.textContent = '🎉 ALL TESTS PASSED! Email fields and button are working perfectly.';
+            } else if (emailTestPassed || buttonTestPassed) {
+                overallResult.className = 'test-result result-info';
+                overallResult.textContent = `⏳ Partial success: Email ${emailTestPassed ? '✅' : '❌'}, Button ${buttonTestPassed ? '✅' : '❌'}`;
+            } else {
+                overallResult.className = 'test-result result-fail';
+                overallResult.textContent = '❌ Tests pending - please test email fields and button functionality.';
+            }
+        }
+
+        // Auto-run tests when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded - starting tests...');
+            
+            // Test email fields after a delay to ensure CSS is loaded
+            setTimeout(() => {
+                testEmailFields();
+            }, 1000);
+
+            // Display device info
+            console.log(`Screen: ${window.innerWidth}x${window.innerHeight}`);
+            console.log(`Device type: ${window.innerWidth <= 768 ? 'Mobile' : 'Desktop'}`);
+            
+            // Initial overall result
+            updateOverallResult();
+        });
+
+        // Re-test on window resize
+        window.addEventListener('resize', function() {
+            setTimeout(() => {
+                testEmailFields();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

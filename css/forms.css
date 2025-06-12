@@ -705,16 +705,19 @@ button:hover i {
 
   /* Email field specific mobile styling */
   input[type="email"] {
-    font-size: 0.8rem !important;
+    font-size: 0.85rem !important;
     padding: 12px 35px 12px 8px !important;
-    letter-spacing: -0.03em !important;
-    word-break: break-all !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
+    letter-spacing: -0.02em !important;
+    word-break: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
     max-width: 100% !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    line-height: 1.2 !important;
+    height: auto !important;
+    min-height: 44px !important;
   }
 
   /* Button mobile styling */
