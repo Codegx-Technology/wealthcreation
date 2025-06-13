@@ -350,87 +350,48 @@ function initializeCustomAmount() {
 function initializeFormSubmission() {
   const form = document.getElementById('registrationForm');
   const submitButton = document.getElementById('submitButton');
-  const formStatus = document.getElementById('formStatus');
 
-  console.log('Initializing form submission fallback...');
-  console.log('Form found:', !!form);
-  console.log('Submit button found:', !!submitButton);
+  if (!form || !submitButton) return;
 
-  if (!form || !submitButton) {
-    console.error('Critical form elements not found!');
-    return;
-  }
-
-  // Add click event listener to button as backup
-  submitButton.addEventListener('click', function(event) {
-    console.log('🔥 Submit button clicked!');
-
-    // Prevent double submission
-    if (submitButton.disabled) {
-      event.preventDefault();
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      alert('Please fill in all required fields correctly.');
       return;
     }
 
-    // Visual feedback for user
-    const formStatus = document.getElementById('formStatus');
-    if (formStatus) {
-      formStatus.textContent = '✅ Button clicked! Processing...';
-      formStatus.className = 'form-status loading';
-      formStatus.style.display = 'block';
-    }
+    submitButton.disabled = true;
+    submitButton.textContent = 'Processing...';
 
-    // If button type is submit, let the form handle it
-    if (event.target.type === 'submit') {
-      console.log('Button type is submit - form will handle submission');
-      // Don't prevent default - let form submit naturally
-    } else {
-      // If not a submit button, manually trigger form submission
-      event.preventDefault();
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    }
-  });
+    try {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
 
-  // Add additional event listeners for debugging
-  submitButton.addEventListener('mousedown', () => console.log('🖱️ Button mousedown'));
-  submitButton.addEventListener('mouseup', () => console.log('🖱️ Button mouseup'));
-  submitButton.addEventListener('focus', () => console.log('🎯 Button focused'));
-  submitButton.addEventListener('blur', () => console.log('🎯 Button blurred'));
-
-  // Add direct form submit listener as backup
-  form.addEventListener('submit', function(event) {
-    console.log('Form submit event fired!');
-
-    // If Firebase form handler isn't working, provide basic functionality
-    if (!window.firebaseFormHandlerActive) {
-      event.preventDefault();
-      console.log('Firebase handler not active, using fallback...');
-
-      if (formStatus) {
-        formStatus.textContent = 'Form submission detected! Please ensure Firebase is loaded for full functionality.';
-        formStatus.className = 'form-status loading';
-        formStatus.style.display = 'block';
+      // Handle payment based on selected method
+      const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
+      
+      if (paymentMethod === 'stripe') {
+        await handleStripePayment(data);
+      } else if (paymentMethod === 'bank-transfer') {
+        await handleBankTransfer(data);
+      } else {
+        throw new Error('Please select a payment method');
       }
 
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
-      }
-
-      // Re-enable button after 3 seconds
-      setTimeout(() => {
-        if (submitButton) {
-          submitButton.disabled = false;
-          submitButton.innerHTML = 'Complete Registration <i class="fas fa-arrow-right"></i>';
-        }
-        if (formStatus) {
-          formStatus.textContent = 'Please check that all required fields are filled and try again.';
-          formStatus.className = 'form-status error';
-        }
-      }, 3000);
+      // Save to Firebase
+      await saveToFirebase(data);
+      
+      alert('Registration successful!');
+      form.reset();
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed: ' + error.message);
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Complete Registration';
     }
   });
-
-  console.log('Form submission fallback initialized');
 }
 
 // Initialize Firebase
@@ -465,285 +426,54 @@ function initializeFirebase() {
       window.firebaseFormHandlerActive = true;
 
       // Form submission event listener
-      form.addEventListener('submit', async function(event) {
-        event.preventDefault();
-        console.log("Form submitted via Firebase handler");
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-        // Show loading message
-        if (formStatus) {
-          formStatus.textContent = 'Processing your registration...';
-          formStatus.className = 'form-status loading';
-          formStatus.style.display = 'block';
+        if (!validateForm()) {
+          alert('Please fill in all required fields correctly.');
+          return;
         }
 
-        if (submitButton) {
-          submitButton.disabled = true;
-          submitButton.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
-        }
+        submitButton.disabled = true;
+        submitButton.textContent = 'Processing...';
 
         try {
-          // Get payment method - default to bank if not found
-          const paymentMethodElement = document.querySelector('input[name="paymentMethod"]:checked');
-          const paymentMethod = paymentMethodElement ? paymentMethodElement.value : 'bank';
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData.entries());
+          
+          // Add timestamp
+          data.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+          
+          // Handle payment method
+          const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
+          data.paymentMethod = paymentMethod;
 
-          console.log('Payment method selected:', paymentMethod);
-
-          // Get basic form data
-          const formData = {
-            title: document.getElementById('title')?.value || '',
-            firstName: document.getElementById('firstName')?.value || '',
-            secondName: document.getElementById('secondName')?.value || '',
-            email: document.getElementById('email')?.value || '',
-            phone: document.getElementById('phone')?.value || '',
-            org: document.getElementById('org')?.value || '',
-            paymentMethod: paymentMethod,
-            timestamp: new Date().toISOString(),
-            source: window.location.hostname,
-            userAgent: navigator.userAgent,
-            screenResolution: `${screen.width}x${screen.height}`
-          };
-
-          console.log('Collected form data:', formData);
-
-          // Validate required fields
-          if (!formData.firstName || !formData.secondName || !formData.email || !formData.phone) {
-            throw new Error('Please fill in all required fields (First Name, Last Name, Email, Phone)');
-          }
-
-          if (paymentMethod === 'stripe') {
-            // Check if Stripe is properly configured
-            if (typeof stripe === 'undefined' || !stripe) {
-              throw new Error('Stripe payment is not available. Please use bank transfer or contact support.');
-            }
-
-            // Check if card element is available
-            if (!cardElement) {
-              throw new Error('Card details not entered. Please enter your card information.');
-            }
-
-            // Handle Stripe payment - get amount from ticket selection or custom input
-            let ticketAmount;
-            const ticketAmountElement = document.getElementById('ticket-amount');
-
-            if (ticketAmountElement && ticketAmountElement.value) {
-              if (ticketAmountElement.value === 'custom') {
-                // Handle custom amount
-                const customAmountElement = document.getElementById('custom-amount-input');
-                if (!customAmountElement || !customAmountElement.value || parseFloat(customAmountElement.value) < 1) {
-                  throw new Error('Please enter a valid custom amount (minimum £1)');
-                }
-                ticketAmount = parseFloat(customAmountElement.value);
-              } else {
-                // Handle predefined ticket amounts
-                ticketAmount = parseFloat(ticketAmountElement.value);
-              }
-            } else {
-              // Fallback: check if there's a custom amount input directly
-              const customAmountElement = document.getElementById('custom-amount-input');
-              if (customAmountElement && customAmountElement.value && parseFloat(customAmountElement.value) >= 1) {
-                ticketAmount = parseFloat(customAmountElement.value);
-              } else {
-                throw new Error('Please select a ticket amount or enter a custom amount');
-              }
-            }
-
-            if (!ticketAmount || ticketAmount < 1) {
-              throw new Error('Please enter a valid amount (minimum £1)');
-            }
-
-            formData.amount = ticketAmount;
-            formData.paymentStatus = 'processing';
-
-            try {
-              console.log('🚀 Starting LIVE Stripe payment process...');
-              console.log(`⚠️ WARNING: This will charge £${ticketAmount} to the customer's card!`);
-              console.log('💰 REAL MONEY TRANSACTION IN PROGRESS...');
-
-              // Convert amount to pence for Stripe (Stripe uses smallest currency unit)
-              const amountInPence = Math.round(ticketAmount * 100);
-              console.log(`Amount: £${ticketAmount} = ${amountInPence} pence`);
-
-              // Try to use backend server for real payment processing
-              let useBackend = true;
-              let response;
-
-              try {
-                console.log('Attempting to connect to payment backend...');
-                response = await fetch(`${API_BASE_URL}/create-payment-intent`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    amount: amountInPence,
-                    currency: 'gbp',
-                    customer_email: formData.email,
-                    customer_name: `${formData.firstName} ${formData.secondName}`,
-                    description: `Wealth Creation Event Registration - £${ticketAmount}`
-                  }),
-                });
-
-                if (!response.ok) {
-                  console.log('Backend response not OK, falling back to direct payment');
-                  useBackend = false;
-                }
-              } catch (fetchError) {
-                console.log('Backend not available, using direct Stripe payment');
-                useBackend = false;
-              }
-
-              if (useBackend && response) {
-                // Full payment processing with backend
-                const { clientSecret, paymentIntentId } = await response.json();
-                console.log('Payment intent created:', paymentIntentId);
-                console.log('💳 Confirming payment with customer card...');
-
-                const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
-                  payment_method: {
-                    card: cardElement,
-                    billing_details: {
-                      name: `${formData.firstName} ${formData.secondName}`,
-                      email: formData.email,
-                      phone: formData.phone,
-                    },
-                  }
-                });
-
-                if (error) {
-                  console.error('Payment confirmation error:', error);
-                  throw new Error(`Payment failed: ${error.message}`);
-                }
-
-                if (paymentIntent.status === 'succeeded') {
-                  formData.paymentStatus = 'completed';
-                  formData.stripePaymentIntentId = paymentIntent.id;
-                  formData.referenceNumber = paymentIntent.id;
-                  formData.amount = ticketAmount;
-                  formData.currency = 'gbp';
-                  formData.livePayment = true;
-                  formData.chargedAmount = ticketAmount;
-                  console.log('🎉 PAYMENT SUCCESSFUL! Money charged: £' + ticketAmount);
-                  console.log('💰 Customer has been charged and should receive bank notification');
-                  console.log('📧 Payment confirmation will be sent to:', formData.email);
-                } else {
-                  throw new Error(`Payment was not successful. Status: ${paymentIntent.status}`);
-                }
-              } else {
-                // Direct payment processing without backend (for live payments)
-                console.log('🔄 Processing direct payment without backend...');
-                console.log('⚠️ Note: For live payments, you should use a backend server');
-
-                // Create payment method first
-                const {error: paymentMethodError, paymentMethod} = await stripe.createPaymentMethod({
-                  type: 'card',
-                  card: cardElement,
-                  billing_details: {
-                    name: `${formData.firstName} ${formData.secondName}`,
-                    email: formData.email,
-                    phone: formData.phone,
-                  },
-                });
-
-                if (paymentMethodError) {
-                  throw new Error(`Card validation failed: ${paymentMethodError.message}`);
-                }
-
-                // For live payments, you would typically create a payment intent on your backend
-                // This is a simplified version that captures the payment method
-                formData.paymentStatus = 'payment_method_captured';
-                formData.stripePaymentMethodId = paymentMethod.id;
-                formData.referenceNumber = paymentMethod.id;
-                formData.amount = ticketAmount;
-                formData.currency = 'gbp';
-                formData.livePayment = true;
-                formData.requiresManualProcessing = true;
-
-                console.log('💳 Payment method captured successfully');
-                console.log('⚠️ Manual processing required to complete payment');
-                console.log('🔧 Payment method ID:', paymentMethod.id);
-              }
-            } catch (stripeError) {
-              console.error('Stripe payment error:', stripeError);
-              throw new Error('Stripe payment failed. Please try bank transfer instead.');
-            }
+          // Handle custom amount
+          if (data['ticket-amount'] === 'custom') {
+            data.amount = parseFloat(data['custom-amount-input']);
           } else {
-            // Handle bank transfer
-            const manualAmountElement = document.getElementById('manual-amount');
-            const manualReferenceElement = document.getElementById('manual-reference');
-
-            // For bank transfer, get amount from manual fields or fallback to old amount field
-            const amountValue = manualAmountElement ? manualAmountElement.value :
-                              (form.amount ? form.amount.value : '');
-            const referenceValue = manualReferenceElement ? manualReferenceElement.value :
-                                 (form.referenceNumber ? form.referenceNumber.value : '');
-
-            if (!amountValue || !referenceValue) {
-              throw new Error('Please enter both amount paid and payment reference for bank transfer.');
-            }
-
-            formData.amount = amountValue;
-            formData.referenceNumber = referenceValue;
-            formData.paymentStatus = 'pending_verification';
+            data.amount = parseFloat(data['ticket-amount']);
           }
 
-          // Add production metadata
-          formData.environment = IS_PRODUCTION ? 'production' : 'development';
-          formData.userAgent = navigator.userAgent;
-          formData.timestamp = new Date().toISOString();
-          formData.submissionId = `REG_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          // Save to Firebase
+          const docRef = await db.collection('registrations').add(data);
+          console.log('Registration saved with ID:', docRef.id);
 
-          console.log("Sending data to Firebase:", formData);
-
-          // Add to Firestore
-          const docRef = await db.collection('registrations').add(formData);
-
-          // Success
-          console.log("✅ Registration saved with ID:", docRef.id);
-          console.log("📊 Submission ID:", formData.submissionId);
-
-          if (formStatus) {
-            if (paymentMethod === 'stripe') {
-              if (formData.paymentStatus === 'completed') {
-                formStatus.textContent = `🎉 Payment Successful! £${ticketAmount} has been charged to your card. You will receive confirmation emails shortly.`;
-              } else if (formData.requiresManualProcessing) {
-                formStatus.textContent = `⚠️ Payment method captured. Manual processing required to complete £${ticketAmount} charge. You will be contacted shortly.`;
-              } else {
-                formStatus.textContent = '✅ Payment processed! Your registration is complete. Confirmation emails will be sent shortly.';
-              }
-            } else {
-              formStatus.textContent = 'Registration submitted! Please complete your bank transfer using the details above.';
-            }
-            formStatus.className = 'form-status success';
+          // Handle payment based on method
+          if (paymentMethod === 'stripe') {
+            await handleStripePayment(data);
+          } else if (paymentMethod === 'bank-transfer') {
+            showBankTransferDetails();
           }
 
-          // Reset form
-          form.reset();
-          if (cardElement) {
-            cardElement.clear();
-          }
-
-          // Track successful submission
-          trackEvent('form_submission', 'success', formData.email);
-
+          // Show success message
+          showSuccessMessage();
         } catch (error) {
-          // Error
-          console.error('Error processing registration:', error);
-          console.error('Error stack:', error.stack);
-
-          if (formStatus) {
-            formStatus.textContent = `Registration Error: ${error.message}`;
-            formStatus.className = 'form-status error';
-            formStatus.style.display = 'block';
-          }
-
-          // Track failed submission
-          trackEvent('form_submission', 'error', error.message);
-
+          console.error('Error saving registration:', error);
+          alert('There was an error processing your registration. Please try again.');
         } finally {
-          if (submitButton) {
-            submitButton.disabled = false;
-            submitButton.innerHTML = 'Complete Registration <i class="fas fa-arrow-right"></i>';
-          }
+          submitButton.disabled = false;
+          submitButton.textContent = 'Complete Registration';
         }
       });
 
@@ -903,4 +633,80 @@ if ('serviceWorker' in navigator) {
         console.log('ServiceWorker registration failed');
       });
   });
+}
+
+function validateForm() {
+  const form = document.getElementById('registrationForm');
+  const requiredFields = form.querySelectorAll('[required]');
+  let isValid = true;
+
+  requiredFields.forEach(field => {
+    if (!field.value.trim()) {
+      field.classList.add('error');
+      isValid = false;
+    } else {
+      field.classList.remove('error');
+    }
+  });
+
+  // Validate custom amount if selected
+  const ticketAmount = document.getElementById('ticket-amount');
+  if (ticketAmount && ticketAmount.value === 'custom') {
+    const customAmount = document.getElementById('custom-amount-input');
+    if (customAmount && (!customAmount.value || isNaN(customAmount.value) || customAmount.value <= 0)) {
+      customAmount.classList.add('error');
+      isValid = false;
+    }
+  }
+
+  return isValid;
+}
+
+async function handleStripePayment(data) {
+  if (!stripe || !cardElement) {
+    throw new Error('Stripe not initialized');
+  }
+
+  const { error, paymentMethod } = await stripe.createPaymentMethod({
+    type: 'card',
+    card: cardElement,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return paymentMethod;
+}
+
+async function handleBankTransfer(data) {
+  // Validate bank transfer details
+  const amount = data['ticket-amount'] === 'custom' 
+    ? data['custom-amount-input'] 
+    : data['ticket-amount'];
+
+  if (!amount || isNaN(amount) || amount <= 0) {
+    throw new Error('Invalid payment amount');
+  }
+
+  return { type: 'bank_transfer', amount };
+}
+
+async function saveToFirebase(data) {
+  try {
+    const db = firebase.firestore();
+    const registrationRef = db.collection('registrations');
+    
+    // Add timestamp and status
+    const registrationData = {
+      ...data,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      status: 'pending',
+      paymentStatus: 'pending'
+    };
+
+    await registrationRef.add(registrationData);
+  } catch (error) {
+    console.error('Firebase save error:', error);
+    throw new Error('Failed to save registration data');
 }
