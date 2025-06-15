@@ -83,4 +83,25 @@ node_modules/
 Thumbs.db
 
 # Project specific
-wealthcreation/
+# Ignore sensitive files in wealthcreation
+wealthcreation/.env
+wealthcreation/.env.*
+wealthcreation/node_modules/
+wealthcreation/logs/
+wealthcreation/*.log
+wealthcreation/.dataconnect
+wealthcreation/.firebase/
+wealthcreation/coverage/
+wealthcreation/.nyc_output/
+
+# Allow tracking of source files
+!wealthcreation/public/
+!wealthcreation/server.js
+!wealthcreation/package.json
+!wealthcreation/package-lock.json
+!wealthcreation/README.md
+!wealthcreation/.eslintrc.js
+!wealthcreation/.prettierrc
+!wealthcreation/ecosystem.config.js
+!wealthcreation/newrelic.js
+!wealthcreation/sentry.js
