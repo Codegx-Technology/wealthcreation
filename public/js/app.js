@@ -262,47 +262,29 @@ function initializePaymentMethods() {
     console.log('🔄 Toggling payment sections with smooth transitions...');
 
     if (stripeRadio && stripeRadio.checked) {
-      // Show Stripe section with animation
+      // Show Stripe section
       if (stripeSection) {
-        stripeSection.classList.remove('hidden');
-        stripeSection.classList.add('show');
         stripeSection.style.display = 'block';
-        console.log('✨ Showing Stripe section with animation');
       }
-      // Hide bank section with animation
+      // Hide bank section
       if (bankSection) {
-        bankSection.classList.add('hidden');
-        bankSection.classList.remove('show');
-        setTimeout(() => {
-          bankSection.style.display = 'none';
-        }, 500); // Wait for animation to complete
-        console.log('🎭 Hiding bank section with animation');
+        bankSection.style.display = 'none';
       }
       // Make manual amount and reference optional for Stripe payments
       if (manualAmountField) manualAmountField.removeAttribute('required');
       if (manualReferenceField) manualReferenceField.removeAttribute('required');
-      console.log('💳 Switched to Stripe payment');
     } else {
-      // Hide Stripe section with animation
+      // Hide Stripe section
       if (stripeSection) {
-        stripeSection.classList.add('hidden');
-        stripeSection.classList.remove('show');
-        setTimeout(() => {
-          stripeSection.style.display = 'none';
-        }, 500); // Wait for animation to complete
-        console.log('🎭 Hiding Stripe section with animation');
+        stripeSection.style.display = 'none';
       }
-      // Show bank section with animation
+      // Show bank section
       if (bankSection) {
-        bankSection.classList.remove('hidden');
-        bankSection.classList.add('show');
         bankSection.style.display = 'block';
-        console.log('✨ Showing bank section with animation');
       }
       // Make manual amount and reference required for bank transfers
       if (manualAmountField) manualAmountField.setAttribute('required', 'required');
       if (manualReferenceField) manualReferenceField.setAttribute('required', 'required');
-      console.log('🏦 Switched to bank transfer');
     }
   }
 
@@ -369,11 +351,11 @@ function initializeFormSubmission() {
       const data = Object.fromEntries(formData.entries());
 
       // Handle payment based on selected method
-      const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
+      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
       
       if (paymentMethod === 'stripe') {
         await handleStripePayment(data);
-      } else if (paymentMethod === 'bank-transfer') {
+      } else if (paymentMethod === 'bank') {
         await handleBankTransfer(data);
       } else {
         throw new Error('Please select a payment method');
