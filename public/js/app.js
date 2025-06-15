@@ -237,6 +237,84 @@ function initializeStripe() {
 
 // Initialize payment method handling
 function initializePaymentMethods() {
+  // Defensive: Remove previous listeners (if any)
+  const oldStripeRadio = document.getElementById('stripe-payment');
+  const oldBankRadio = document.getElementById('bank-transfer');
+  const oldStripeLabel = document.querySelector('label[for="stripe-payment"]');
+  const oldBankLabel = document.querySelector('label[for="bank-transfer"]');
+  if (oldStripeRadio) {
+    oldStripeRadio.replaceWith(oldStripeRadio.cloneNode(true));
+  }
+  if (oldBankRadio) {
+    oldBankRadio.replaceWith(oldBankRadio.cloneNode(true));
+  }
+  // Now re-query for the new nodes
+  const stripeRadio = document.getElementById('stripe-payment');
+  const bankRadio = document.getElementById('bank-transfer');
+  const stripeSection = document.getElementById('stripe-payment-section');
+  const bankSection = document.getElementById('bank-transfer-section');
+  const manualAmountField = document.getElementById('manual-amount');
+  const manualReferenceField = document.getElementById('manual-reference');
+  const submitButton = document.getElementById('submitButton');
+
+  function togglePaymentSections() {
+    console.log('[TOGGLE] Payment method:', stripeRadio && stripeRadio.checked ? 'stripe' : 'bank');
+    if (stripeRadio && stripeRadio.checked) {
+      if (stripeSection) stripeSection.style.display = 'block';
+      if (bankSection) bankSection.style.display = 'none';
+      if (manualAmountField) manualAmountField.removeAttribute('required');
+      if (manualReferenceField) manualReferenceField.removeAttribute('required');
+    } else {
+      if (stripeSection) stripeSection.style.display = 'none';
+      if (bankSection) bankSection.style.display = 'block';
+      if (manualAmountField) manualAmountField.setAttribute('required', 'required');
+      if (manualReferenceField) manualReferenceField.setAttribute('required', 'required');
+    }
+  }
+
+  // Initial setup
+  togglePaymentSections();
+
+  // Add event listeners with debugging
+  if (stripeRadio) {
+    stripeRadio.addEventListener('change', function() {
+      togglePaymentSections();
+      if (submitButton) submitButton.disabled = false;
+    });
+    const stripeLabel = document.querySelector('label[for="stripe-payment"]');
+    if (stripeLabel) {
+      stripeLabel.addEventListener('click', function() {
+        stripeRadio.checked = true;
+        togglePaymentSections();
+        if (submitButton) submitButton.disabled = false;
+      });
+    }
+  }
+  if (bankRadio) {
+    bankRadio.addEventListener('change', function() {
+      togglePaymentSections();
+      if (submitButton) submitButton.disabled = false;
+    });
+    const bankLabel = document.querySelector('label[for="bank-transfer"]');
+    if (bankLabel) {
+      bankLabel.addEventListener('click', function() {
+        bankRadio.checked = true;
+        togglePaymentSections();
+        if (submitButton) submitButton.disabled = false;
+      });
+    }
+  }
+
+  // Ensure toggle runs after form reset
+  const form = document.getElementById('registrationForm');
+  if (form) {
+    form.addEventListener('reset', function() {
+      setTimeout(togglePaymentSections, 10);
+    });
+  }
+  console.log('Payment method initialization complete');
+}
+
   const stripeRadio = document.getElementById('stripe-payment');
   const bankRadio = document.getElementById('bank-transfer');
   const stripeSection = document.getElementById('stripe-payment-section');
