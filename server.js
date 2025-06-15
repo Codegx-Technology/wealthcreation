@@ -19,7 +19,7 @@ app.use(cors({
 }));
 
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static('.', {
+app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: process.env.NODE_ENV === 'production' ? '1d' : '0'
 }));
 
