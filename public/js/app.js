@@ -295,25 +295,33 @@ function initializePaymentMethods() {
   if (stripeRadio) {
     // Listen to both 'change' and 'click' for robustness
     stripeRadio.addEventListener('change', function() {
+      console.log('[PAYMENT] Stripe radio changed, checked:', this.checked);
       togglePaymentSections();
+      submitButton.disabled = false;
     });
     const stripeLabel = document.querySelector('label[for="stripe-payment"]');
     if (stripeLabel) {
       stripeLabel.addEventListener('click', function() {
         stripeRadio.checked = true;
+        console.log('[PAYMENT] Stripe label clicked');
         togglePaymentSections();
+        submitButton.disabled = false;
       });
     }
   }
   if (bankRadio) {
     bankRadio.addEventListener('change', function() {
+      console.log('[PAYMENT] Bank radio changed, checked:', this.checked);
       togglePaymentSections();
+      submitButton.disabled = false;
     });
     const bankLabel = document.querySelector('label[for="bank-transfer"]');
     if (bankLabel) {
       bankLabel.addEventListener('click', function() {
         bankRadio.checked = true;
+        console.log('[PAYMENT] Bank label clicked');
         togglePaymentSections();
+        submitButton.disabled = false;
       });
     }
   }
