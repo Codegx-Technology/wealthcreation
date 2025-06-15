@@ -76,6 +76,14 @@ function toggleCustomAmount() {
 }
 
 // Initialize application when DOM is loaded
+function tryInitializeAppWithStripe() {
+  if (typeof Stripe !== 'undefined') {
+    initializeApp();
+  } else {
+    console.warn('[INIT] Stripe SDK not loaded yet, retrying in 200ms...');
+    setTimeout(tryInitializeAppWithStripe, 200);
+  }
+}
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded, initializing application");
 
@@ -87,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error('Critical form elements missing - retrying in 500ms');
     setTimeout(() => {
       if (document.getElementById('registrationForm') && document.getElementById('submitButton')) {
-        initializeApp();
+        tryInitializeAppWithStripe();
       } else {
         console.error('Form elements still missing after retry');
       }
@@ -95,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  initializeApp();
+  tryInitializeAppWithStripe();
 });
 
 function initializeApp() {
@@ -199,33 +207,17 @@ function initializeStripe() {
           },
           invalid: {
             color: '#9e2146',
-          },
-        },
-      });
-
-      // Mount card element
       const cardElementContainer = document.getElementById('card-element');
       if (cardElementContainer) {
+        cardElement = elements.create('card');
         cardElement.mount('#card-element');
-
-        // Handle real-time validation errors from the card Element
-        cardElement.on('change', ({error}) => {
-          const displayError = document.getElementById('card-errors');
-          if (error) {
-            displayError.textContent = error.message;
-            displayError.style.display = 'block';
-          } else {
-            displayError.textContent = '';
-            displayError.style.display = 'none';
-          }
-        });
-
-        console.log('Stripe initialized successfully');
+        console.log('[STRIPE] Card element mounted');
       } else {
         console.error('Card element container not found');
       }
     } else {
-      console.error('Stripe SDK not loaded');
+      // Stripe SDK not loaded, will re-try via app init fallback
+      console.error('[STRIPE] Stripe SDK not loaded at initializeStripe call');
     }
   } catch (error) {
     console.error('Error initializing Stripe:', error);
