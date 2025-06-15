@@ -293,16 +293,29 @@ function initializePaymentMethods() {
 
   // Add event listeners with debugging
   if (stripeRadio) {
+    // Listen to both 'change' and 'click' for robustness
     stripeRadio.addEventListener('change', function() {
-      console.log('🔄 Stripe radio changed, checked:', this.checked);
       togglePaymentSections();
     });
+    const stripeLabel = document.querySelector('label[for="stripe-payment"]');
+    if (stripeLabel) {
+      stripeLabel.addEventListener('click', function() {
+        stripeRadio.checked = true;
+        togglePaymentSections();
+      });
+    }
   }
   if (bankRadio) {
     bankRadio.addEventListener('change', function() {
-      console.log('🔄 Bank radio changed, checked:', this.checked);
       togglePaymentSections();
     });
+    const bankLabel = document.querySelector('label[for="bank-transfer"]');
+    if (bankLabel) {
+      bankLabel.addEventListener('click', function() {
+        bankRadio.checked = true;
+        togglePaymentSections();
+      });
+    }
   }
 
   console.log('Payment method initialization complete');
