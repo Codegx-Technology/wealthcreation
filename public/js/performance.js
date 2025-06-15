@@ -109,13 +109,53 @@ if (document.readyState === 'loading') {
   forceEmojiIcons();
 }
 
-// Service Worker registration for caching
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => console.log('SW registered'))
-      .catch(error => console.log('SW registration failed'));
-  });
+// Register service worker
+async function registerServiceWorker() {
+  try {
+    if ('serviceWorker' in navigator) {
+      const registration = await navigator.serviceWorker.register('/sw.js', {
+        scope: '/',
+        updateViaCache: 'none'
+      });
+      
+      console.log('[SW] Service Worker registered:', registration.scope);
+      
+      // Handle updates
+      registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing;
+        console.log('[SW] Service Worker update found');
+        
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            console.log('[SW] New content available; please refresh');
+          }
+        });
+      });
+      
+      return registration;
+    }
+  } catch (error) {
+    console.warn('[SW] Service Worker registration failed:', error);
+    // Don't throw the error, just log it
+    return null;
+  }
+}
+
+// Initialize performance optimizations
+async function initializePerformanceOptimizations() {
+  try {
+    // Register service worker
+    await registerServiceWorker();
+    
+    // Force emoji icons on mobile
+    forceEmojiIcons();
+    
+    // Track page load time
+    trackPageLoadTime();
+  } catch (error) {
+    console.warn('[PERF] Performance optimization error:', error);
+    // Don't throw the error, just log it
+  }
 }
 
 // Async script loader

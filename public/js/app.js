@@ -1,11 +1,11 @@
 // Wealth Creation Registration Form - Main JavaScript
 
-// Production Environment Configuration
-const IS_PRODUCTION = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-const API_BASE_URL = IS_PRODUCTION ? '/api/create-payment-intent' : 'http://localhost:3000/api/create-payment-intent';
+// Constants
+const IS_PRODUCTION = window.location.protocol === 'https:';
+// Get Stripe key from meta tag instead of process.env
+const STRIPE_PUBLISHABLE_KEY = document.querySelector('meta[name="stripe-publishable-key"]')?.content;
 
 // Stripe configuration - LIVE KEYS (PRODUCTION READY)
-const STRIPE_PUBLISHABLE_KEY = 'pk_live_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz';
 let stripe;
 let elements;
 let cardElement;
@@ -106,121 +106,93 @@ document.addEventListener('DOMContentLoaded', function() {
   tryInitializeAppWithStripe();
 });
 
-function initializeApp() {
-
-  // Check for duplicate payment method titles and remove them
-  const paymentTitles = document.querySelectorAll('.payment-method-title');
-  if (paymentTitles.length > 1) {
-    // Keep only the first one and remove the rest
-    for (let i = 1; i < paymentTitles.length; i++) {
-      paymentTitles[i].remove();
-    }
+async function initializeApp() {
+  try {
+    console.log('[INIT] Initializing application...');
+    
+    // Initialize Stripe
+    await initializeStripe();
+    
+    // Initialize payment methods
+    initializePaymentMethods();
+    
+    // Initialize custom amount functionality
+    initializeCustomAmount();
+    
+    console.log('[INIT] Application initialized successfully');
+  } catch (error) {
+    console.error('[INIT] Application initialization error:', error);
   }
-
-  // Quick element check
-  const testButton = document.getElementById('submitButton');
-  const testForm = document.getElementById('registrationForm');
-
-  if (!testButton || !testForm) {
-    console.error('Critical form elements missing!');
-    return;
-  }
-
-  // Check if mobile device
-  const isMobile = window.innerWidth <= 768;
-
-  if (isMobile) {
-    // Immediate mobile optimizations
-    document.body.classList.add('mobile-device');
-
-    // Ensure button is properly clickable on mobile
-    setTimeout(() => {
-      const submitButton = document.getElementById('submitButton');
-      if (submitButton) {
-        submitButton.style.pointerEvents = 'auto';
-        submitButton.style.touchAction = 'manipulation';
-        submitButton.style.webkitTapHighlightColor = 'transparent';
-      }
-    }, 100);
-  }
-
-  // Preload resources for better performance (only on desktop or fast connections)
-  if (!isMobile || (navigator.connection && navigator.connection.effectiveType === '4g')) {
-    preloadCriticalResources();
-  }
-
-  // Initialize Stripe
-  initializeStripe();
-
-  // Initialize Firebase and form handling
-  initializeFirebase();
-
-  // Initialize payment method handling
-  initializePaymentMethods();
-
-  // Initialize custom amount functionality
-  initializeCustomAmount();
-
-  // Initialize performance optimizations
-  initializePerformanceOptimizations();
-
-  // Initialize accessibility features
-  initializeAccessibility();
-
-  // Initialize form submission (fallback if Firebase fails)
-  initializeFormSubmission();
 }
 
 // Initialize Stripe
-function initializeStripe() {
+async function initializeStripe() {
   try {
-    if (typeof Stripe !== 'undefined') {
-      // Check if we have a valid publishable key
-      if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY.includes('pk_test_51234567890abcdef')) {
-        console.warn('Stripe publishable key not configured - Stripe payments disabled');
-        // Hide Stripe payment option
-        const stripeOption = document.getElementById('stripe-payment');
-        if (stripeOption) {
-          stripeOption.disabled = true;
-          stripeOption.parentElement.style.opacity = '0.5';
-        }
-        // Select bank transfer by default
-        const bankOption = document.getElementById('bank-transfer');
-        if (bankOption) {
-          bankOption.checked = true;
-        }
-        return;
+    console.log('[STRIPE] Initializing Stripe...');
+    
+    if (typeof Stripe === 'undefined') {
+      console.error('[STRIPE] Stripe SDK not loaded');
+      return;
+    }
+
+    // Check if we have a valid publishable key
+    if (!STRIPE_PUBLISHABLE_KEY) {
+      console.warn('[STRIPE] Stripe publishable key not found in meta tag - Stripe payments disabled');
+      // Hide Stripe payment option
+      const stripeOption = document.getElementById('stripe-payment');
+      if (stripeOption) {
+        stripeOption.disabled = true;
+        stripeOption.parentElement.style.opacity = '0.5';
       }
+      // Select bank transfer by default
+      const bankOption = document.getElementById('bank-transfer');
+      if (bankOption) {
+        bankOption.checked = true;
+      }
+      return;
+    }
 
-      stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-      elements = stripe.elements();
+    stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    elements = stripe.elements();
 
-      // Create card element
-      cardElement = elements.create('card', {
-        style: {
-          base: {
-            fontSize: '16px',
-            color: '#424770',
-            '::placeholder': {
-              color: '#aab7c4',
-            },
+    // Create card element
+    cardElement = elements.create('card', {
+      style: {
+        base: {
+          fontSize: '16px',
+          color: '#424770',
+          '::placeholder': {
+            color: '#aab7c4',
           },
-          invalid: {
-            color: '#9e2146',
-      const cardElementContainer = document.getElementById('card-element');
-      if (cardElementContainer) {
-        cardElement = elements.create('card');
-        cardElement.mount('#card-element');
-        console.log('[STRIPE] Card element mounted');
-      } else {
-        console.error('Card element container not found');
-      }
+        },
+        invalid: {
+          color: '#9e2146',
+        },
+      },
+    });
+
+    // Mount card element
+    const cardElementContainer = document.getElementById('card-element');
+    if (cardElementContainer) {
+      cardElement.mount('#card-element');
+      console.log('[STRIPE] Card element mounted successfully');
+      
+      // Add error handling for card element
+      cardElement.on('change', function(event) {
+        const displayError = document.getElementById('card-errors');
+        if (displayError) {
+          if (event.error) {
+            displayError.textContent = event.error.message;
+          } else {
+            displayError.textContent = '';
+          }
+        }
+      });
     } else {
-      // Stripe SDK not loaded, will re-try via app init fallback
-      console.error('[STRIPE] Stripe SDK not loaded at initializeStripe call');
+      console.error('[STRIPE] Card element container not found');
     }
   } catch (error) {
-    console.error('Error initializing Stripe:', error);
+    console.error('[STRIPE] Error initializing Stripe:', error);
     // Disable Stripe option on error
     const stripeOption = document.getElementById('stripe-payment');
     if (stripeOption) {
@@ -237,6 +209,8 @@ function initializeStripe() {
 
 // Initialize payment method handling
 function initializePaymentMethods() {
+  console.log('[PAYMENT] Initializing payment methods...');
+  
   const stripeRadio = document.getElementById('stripe-payment');
   const bankRadio = document.getElementById('bank-transfer');
   const stripeSection = document.getElementById('stripe-payment-section');
@@ -244,29 +218,54 @@ function initializePaymentMethods() {
   const manualAmountField = document.getElementById('manual-amount');
   const manualReferenceField = document.getElementById('manual-reference');
 
+  console.log('[PAYMENT] Elements found:', {
+    stripeRadio: !!stripeRadio,
+    bankRadio: !!bankRadio,
+    stripeSection: !!stripeSection,
+    bankSection: !!bankSection
+  });
+
+  if (!stripeRadio || !bankRadio || !stripeSection || !bankSection) {
+    console.error('[PAYMENT] Required payment elements not found');
+    return;
+  }
+
   function togglePaymentSections() {
-    if (stripeRadio && stripeRadio.checked) {
-      if (stripeSection) stripeSection.style.display = 'block';
-      if (bankSection) bankSection.style.display = 'none';
+    console.log('[PAYMENT] Toggling payment sections...');
+    
+    if (stripeRadio.checked) {
+      console.log('[PAYMENT] Switching to Stripe payment');
+      stripeSection.style.display = 'block';
+      stripeSection.style.opacity = '1';
+      bankSection.style.display = 'none';
+      bankSection.style.opacity = '0';
       if (manualAmountField) manualAmountField.removeAttribute('required');
       if (manualReferenceField) manualReferenceField.removeAttribute('required');
     } else {
-      if (stripeSection) stripeSection.style.display = 'none';
-      if (bankSection) bankSection.style.display = 'block';
+      console.log('[PAYMENT] Switching to bank transfer');
+      stripeSection.style.display = 'none';
+      stripeSection.style.opacity = '0';
+      bankSection.style.display = 'block';
+      bankSection.style.opacity = '1';
       if (manualAmountField) manualAmountField.setAttribute('required', 'required');
       if (manualReferenceField) manualReferenceField.setAttribute('required', 'required');
     }
   }
 
-  // Initial state
-  togglePaymentSections();
+  // Add event listeners
+  stripeRadio.addEventListener('change', function() {
+    console.log('[PAYMENT] Stripe radio changed:', this.checked);
+    togglePaymentSections();
+  });
+  
+  bankRadio.addEventListener('change', function() {
+    console.log('[PAYMENT] Bank radio changed:', this.checked);
+    togglePaymentSections();
+  });
 
-  if (stripeRadio) {
-    stripeRadio.addEventListener('change', togglePaymentSections);
-  }
-  if (bankRadio) {
-    bankRadio.addEventListener('change', togglePaymentSections);
-  }
+  // Initial setup
+  togglePaymentSections();
+  console.log('[PAYMENT] Payment methods initialized');
 }
 
 // Initialize custom amount functionality
@@ -338,93 +337,494 @@ function initializeFormSubmission() {
 }
 
 // Initialize Firebase
-function initializeFirebase() {
-  console.log("Initializing Firebase");
-
-  // Check if Firebase is available
-  if (typeof firebase !== 'undefined') {
-    console.log('Firebase SDK loaded, initializing...');
-
-    try {
-      firebase.initializeApp(firebaseConfig);
-      console.log('Firebase app initialized');
-
-      // Initialize Firestore
-      const db = firebase.firestore();
-      console.log('Firestore initialized');
-
-      // Get form elements
-      const form = document.getElementById('registrationForm');
-      console.log("Form found:", !!form);
-
-      if (!form) {
-        console.error("Registration form not found in the DOM");
-        return;
-      }
-
-      const formStatus = document.getElementById('formStatus');
-      const submitButton = document.getElementById('submitButton');
-
-      // Set flag to indicate Firebase handler is active
-      window.firebaseFormHandlerActive = true;
-
-      // Form submission event listener
-      form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        if (!validateForm()) {
-          alert('Please fill in all required fields correctly.');
-          return;
-        }
-
-        submitButton.disabled = true;
-        submitButton.textContent = 'Processing...';
-
-        try {
-          const formData = new FormData(this);
-          const data = Object.fromEntries(formData.entries());
-          
-          // Add timestamp
-          data.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-          
-          // Handle payment method
-          const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
-          data.paymentMethod = paymentMethod;
-
-          // Handle custom amount
-          if (data['ticket-amount'] === 'custom') {
-            data.amount = parseFloat(data['custom-amount-input']);
-          } else {
-            data.amount = parseFloat(data['ticket-amount']);
-          }
-
-          // Save to Firebase
-          const docRef = await db.collection('registrations').add(data);
-          console.log('Registration saved with ID:', docRef.id);
-
-          // Handle payment based on method
-          if (paymentMethod === 'stripe') {
-            await handleStripePayment(data);
-          } else if (paymentMethod === 'bank-transfer') {
-            showBankTransferDetails();
-          }
-
-          // Show success message
-          showSuccessMessage();
-        } catch (error) {
-          console.error('Error saving registration:', error);
-          alert('There was an error processing your registration. Please try again.');
-        } finally {
-          submitButton.disabled = false;
-          submitButton.textContent = 'Complete Registration';
-        }
-      });
-
-    } catch (error) {
-      console.error('Error initializing Firebase:', error);
+async function initializeFirebase() {
+  try {
+    console.log('[FIREBASE] Initializing Firebase...');
+    
+    // Check if Firebase SDK is loaded
+    if (typeof firebase === 'undefined') {
+      console.error('[FIREBASE] Firebase SDK not loaded');
+      throw new Error('Firebase SDK not loaded');
     }
-  } else {
-    console.error("Firebase SDK not loaded");
+
+    // Check if Firebase is already initialized
+    if (!firebase.apps.length) {
+      const firebaseConfig = {
+        apiKey: FIREBASE_API_KEY,
+        authDomain: FIREBASE_AUTH_DOMAIN,
+        projectId: FIREBASE_PROJECT_ID,
+        storageBucket: FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+        appId: FIREBASE_APP_ID,
+        measurementId: FIREBASE_MEASUREMENT_ID
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      console.log('[FIREBASE] Firebase initialized successfully');
+    } else {
+      console.log('[FIREBASE] Firebase already initialized');
+    }
+
+    // Initialize Firestore
+    const db = firebase.firestore();
+    console.log('[FIREBASE] Firestore initialized');
+
+    return db;
+  } catch (error) {
+    console.error('[FIREBASE] Initialization error:', error);
+    throw error;
+  }
+}
+
+// Save registration data to Firebase
+async function saveToFirebase(formData) {
+  try {
+    console.log('[FIREBASE] Saving registration data...');
+    
+    // Get Firestore instance
+    const db = await initializeFirebase();
+    if (!db) {
+      throw new Error('Failed to initialize Firebase');
+    }
+
+    // Prepare registration data
+    const registrationData = {
+      ...formData,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      status: 'pending',
+      paymentMethod: formData.paymentMethod || 'bank',
+      paymentStatus: 'pending'
+    };
+
+    // Add payment details based on method
+    if (formData.paymentMethod === 'stripe') {
+      registrationData.paymentDetails = {
+        type: 'stripe',
+        amount: formData.ticketAmount || formData.customAmount,
+        status: 'pending'
+      };
+    } else {
+      registrationData.paymentDetails = {
+        type: 'bank_transfer',
+        amount: formData.manualAmount,
+        reference: formData.manualReference,
+        status: 'pending'
+      };
+    }
+
+    // Save to Firestore
+    const docRef = await db.collection('registrations').add(registrationData);
+    console.log('[FIREBASE] Registration saved with ID:', docRef.id);
+
+    // Update payment status if using Stripe
+    if (formData.paymentMethod === 'stripe') {
+      await docRef.update({
+        'paymentDetails.status': 'processing'
+      });
+    }
+
+    return docRef.id;
+  } catch (error) {
+    console.error('[FIREBASE] Save error:', error);
+    throw new Error('Failed to save registration data: ' + error.message);
+  }
+}
+
+// Save registration data
+async function saveRegistration(formData) {
+  try {
+    console.log('[API] Saving registration data...');
+    
+    // Prepare registration data
+    const registrationData = {
+      ...formData,
+      timestamp: new Date().toISOString(),
+      status: 'pending',
+      paymentMethod: formData.paymentMethod || 'bank',
+      paymentStatus: 'pending'
+    };
+
+    // Add payment details based on method
+    if (formData.paymentMethod === 'stripe') {
+      registrationData.paymentDetails = {
+        type: 'stripe',
+        amount: formData.ticketAmount === 'custom' ? formData.customAmount : formData.ticketAmount,
+        status: 'pending'
+      };
+    } else {
+      registrationData.paymentDetails = {
+        type: 'bank_transfer',
+        amount: formData.manualAmount,
+        reference: formData.manualReference,
+        status: 'pending'
+      };
+    }
+
+    // Save using API endpoint
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(registrationData)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to save registration');
+    }
+
+    const result = await response.json();
+    console.log('[API] Registration saved:', result);
+    
+    // Return the registration ID from the response
+    if (!result.id) {
+      throw new Error('Registration ID not received from server');
+    }
+    
+    return result.id;
+  } catch (error) {
+    console.error('[API] Save error:', error);
+    throw new Error('Failed to save registration data: ' + error.message);
+  }
+}
+
+// Handle form submission
+document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  console.log('[FORM] Form submission started');
+
+  try {
+    // Get form data
+    const formData = new FormData(this);
+    const data = {};
+    
+    // Collect all form fields
+    for (const [key, value] of formData.entries()) {
+      data[key] = value.trim();
+    }
+    
+    // Get payment method
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+    if (paymentMethod) {
+      data.paymentMethod = paymentMethod.value;
+    }
+    
+    // Get ticket amount
+    const ticketAmount = document.getElementById('ticket-amount');
+    if (ticketAmount) {
+      data.ticketAmount = ticketAmount.value;
+      if (ticketAmount.value === 'custom') {
+        const customAmount = document.getElementById('custom-amount-input');
+        if (customAmount) {
+          data.customAmount = customAmount.value;
+        }
+      }
+    }
+    
+    // Get bank transfer details if applicable
+    if (data.paymentMethod === 'bank') {
+      const manualAmount = document.getElementById('manual-amount');
+      const manualReference = document.getElementById('manual-reference');
+      if (manualAmount) data.manualAmount = manualAmount.value;
+      if (manualReference) data.manualReference = manualReference.value;
+    }
+
+    console.log('[FORM] Collected form data:', data);
+    
+    // Validate form data
+    if (!validateFormData(data)) {
+      console.error('[FORM] Validation failed');
+      return;
+    }
+
+    // Show loading state
+    showFormStatus('Processing registration...', 'info');
+    const submitButton = document.getElementById('submitButton');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Processing...';
+    }
+
+    // Save registration and get ID
+    const registrationId = await saveRegistration(data);
+    console.log('[FORM] Registration saved with ID:', registrationId);
+
+    // Handle payment based on method
+    if (data.paymentMethod === 'stripe') {
+      await handleStripePayment(data, registrationId);
+    } else {
+      await handleBankTransfer(data, registrationId);
+    }
+
+    // Show success message
+    showFormStatus('Registration successful! Thank you for registering.', 'success');
+    this.reset();
+    
+  } catch (error) {
+    console.error('[FORM] Registration error:', error);
+    showFormStatus(error.message || 'Registration failed. Please try again.', 'error');
+  } finally {
+    // Reset button state
+    const submitButton = document.getElementById('submitButton');
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Register Now';
+    }
+  }
+});
+
+// Form status display function
+function showFormStatus(message, type = 'info') {
+  const statusElement = document.getElementById('formStatus');
+  if (!statusElement) {
+    console.error('[FORM] Status element not found');
+    return;
+  }
+
+  // Remove existing classes
+  statusElement.className = 'form-status';
+  
+  // Add type-specific class
+  switch(type) {
+    case 'success':
+      statusElement.classList.add('success');
+      break;
+    case 'error':
+      statusElement.classList.add('error');
+      break;
+    case 'warning':
+      statusElement.classList.add('warning');
+      break;
+    default:
+      statusElement.classList.add('info');
+  }
+
+  // Set message and show
+  statusElement.textContent = message;
+  statusElement.style.display = 'block';
+  
+  // Auto-hide after 5 seconds for non-error messages
+  if (type !== 'error') {
+    setTimeout(() => {
+      statusElement.style.display = 'none';
+    }, 5000);
+  }
+}
+
+// Update validateFormData to be more specific about validation errors
+function validateFormData(data) {
+  console.log('[FORM] Validating form data...', data);
+  
+  // Required fields with friendly names
+  const requiredFields = {
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    email: 'Email',
+    phone: 'Phone Number',
+    paymentMethod: 'Payment Method'
+  };
+  
+  // Check for missing required fields
+  const missingFields = Object.entries(requiredFields)
+    .filter(([key]) => !data[key] || data[key].trim() === '')
+    .map(([_, label]) => label);
+  
+  if (missingFields.length > 0) {
+    const message = `Please fill in the following required fields: ${missingFields.join(', ')}`;
+    console.error('[FORM] Validation error:', message);
+    showFormStatus(message, 'error');
+    return false;
+  }
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(data.email)) {
+    const message = 'Please enter a valid email address';
+    console.error('[FORM] Validation error:', message);
+    showFormStatus(message, 'error');
+    return false;
+  }
+
+  // Phone validation (basic)
+  const phoneRegex = /^\+?[\d\s-]{10,}$/;
+  if (!phoneRegex.test(data.phone)) {
+    const message = 'Please enter a valid phone number (minimum 10 digits)';
+    console.error('[FORM] Validation error:', message);
+    showFormStatus(message, 'error');
+    return false;
+  }
+
+  // Payment method specific validation
+  if (data.paymentMethod === 'bank') {
+    if (!data.manualAmount || data.manualAmount.trim() === '') {
+      showFormStatus('Please enter the bank transfer amount', 'error');
+      return false;
+    }
+    if (!data.manualReference || data.manualReference.trim() === '') {
+      showFormStatus('Please enter the bank transfer reference', 'error');
+      return false;
+    }
+  } else if (data.paymentMethod === 'stripe') {
+    if (!data.ticketAmount || (data.ticketAmount === 'custom' && !data.customAmount)) {
+      showFormStatus('Please select or enter a ticket amount', 'error');
+      return false;
+    }
+  }
+
+  console.log('[FORM] Form data validation successful');
+  return true;
+}
+
+// Handle Stripe payment
+async function handleStripePayment(data, registrationId) {
+  const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  console.log(`[STRIPE ${requestId}] Starting payment process for registration ${registrationId}`);
+
+  try {
+    // Validate Stripe initialization
+    if (!stripe || !elements) {
+      console.error(`[STRIPE ${requestId}] Stripe not initialized`);
+      throw new Error('Payment system not initialized');
+    }
+
+    // Validate card element
+    if (!cardElement) {
+      console.error(`[STRIPE ${requestId}] Card element not found`);
+      throw new Error('Payment form not properly initialized');
+    }
+
+    // Get and validate amount
+    const amount = data.ticketAmount === 'custom' ? data.customAmount : data.ticketAmount;
+    const numericAmount = parseFloat(amount);
+    
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      console.error(`[STRIPE ${requestId}] Invalid amount:`, amount);
+      throw new Error('Invalid payment amount');
+    }
+
+    console.log(`[STRIPE ${requestId}] Creating payment intent for £${numericAmount} (Registration: ${registrationId})`);
+
+    // Create payment intent
+    const response = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        amount: numericAmount,
+        registrationId: registrationId,
+        paymentMethod: 'stripe',
+        email: data.email
+      })
+    });
+
+    // Parse response
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      console.error(`[STRIPE ${requestId}] Payment intent creation failed:`, {
+        status: response.status,
+        data: responseData
+      });
+      throw new Error(responseData.error || 'Failed to create payment intent');
+    }
+
+    console.log(`[STRIPE ${requestId}] Payment intent created:`, {
+      id: responseData.paymentIntentId,
+      requestId: responseData.requestId,
+      registrationId: registrationId
+    });
+
+    // Confirm payment
+    const result = await stripe.confirmCardPayment(responseData.clientSecret, {
+      payment_method: {
+        card: cardElement,
+        billing_details: {
+          name: `${data.firstName} ${data.lastName}`,
+          email: data.email,
+          phone: data.phone
+        }
+      }
+    });
+
+    if (result.error) {
+      console.error(`[STRIPE ${requestId}] Payment confirmation failed:`, {
+        code: result.error.code,
+        message: result.error.message,
+        type: result.error.type
+      });
+      throw new Error(result.error.message);
+    }
+
+    console.log(`[STRIPE ${requestId}] Payment confirmed:`, {
+      id: result.paymentIntent.id,
+      status: result.paymentIntent.status,
+      registrationId: registrationId
+    });
+
+    // Update payment status
+    const updateResponse = await fetch('/api/update-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        registrationId: registrationId,
+        paymentId: result.paymentIntent.id,
+        status: 'completed',
+        requestId: responseData.requestId
+      })
+    });
+
+    if (!updateResponse.ok) {
+      console.warn(`[STRIPE ${requestId}] Payment status update failed:`, await updateResponse.json());
+      // Don't throw here - payment was successful even if status update fails
+    }
+
+    return result.paymentIntent;
+    
+  } catch (error) {
+    console.error(`[STRIPE ${requestId}] Payment error:`, {
+      message: error.message,
+      stack: error.stack,
+      registrationId: registrationId
+    });
+    throw error;
+  }
+}
+
+// Handle bank transfer
+async function handleBankTransfer(data, registrationId) {
+  try {
+    console.log('[BANK] Processing bank transfer...');
+    
+    // Update registration with bank transfer details using Vercel API
+    const response = await fetch('/api/update-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        registrationId: registrationId,
+        paymentDetails: {
+          type: 'bank_transfer',
+          amount: data.manualAmount,
+          reference: data.manualReference,
+          status: 'pending_verification'
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to update bank transfer details');
+    }
+
+    console.log('[BANK] Bank transfer details saved');
+    return true;
+    
+  } catch (error) {
+    console.error('[BANK] Bank transfer error:', error);
+    throw error;
   }
 }
 
@@ -603,55 +1003,5 @@ function validateForm() {
   }
 
   return isValid;
-}
-
-async function handleStripePayment(data) {
-  if (!stripe || !cardElement) {
-    throw new Error('Stripe not initialized');
-  }
-
-  const { error, paymentMethod } = await stripe.createPaymentMethod({
-    type: 'card',
-    card: cardElement,
-  });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return paymentMethod;
-}
-
-async function handleBankTransfer(data) {
-  // Validate bank transfer details
-  const amount = data['ticket-amount'] === 'custom' 
-    ? data['custom-amount-input'] 
-    : data['ticket-amount'];
-
-  if (!amount || isNaN(amount) || amount <= 0) {
-    throw new Error('Invalid payment amount');
-  }
-
-  return { type: 'bank_transfer', amount };
-}
-
-async function saveToFirebase(data) {
-  try {
-    const db = firebase.firestore();
-    const registrationRef = db.collection('registrations');
-    
-    // Add timestamp and status
-    const registrationData = {
-      ...data,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      status: 'pending',
-      paymentStatus: 'pending'
-    };
-
-    await registrationRef.add(registrationData);
-  } catch (error) {
-    console.error('Firebase save error:', error);
-    throw new Error('Failed to save registration data');
-  }
 }
 

@@ -29,6 +29,15 @@
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-tap-highlight" content="no" />
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="apple-touch-icon" href="/images/favicon.ico">
+
+  <!-- Stripe Configuration -->
+  <meta name="stripe-publishable-key" content="pk_test_51RYnZdPRClgqfdkf2t3vHj5wyGKRcbEwiurlvfHDdXeBUsmdGD42rEEvEe4u8RUvB0pb7R8ltWdsNGk9jpFt2PjC00qORO1zJf">
+  <meta name="stripe-mode" content="test">
+
   <title>Secrets to Wealth Creation & Leadership in the Marketplace Conference - London</title>
 
   <!-- All CSS moved to external files for better debugging -->
@@ -45,15 +54,15 @@
   <link rel="stylesheet" href="css/critical.css">
 
   <!-- Combined CSS for better performance -->
-  <link rel="stylesheet" href="css/combined.css?v=20250101">
+  <link rel="stylesheet" href="css/combined.css?v=20250615">
 
   <!-- Load fonts asynchronously for better performance -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"></noscript>
 
   <!-- Load only essential FontAwesome icons -->
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"></noscript>
 
   <!-- Critical image preloading with responsive considerations -->
   <link rel="preload" href="images/background.jpg" as="image" media="(min-width: 769px)">
@@ -95,6 +104,15 @@
     .btn-container {
       text-align: center !important;
       margin-top: 40px !important;
+    }
+
+    /* Font Awesome fallback */
+    @font-face {
+      font-family: 'Font Awesome 6 Free';
+      font-style: normal;
+      font-weight: 900;
+      font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/webfonts/fa-solid-900.woff2') format('woff2');
     }
   </style>
 </head>
@@ -150,7 +168,8 @@
         </div>
       </div>
 
-      <form id="registrationForm">
+      <form id="registrationForm" class="registration-form" novalidate>
+        <div id="formStatus" class="form-status" style="display: none;"></div>
         <div class="form-grid">
           <div class="form-group">
             <label for="title">Title</label>
@@ -179,8 +198,8 @@
           </div>
 
           <div class="form-group">
-            <label for="secondName">Last Name</label>
-            <input type="text" id="secondName" name="secondName" placeholder="Last Name" required />
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Last Name" required />
             <div class="input-icon">
               <i class="fas fa-user"></i>
             </div>
@@ -202,8 +221,6 @@
             </div>
           </div>
 
-
-
           <div class="form-group full-width">
             <label for="org">Organisation (Optional)</label>
             <input type="text" id="org" name="org" placeholder="Organisation" class="org-input" />
@@ -211,8 +228,6 @@
               <i class="fas fa-building"></i>
             </div>
           </div>
-
-
         </div>
 
         <!-- Payment Method Selection -->
@@ -285,8 +300,6 @@
             </div>
           </div>
         </div>
-
-        <div id="formStatus" class="form-status"></div>
 
         <div class="btn-container" style="opacity: 1 !important; display: block !important; visibility: visible !important;">
           <button type="submit" id="submitButton" style="opacity: 1 !important; display: inline-block !important; visibility: visible !important; min-width: 250px !important; min-height: 48px !important; padding: 18px 40px !important;">Complete Registration <i class="fas fa-arrow-right"></i></button>
