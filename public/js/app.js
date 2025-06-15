@@ -237,28 +237,14 @@ function initializeStripe() {
 
 // Initialize payment method handling
 function initializePaymentMethods() {
-  // Defensive: Remove previous listeners (if any)
-  const oldStripeRadio = document.getElementById('stripe-payment');
-  const oldBankRadio = document.getElementById('bank-transfer');
-  const oldStripeLabel = document.querySelector('label[for="stripe-payment"]');
-  const oldBankLabel = document.querySelector('label[for="bank-transfer"]');
-  if (oldStripeRadio) {
-    oldStripeRadio.replaceWith(oldStripeRadio.cloneNode(true));
-  }
-  if (oldBankRadio) {
-    oldBankRadio.replaceWith(oldBankRadio.cloneNode(true));
-  }
-  // Now re-query for the new nodes
   const stripeRadio = document.getElementById('stripe-payment');
   const bankRadio = document.getElementById('bank-transfer');
   const stripeSection = document.getElementById('stripe-payment-section');
   const bankSection = document.getElementById('bank-transfer-section');
   const manualAmountField = document.getElementById('manual-amount');
   const manualReferenceField = document.getElementById('manual-reference');
-  const submitButton = document.getElementById('submitButton');
 
   function togglePaymentSections() {
-    console.log('[TOGGLE] Payment method:', stripeRadio && stripeRadio.checked ? 'stripe' : 'bank');
     if (stripeRadio && stripeRadio.checked) {
       if (stripeSection) stripeSection.style.display = 'block';
       if (bankSection) bankSection.style.display = 'none';
@@ -272,47 +258,15 @@ function initializePaymentMethods() {
     }
   }
 
-  // Initial setup
+  // Initial state
   togglePaymentSections();
 
-  // Add event listeners with debugging
   if (stripeRadio) {
-    stripeRadio.addEventListener('change', function() {
-      togglePaymentSections();
-      if (submitButton) submitButton.disabled = false;
-    });
-    const stripeLabel = document.querySelector('label[for="stripe-payment"]');
-    if (stripeLabel) {
-      stripeLabel.addEventListener('click', function() {
-        stripeRadio.checked = true;
-        togglePaymentSections();
-        if (submitButton) submitButton.disabled = false;
-      });
-    }
+    stripeRadio.addEventListener('change', togglePaymentSections);
   }
   if (bankRadio) {
-    bankRadio.addEventListener('change', function() {
-      togglePaymentSections();
-      if (submitButton) submitButton.disabled = false;
-    });
-    const bankLabel = document.querySelector('label[for="bank-transfer"]');
-    if (bankLabel) {
-      bankLabel.addEventListener('click', function() {
-        bankRadio.checked = true;
-        togglePaymentSections();
-        if (submitButton) submitButton.disabled = false;
-      });
-    }
+    bankRadio.addEventListener('change', togglePaymentSections);
   }
-
-  // Ensure toggle runs after form reset
-  const form = document.getElementById('registrationForm');
-  if (form) {
-    form.addEventListener('reset', function() {
-      setTimeout(togglePaymentSections, 10);
-    });
-  }
-  console.log('Payment method initialization complete');
 }
 
   const stripeRadio = document.getElementById('stripe-payment');
