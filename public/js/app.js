@@ -712,4 +712,6 @@ async function saveToFirebase(data) {
   } catch (error) {
     console.error('Firebase save error:', error);
     throw new Error('Failed to save registration data');
+  }
 }
+
