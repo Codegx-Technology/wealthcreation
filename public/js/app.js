@@ -604,7 +604,7 @@ function validateFormData(data) {
   // Required fields with friendly names
   const requiredFields = {
     firstName: 'First Name',
-    lastName: 'Last Name',
+    secondName: 'Last Name',
     email: 'Email',
     phone: 'Phone Number',
     paymentMethod: 'Payment Method'
@@ -748,7 +748,7 @@ async function handleStripePayment(data, registrationId) {
       payment_method: {
         card: cardElement,
         billing_details: {
-          name: `${data.firstName} ${data.lastName}`,
+          name: `${data.firstName} ${data.secondName}`,
           email: data.email,
           phone: data.phone
         }

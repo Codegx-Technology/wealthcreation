@@ -272,7 +272,7 @@ app.post('/api/register', async (req, res) => {
     const registrationData = req.body;
     
     // Validate required fields
-    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'paymentMethod'];
+    const requiredFields = ['firstName', 'secondName', 'email', 'phone', 'paymentMethod'];
     const missingFields = requiredFields.filter(field => !registrationData[field]);
     
     if (missingFields.length > 0) {
