@@ -7,9 +7,9 @@ const cookieParser = require('cookie-parser');
 
 // Load environment variables - support both local .env and Vercel environment variables
 try {
-  const envPath = path.join(__dirname, 'wealthcreation', '.env');
+const envPath = path.join(__dirname, 'wealthcreation', '.env');
   console.log('[ENV] Attempting to load .env from:', envPath);
-  require('dotenv').config({ path: envPath });
+require('dotenv').config({ path: envPath });
 } catch (error) {
   console.log('[ENV] No local .env file found, using Vercel environment variables');
   // Vercel will provide environment variables directly

@@ -169,6 +169,6 @@ function loadScript(src, callback) {
 
 // Load critical scripts in order
 loadScript('https://js.stripe.com/v3/', function() {
-  // Load main app after dependencies
-  loadScript('js/app.js');
+      // Load main app after dependencies
+      loadScript('js/app.js');
 });
