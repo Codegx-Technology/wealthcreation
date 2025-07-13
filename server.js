@@ -53,8 +53,9 @@ try {
       console.error(`[STRIPE] ❌ ${isTestMode ? 'Test' : 'Live'} mode connection test failed:`, err.message);
       if (err.type === 'StripeAuthenticationError') {
         console.error('[STRIPE] Authentication failed - please check your secret key');
+        console.log('[STRIPE] ⚠️ Server will continue running but payment processing will be disabled');
       }
-      throw err;
+      // Don't throw error, just log it and continue
     });
 
 } catch (error) {
@@ -63,7 +64,8 @@ try {
     stack: error.stack,
     type: error.type
   });
-  process.exit(1); // Exit if Stripe initialization fails
+  console.log('[STRIPE] ⚠️ Server will continue running but payment processing will be disabled');
+  // Don't exit, just continue without Stripe
 }
 
 const app = express();
@@ -159,8 +161,8 @@ app.post('/create-payment-intent', async (req, res) => {
     }
 
     // Check if Stripe is properly configured
-    if (!process.env.STRIPE_SECRET_KEY) {
-      console.error('STRIPE_SECRET_KEY not found in environment variables');
+    if (!process.env.STRIPE_SECRET_KEY || !stripe) {
+      console.error('STRIPE_SECRET_KEY not found or Stripe not initialized');
       return res.status(500).json({
         error: 'Payment processing not configured. Please contact support.'
       });
