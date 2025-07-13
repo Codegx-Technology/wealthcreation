@@ -1155,6 +1155,22 @@ h2 {
   transition: all 0.3s ease;
   background: white;
   min-height: 80px;
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.payment-method-label:hover {
+  border-color: #c6a343;
+  box-shadow: 0 4px 8px rgba(198, 163, 67, 0.2);
+  transform: translateY(-1px);
+}
+
+.payment-method-label:has(input:checked) {
+  border-color: #c6a343;
+  background: linear-gradient(135deg, rgba(198, 163, 67, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+  box-shadow: 0 4px 12px rgba(198, 163, 67, 0.3);
 }
 
 .payment-method-label:hover {
@@ -1932,10 +1948,23 @@ button:hover i {
 .custom-amount-section {
   margin-top: 15px;
   padding: 20px;
-  background: rgba(198, 163, 67, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(198, 163, 67, 0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
+  border-radius: 12px;
+  border: 2px solid rgba(198, 163, 67, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease-out;
   transition: all 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .custom-amount-section label {

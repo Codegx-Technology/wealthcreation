@@ -198,9 +198,57 @@ function initializePaymentMethods() {
     togglePaymentSections();
   });
 
+  // Add click event listeners to labels as well
+  const stripeLabel = document.querySelector('label[for="stripe-payment"]');
+  const bankLabel = document.querySelector('label[for="bank-transfer"]');
+  
+  if (stripeLabel) {
+    stripeLabel.addEventListener('click', function() {
+      console.log('[PAYMENT] Stripe label clicked');
+      stripeRadio.checked = true;
+      togglePaymentSections();
+    });
+  }
+  
+  if (bankLabel) {
+    bankLabel.addEventListener('click', function() {
+      console.log('[PAYMENT] Bank label clicked');
+      bankRadio.checked = true;
+      togglePaymentSections();
+    });
+  }
+
   // Initial setup
   togglePaymentSections();
   console.log('[PAYMENT] Payment methods initialized');
+}
+
+// Toggle custom amount section visibility
+function toggleCustomAmount() {
+  const ticketAmountSelect = document.getElementById('ticket-amount');
+  const customAmountSection = document.getElementById('custom-amount-section');
+  const customAmountInput = document.getElementById('custom-amount-input');
+
+  if (!ticketAmountSelect || !customAmountSection) {
+    console.warn('[CUSTOM AMOUNT] Required elements not found');
+    return;
+  }
+
+  if (ticketAmountSelect.value === 'custom') {
+    customAmountSection.style.display = 'block';
+    if (customAmountInput) {
+      customAmountInput.setAttribute('required', 'required');
+      customAmountInput.focus();
+    }
+    console.log('[CUSTOM AMOUNT] Custom amount section shown');
+  } else {
+    customAmountSection.style.display = 'none';
+    if (customAmountInput) {
+      customAmountInput.removeAttribute('required');
+      customAmountInput.value = '';
+    }
+    console.log('[CUSTOM AMOUNT] Custom amount section hidden');
+  }
 }
 
 // Initialize custom amount functionality
@@ -210,16 +258,16 @@ function initializeCustomAmount() {
   if (ticketAmountSelect) {
     // Add event listener for amount selection change
     ticketAmountSelect.addEventListener('change', function() {
-      console.log('Ticket amount changed to:', this.value);
+      console.log('[CUSTOM AMOUNT] Ticket amount changed to:', this.value);
       toggleCustomAmount();
     });
 
     // Initial call to set correct state
     toggleCustomAmount();
 
-    console.log('Custom amount functionality initialized');
+    console.log('[CUSTOM AMOUNT] Custom amount functionality initialized');
   } else {
-    console.warn('Ticket amount select not found - custom amount functionality disabled');
+    console.warn('[CUSTOM AMOUNT] Ticket amount select not found - custom amount functionality disabled');
   }
 }
 
@@ -385,6 +433,7 @@ async function saveRegistration(formData) {
       registrationData.paymentDetails = {
         type: 'stripe',
         amount: formData.ticketAmount === 'custom' ? formData.customAmount : formData.ticketAmount,
+        reference: formData.stripeReference,
         status: 'pending'
       };
     } else {
@@ -601,9 +650,30 @@ function validateFormData(data) {
       showFormStatus('Please enter the bank transfer reference', 'error');
       return false;
     }
+    // Validate amount format
+    const amountRegex = /^[£]?\d+(\.\d{1,2})?$/;
+    if (!amountRegex.test(data.manualAmount.replace(/[£,\s]/g, ''))) {
+      showFormStatus('Please enter a valid amount (e.g., £150 or 150)', 'error');
+      return false;
+    }
   } else if (data.paymentMethod === 'stripe') {
-    if (!data.ticketAmount || (data.ticketAmount === 'custom' && !data.customAmount)) {
-      showFormStatus('Please select or enter a ticket amount', 'error');
+    if (!data.ticketAmount) {
+      showFormStatus('Please select a ticket amount', 'error');
+      return false;
+    }
+    if (data.ticketAmount === 'custom') {
+      if (!data.customAmount || data.customAmount.trim() === '') {
+        showFormStatus('Please enter a custom amount', 'error');
+        return false;
+      }
+      const customAmount = parseFloat(data.customAmount);
+      if (isNaN(customAmount) || customAmount <= 0 || customAmount > 10000) {
+        showFormStatus('Please enter a valid custom amount between £1 and £10,000', 'error');
+        return false;
+      }
+    }
+    if (!data.stripeReference || data.stripeReference.trim() === '') {
+      showFormStatus('Please enter a payment reference for Stripe payment', 'error');
       return false;
     }
   }

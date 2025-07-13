@@ -45,7 +45,7 @@
   <link rel="stylesheet" href="css/critical.css">
 
   <!-- Combined CSS for better performance -->
-  <link rel="stylesheet" href="css/combined.css?v=20250102">
+  <link rel="stylesheet" href="css/combined.css?v=20250105">
 
   <!-- Load fonts asynchronously for better performance -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -160,7 +160,7 @@
                 <img src="images/masha.jpg" alt="Masha" onerror="this.src='images/wealthcreationlondon.png'">
               </div>
               <div class="speaker-info">
-                <h3 class="speaker-name">Masha</h3>
+                <h3 class="speaker-name">Caroline Masha</h3>
                 <p class="speaker-title">Christian Entrepreneur & Speaker</p>
                 <p class="speaker-bio">Accomplished entrepreneur and speaker with expertise in business development and marketplace leadership. Known for inspiring others to achieve financial success through faith-based principles and strategic thinking.</p>
               </div>
@@ -219,7 +219,7 @@
 
           <div class="form-group">
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName" name="firstName" placeholder="Caroline" required />
+            <input type="text" id="firstName" name="firstName" placeholder="First Name" required />
             <div class="input-icon">
               <i class="fas fa-user"></i>
             </div>
@@ -227,7 +227,7 @@
 
           <div class="form-group">
             <label for="secondName">Last Name</label>
-            <input type="text" id="secondName" name="secondName" placeholder="Marsh" required />
+            <input type="text" id="secondName" name="secondName" placeholder="Last Name" required />
             <div class="input-icon">
               <i class="fas fa-user"></i>
             </div>
@@ -308,6 +308,13 @@
           <div id="custom-amount-section" class="custom-amount-section" style="display: none;">
             <label for="custom-amount-input">Enter Custom Amount (£)</label>
             <input type="number" id="custom-amount-input" name="customAmount" min="1" max="10000" step="1" placeholder="Enter amount">
+          </div>
+          <div class="form-group">
+            <label for="stripe-reference">Payment Reference *</label>
+            <input type="text" id="stripe-reference" name="stripeReference" placeholder="Payment Reference" required />
+            <div class="input-icon">
+              <i class="fas fa-hashtag"></i>
+            </div>
           </div>
           <div id="card-element" class="card-element">
             <!-- Stripe Elements will create form elements here -->
@@ -438,12 +445,6 @@
 
   <!-- All JavaScript moved to external files for better debugging -->
   <script src="js/performance.js"></script>
-
-  <!-- Direct reference to main app for immediate loading -->
-  <script src="js/app.js" defer></script>
-
-  <!-- Application Scripts -->
   <script src="js/app.js"></script>
-  <script src="js/performance.js"></script>
 </body>
 </html>
