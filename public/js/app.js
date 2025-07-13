@@ -10,71 +10,6 @@ let stripe;
 let elements;
 let cardElement;
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCXiak3a4DluvlmBzniR1n7U7hkQ1J1lAM",
-  authDomain: "wealth-creation-registration.firebaseapp.com",
-  projectId: "wealth-creation-registration",
-  storageBucket: "wealth-creation-registration.firebasestorage.app",
-  messagingSenderId: "440514993252",
-  appId: "1:440514993252:web:47cc825e650523bc515371",
-  measurementId: "G-LXZ6HGN7LF"
-};
-
-// Performance optimization: Preload critical resources
-function preloadCriticalResources() {
-  // Only preload on desktop or fast connections
-  if (navigator.connection && navigator.connection.effectiveType === '4g' || window.innerWidth > 768) {
-    // Preload hero image
-    const heroImg = new Image();
-    heroImg.src = 'images/background.jpg';
-
-    // Preload QR code image
-    const qrImg = new Image();
-    qrImg.src = 'images/wealthcreationlondon.png';
-
-    // Preload other images only on desktop
-    if (window.innerWidth > 768) {
-      const bgImg = new Image();
-      bgImg.src = 'images/london_skyline.jpg';
-    }
-  }
-}
-
-// Toggle custom amount section
-function toggleCustomAmount() {
-  const ticketAmount = document.getElementById('ticket-amount');
-  const customSection = document.getElementById('custom-amount-section');
-  const customInput = document.getElementById('custom-amount-input');
-
-  console.log('toggleCustomAmount called, value:', ticketAmount?.value);
-
-  if (ticketAmount && customSection) {
-    if (ticketAmount.value === 'custom') {
-      customSection.style.display = 'block';
-      customSection.style.opacity = '1';
-      if (customInput) {
-        customInput.focus();
-        customInput.setAttribute('required', 'required');
-      }
-      console.log('Custom amount section shown');
-    } else {
-      customSection.style.display = 'none';
-      customSection.style.opacity = '0';
-      if (customInput) {
-        customInput.removeAttribute('required');
-        customInput.value = '';
-      }
-      console.log('Custom amount section hidden');
-    }
-  } else {
-    console.error('toggleCustomAmount: Elements not found', {
-      ticketAmount: !!ticketAmount,
-      customSection: !!customSection
-    });
-  }
-}
-
 // Initialize application when DOM is loaded
 function tryInitializeAppWithStripe() {
   if (typeof Stripe !== 'undefined') {
@@ -322,7 +257,7 @@ function initializeFormSubmission() {
       }
 
       // Save to Firebase
-      await saveToFirebase(data);
+      // await saveToFirebase(data); // REMOVED
       
       alert('Registration successful!');
       form.reset();
@@ -337,99 +272,99 @@ function initializeFormSubmission() {
 }
 
 // Initialize Firebase
-async function initializeFirebase() {
-  try {
-    console.log('[FIREBASE] Initializing Firebase...');
+// async function initializeFirebase() { // REMOVED
+//   try { // REMOVED
+//     console.log('[FIREBASE] Initializing Firebase...'); // REMOVED
     
-    // Check if Firebase SDK is loaded
-    if (typeof firebase === 'undefined') {
-      console.error('[FIREBASE] Firebase SDK not loaded');
-      throw new Error('Firebase SDK not loaded');
-    }
+//     // Check if Firebase SDK is loaded // REMOVED
+//     if (typeof firebase === 'undefined') { // REMOVED
+//       console.error('[FIREBASE] Firebase SDK not loaded'); // REMOVED
+//       throw new Error('Firebase SDK not loaded'); // REMOVED
+//     } // REMOVED
 
-    // Check if Firebase is already initialized
-    if (!firebase.apps.length) {
-      const firebaseConfig = {
-        apiKey: FIREBASE_API_KEY,
-        authDomain: FIREBASE_AUTH_DOMAIN,
-        projectId: FIREBASE_PROJECT_ID,
-        storageBucket: FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-        appId: FIREBASE_APP_ID,
-        measurementId: FIREBASE_MEASUREMENT_ID
-      };
+//     // Check if Firebase is already initialized // REMOVED
+//     if (!firebase.apps.length) { // REMOVED
+//       const firebaseConfig = { // REMOVED
+//         apiKey: FIREBASE_API_KEY, // REMOVED
+//         authDomain: FIREBASE_AUTH_DOMAIN, // REMOVED
+//         projectId: FIREBASE_PROJECT_ID, // REMOVED
+//         storageBucket: FIREBASE_STORAGE_BUCKET, // REMOVED
+//         messagingSenderId: FIREBASE_MESSAGING_SENDER_ID, // REMOVED
+//         appId: FIREBASE_APP_ID, // REMOVED
+//         measurementId: FIREBASE_MEASUREMENT_ID // REMOVED
+//       }; // REMOVED
 
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      console.log('[FIREBASE] Firebase initialized successfully');
-    } else {
-      console.log('[FIREBASE] Firebase already initialized');
-    }
+//       // Initialize Firebase // REMOVED
+//       firebase.initializeApp(firebaseConfig); // REMOVED
+//       console.log('[FIREBASE] Firebase initialized successfully'); // REMOVED
+//     } else { // REMOVED
+//       console.log('[FIREBASE] Firebase already initialized'); // REMOVED
+//     } // REMOVED
 
-    // Initialize Firestore
-    const db = firebase.firestore();
-    console.log('[FIREBASE] Firestore initialized');
+//     // Initialize Firestore // REMOVED
+//     const db = firebase.firestore(); // REMOVED
+//     console.log('[FIREBASE] Firestore initialized'); // REMOVED
 
-    return db;
-  } catch (error) {
-    console.error('[FIREBASE] Initialization error:', error);
-    throw error;
-  }
-}
+//     return db; // REMOVED
+//   } catch (error) { // REMOVED
+//     console.error('[FIREBASE] Initialization error:', error); // REMOVED
+//     throw error; // REMOVED
+//   } // REMOVED
+// } // REMOVED
 
 // Save registration data to Firebase
-async function saveToFirebase(formData) {
-  try {
-    console.log('[FIREBASE] Saving registration data...');
+// async function saveToFirebase(formData) { // REMOVED
+//   try { // REMOVED
+//     console.log('[FIREBASE] Saving registration data...'); // REMOVED
     
-    // Get Firestore instance
-    const db = await initializeFirebase();
-    if (!db) {
-      throw new Error('Failed to initialize Firebase');
-    }
+//     // Get Firestore instance // REMOVED
+//     const db = await initializeFirebase(); // REMOVED
+//     if (!db) { // REMOVED
+//       throw new Error('Failed to initialize Firebase'); // REMOVED
+//     } // REMOVED
 
-    // Prepare registration data
-    const registrationData = {
-      ...formData,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      status: 'pending',
-      paymentMethod: formData.paymentMethod || 'bank',
-      paymentStatus: 'pending'
-    };
+//     // Prepare registration data // REMOVED
+//     const registrationData = { // REMOVED
+//       ...formData, // REMOVED
+//       timestamp: firebase.firestore.FieldValue.serverTimestamp(), // REMOVED
+//       status: 'pending', // REMOVED
+//       paymentMethod: formData.paymentMethod || 'bank', // REMOVED
+//       paymentStatus: 'pending' // REMOVED
+//     }; // REMOVED
 
-    // Add payment details based on method
-    if (formData.paymentMethod === 'stripe') {
-      registrationData.paymentDetails = {
-        type: 'stripe',
-        amount: formData.ticketAmount || formData.customAmount,
-        status: 'pending'
-      };
-    } else {
-      registrationData.paymentDetails = {
-        type: 'bank_transfer',
-        amount: formData.manualAmount,
-        reference: formData.manualReference,
-        status: 'pending'
-      };
-    }
+//     // Add payment details based on method // REMOVED
+//     if (formData.paymentMethod === 'stripe') { // REMOVED
+//       registrationData.paymentDetails = { // REMOVED
+//         type: 'stripe', // REMOVED
+//         amount: formData.ticketAmount || formData.customAmount, // REMOVED
+//         status: 'pending' // REMOVED
+//       }; // REMOVED
+//     } else { // REMOVED
+//       registrationData.paymentDetails = { // REMOVED
+//         type: 'bank_transfer', // REMOVED
+//         amount: formData.manualAmount, // REMOVED
+//         reference: formData.manualReference, // REMOVED
+//         status: 'pending' // REMOVED
+//       }; // REMOVED
+//     } // REMOVED
 
-    // Save to Firestore
-    const docRef = await db.collection('registrations').add(registrationData);
-    console.log('[FIREBASE] Registration saved with ID:', docRef.id);
+//     // Save to Firestore // REMOVED
+//     const docRef = await db.collection('registrations').add(registrationData); // REMOVED
+//     console.log('[FIREBASE] Registration saved with ID:', docRef.id); // REMOVED
 
-    // Update payment status if using Stripe
-    if (formData.paymentMethod === 'stripe') {
-      await docRef.update({
-        'paymentDetails.status': 'processing'
-      });
-    }
+//     // Update payment status if using Stripe // REMOVED
+//     if (formData.paymentMethod === 'stripe') { // REMOVED
+//       await docRef.update({ // REMOVED
+//         'paymentDetails.status': 'processing' // REMOVED
+//       }); // REMOVED
+//     } // REMOVED
 
-    return docRef.id;
-  } catch (error) {
-    console.error('[FIREBASE] Save error:', error);
-    throw new Error('Failed to save registration data: ' + error.message);
-  }
-}
+//     return docRef.id; // REMOVED
+//   } catch (error) { // REMOVED
+//     console.error('[FIREBASE] Save error:', error); // REMOVED
+//     throw new Error('Failed to save registration data: ' + error.message); // REMOVED
+//   } // REMOVED
+// } // REMOVED
 
 // Save registration data
 async function saveRegistration(formData) {

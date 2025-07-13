@@ -169,10 +169,6 @@ function loadScript(src, callback) {
 
 // Load critical scripts in order
 loadScript('https://js.stripe.com/v3/', function() {
-  loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js', function() {
-    loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js', function() {
-      // Load main app after dependencies
-      loadScript('js/app.js');
-    });
-  });
+  // Load main app after dependencies
+  loadScript('js/app.js');
 });
