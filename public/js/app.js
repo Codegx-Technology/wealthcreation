@@ -54,6 +54,9 @@ async function initializeApp() {
     // Initialize custom amount functionality
     initializeCustomAmount();
     
+    // Initialize form submission
+    initializeFormSubmission();
+    
     console.log('[INIT] Application initialized successfully');
   } catch (error) {
     console.error('[INIT] Application initialization error:', error);
