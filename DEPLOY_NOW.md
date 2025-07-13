@@ -2,7 +2,7 @@
 
 ## Quick Deployment Guide
 
-Your app is ready to deploy to Vercel **without Stripe keys** initially. The server will run fine and show appropriate messages when payment features are accessed.
+Your app is ready to deploy to Netlify **without Stripe keys** initially. The server will run fine and show appropriate messages when payment features are accessed.
 
 ### ✅ What Works Without Stripe:
 - ✅ Registration form
@@ -18,45 +18,49 @@ Your app is ready to deploy to Vercel **without Stripe keys** initially. The ser
 
 ## 🎯 Deployment Steps:
 
-### 1. **Deploy to Vercel**
-- Go to [Vercel Dashboard](https://vercel.com/dashboard)
-- Import your GitHub repository
-- Select **"Other"** as framework preset
-- Click **"Deploy"**
+### 1. **Deploy to Netlify**
+- Go to [Netlify Dashboard](https://app.netlify.com/)
+- Click **"New site from Git"**
+- Choose your Git provider (GitHub, GitLab, Bitbucket)
+- Select your repository
 
-### 2. **Environment Variables (Optional for now)**
-You can add these later in Vercel dashboard:
-```
-NODE_ENV=production
-```
+### 2. **Build Settings**
+- **Build command**: `npm run build`
+- **Publish directory**: `public`
+- **Base directory**: Leave empty (if your code is in the root)
 
-### 3. **Test Your Deployment**
-- Visit your Vercel URL
-- Test the registration form
-- Verify all images and CSS load correctly
-- Check that payment section shows appropriate message
+### 3. **Deploy**
+- Click **"Deploy site"**
+- Netlify will automatically build and deploy your site
 
-## 🔧 Adding Stripe Later:
+## 🔧 Environment Variables (Optional for now)
 
-### Step 1: Get Stripe Keys
-1. Go to [Stripe Dashboard](https://dashboard.stripe.com/)
-2. Sign up/login to your account
-3. Go to **Developers** → **API Keys**
-4. Copy your **Secret key** (starts with `sk_test_`)
+You can add these later in Netlify dashboard:
+- Go to **Site settings** → **Environment variables**
+- Add `STRIPE_SECRET_KEY` when you have it
+- Add `STRIPE_WEBHOOK_SECRET` when you have it
+- Add `NODE_ENV=production`
 
-### Step 2: Add to Vercel
-1. Go to your Vercel project dashboard
-2. Click **Settings** → **Environment Variables**
-3. Add:
-   - **Name**: `STRIPE_SECRET_KEY`
-   - **Value**: `sk_test_your_key_here`
-   - **Environment**: Production
+## 🎉 After Deployment
 
-### Step 3: Redeploy
-- Vercel will automatically redeploy with the new environment variables
+1. **Test the registration form** - should work perfectly
+2. **Test form validation** - all validations should work
+3. **Test payment section** - will show "temporarily unavailable" message
+4. **Share your site** - the basic functionality is ready
 
-## 🎉 You're Ready!
+## 📝 Next Steps
 
-Your app will work perfectly for registration forms and can accept payments once you add the Stripe keys later.
+1. **Get Stripe account** when ready for payments
+2. **Add environment variables** in Netlify dashboard
+3. **Test payment processing** with Stripe keys
+4. **Configure webhooks** for payment notifications
 
-**No rush - you can add Stripe whenever you're ready!** 
+## 🆘 Need Help?
+
+- Check `NETLIFY_DEPLOYMENT.md` for detailed instructions
+- Check `SETUP_ENV.md` for environment variable setup
+- View build logs in Netlify dashboard if deployment fails
+
+---
+
+**Your app is ready to deploy! 🚀** 

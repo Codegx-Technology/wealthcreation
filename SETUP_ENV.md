@@ -10,40 +10,57 @@
    PORT=3000
    ```
 
-## For Vercel Deployment
+## For Netlify Deployment
 
-1. Go to your Vercel dashboard
-2. Select your project
-3. Go to Settings > Environment Variables
-4. Add the following variables:
+1. Go to your Netlify dashboard
+2. Select your site
+3. Go to **Site settings** → **Environment variables**
+4. Click **"Add a variable"**
+5. Add the following variables:
 
 ### Production Environment
 - **Name**: `STRIPE_SECRET_KEY`
 - **Value**: `sk_test_your_key_here` (or live key for production)
-- **Environment**: Production
+- **Scope**: All contexts (Production, Deploy previews, Branch deploys)
 
 - **Name**: `STRIPE_WEBHOOK_SECRET`
 - **Value**: `whsec_your_webhook_secret_here`
-- **Environment**: Production
+- **Scope**: All contexts
 
 - **Name**: `NODE_ENV`
 - **Value**: `production`
-- **Environment**: Production
-
-### Preview Environment (Optional)
-Add the same variables for Preview environment if you want to test deployments.
+- **Scope**: All contexts
 
 ## Getting Your Stripe Keys
 
-1. Go to [Stripe Dashboard](https://dashboard.stripe.com)
-2. Navigate to Developers > API Keys
-3. Copy your Secret Key (starts with `sk_test_` or `sk_live_`)
-4. For webhook secret, go to Developers > Webhooks
-5. Create a webhook endpoint and copy the signing secret
+### 1. Stripe Secret Key
+1. Go to [Stripe Dashboard](https://dashboard.stripe.com/)
+2. Sign in to your account (or create one if you don't have one)
+3. Go to **Developers** → **API Keys**
+4. You'll see two keys:
+   - **Publishable key** (starts with `pk_test_` or `pk_live_`)
+   - **Secret key** (starts with `sk_test_` or `sk_live_`)
+5. **Copy the Secret key** - this is your `STRIPE_SECRET_KEY`
 
-## Security Notes
+### 2. Stripe Webhook Secret
+1. In Stripe Dashboard, go to **Developers** → **Webhooks**
+2. Click **"Add endpoint"**
+3. Set the endpoint URL to: `https://your-netlify-site.netlify.app/.netlify/functions/index`
+4. Select these events:
+   - `payment_intent.succeeded`
+   - `payment_intent.payment_failed`
+   - `checkout.session.completed`
+5. Click **"Add endpoint"**
+6. Copy the **Signing secret** - this is your `STRIPE_WEBHOOK_SECRET`
 
-- Never commit `.env` files to Git
-- Use test keys for development
-- Use live keys only in production
-- Keep your keys secure and rotate them regularly 
+## Important Notes
+
+- **Never commit API keys** to your repository
+- **Use test keys** for development and testing
+- **Use live keys** only for production
+- **Redeploy** after adding environment variables
+- **Test thoroughly** after setting up Stripe
+
+## Testing Without Stripe
+
+Your app will work perfectly without Stripe keys initially. Payment features will show appropriate "temporarily unavailable" messages until you configure Stripe. 
