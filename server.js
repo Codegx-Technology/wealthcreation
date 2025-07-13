@@ -5,10 +5,15 @@ const path = require('path');
 const Stripe = require('stripe');
 const cookieParser = require('cookie-parser');
 
-// Load environment variables from the correct path
-const envPath = path.join(__dirname, 'wealthcreation', '.env');
-console.log('[ENV] Loading .env from:', envPath);
-require('dotenv').config({ path: envPath });
+// Load environment variables - support both local .env and Vercel environment variables
+try {
+  const envPath = path.join(__dirname, 'wealthcreation', '.env');
+  console.log('[ENV] Attempting to load .env from:', envPath);
+  require('dotenv').config({ path: envPath });
+} catch (error) {
+  console.log('[ENV] No local .env file found, using Vercel environment variables');
+  // Vercel will provide environment variables directly
+}
 
 // Verify environment variables
 console.log('[ENV] Environment check:', {
@@ -73,7 +78,14 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware setup
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://wealthcreation.suzzyevents.com'],
+  origin: [
+    'http://localhost:3000', 
+    'http://127.0.0.1:3000', 
+    'https://wealthcreation.suzzyevents.com',
+    // Add Vercel domains
+    /https:\/\/.*\.vercel\.app$/,
+    /https:\/\/.*\.vercel\.com$/
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
