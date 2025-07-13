@@ -175,8 +175,9 @@ app.post('/create-payment-intent', async (req, res) => {
     // Check if Stripe is properly configured
     if (!process.env.STRIPE_SECRET_KEY || !stripe) {
       console.error('STRIPE_SECRET_KEY not found or Stripe not initialized');
-      return res.status(500).json({
-        error: 'Payment processing not configured. Please contact support.'
+      return res.status(503).json({
+        error: 'Payment processing is temporarily unavailable. Please try again later or contact support.',
+        code: 'PAYMENT_NOT_CONFIGURED'
       });
     }
 
