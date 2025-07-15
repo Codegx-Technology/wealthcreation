@@ -783,3 +783,31 @@ footer {
   max-height: 1000px !important;
   overflow: visible !important;
 }
+
+.speakers-secondary, .speakers-secondary .speaker-card, .speakers-secondary .collapsible-bio {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.speakers-secondary .collapsible-bio {
+  overflow-wrap: break-word !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+@media (max-width: 768px) {
+  .speakers-secondary .read-more-btn {
+    display: block !important;
+    margin: 10px auto 0 auto !important;
+    text-align: center !important;
+    min-width: 90px !important;
+    max-width: 100% !important;
+  }
+  .speakers-secondary .collapsible-bio {
+    padding-left: 4vw !important;
+    padding-right: 4vw !important;
+    font-size: 0.97rem !important;
+  }
+  .speakers-secondary .speaker-card {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
