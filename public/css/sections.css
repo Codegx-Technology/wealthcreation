@@ -562,10 +562,9 @@ footer {
 }
 
 .speaker-info {
-  text-align: center;
-  flex: 1;
-  position: relative;
-  z-index: 2;
+  text-align: left;
+  flex: 1 1 100%;
+  width: 100%;
 }
 
 .speaker-name {
@@ -592,11 +591,11 @@ footer {
 }
 
 .speaker-bio {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  letter-spacing: 0.4px;
-  font-weight: 300;
+  text-align: left;
+  display: block;
+  width: 100%;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .speakers-secondary {
