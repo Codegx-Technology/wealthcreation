@@ -680,18 +680,18 @@ footer {
   }
 }
 
-.speaker-card {
+.speakers-secondary .speaker-card {
   flex-direction: column !important;
   align-items: center;
   text-align: left;
 }
 
-.speaker-image {
+.speakers-secondary .speaker-image {
   margin: 0 auto 16px auto !important;
   display: block;
 }
 
-.speaker-info {
+.speakers-secondary .speaker-info {
   text-align: left;
   width: 100%;
 }
