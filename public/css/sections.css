@@ -563,7 +563,6 @@ footer {
 
 .speaker-info {
   text-align: left;
-  flex: 1 1 100%;
   width: 100%;
 }
 
@@ -679,4 +678,20 @@ footer {
     top: -8px;
     right: 15px;
   }
+}
+
+.speaker-card {
+  flex-direction: column !important;
+  align-items: center;
+  text-align: left;
+}
+
+.speaker-image {
+  margin: 0 auto 16px auto !important;
+  display: block;
+}
+
+.speaker-info {
+  text-align: left;
+  width: 100%;
 }
