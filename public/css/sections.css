@@ -933,15 +933,23 @@ footer {
   display: none;
   position: fixed;
   right: 18px;
-  bottom: 80px;
-  z-index: 100;
+  bottom: 24px;
+  z-index: 9999;
   background: rgba(12,35,64,0.85);
   border-radius: 50%;
   box-shadow: 0 4px 16px rgba(12,35,64,0.18);
   padding: 7px;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s, opacity 0.3s;
   opacity: 0.92;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  animation: scrollArrowFadeIn 0.7s ease;
+}
+@keyframes scrollArrowFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 0.92; transform: translateY(0); }
 }
 .scroll-up-arrow:hover, .scroll-up-arrow:focus {
   background: rgba(198,163,67,0.18);
@@ -954,6 +962,6 @@ footer {
 }
 @media (max-width: 900px) {
   .scroll-up-arrow {
-    display: block;
+    display: flex;
   }
 }
