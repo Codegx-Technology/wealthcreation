@@ -1016,13 +1016,22 @@ function validateForm() {
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.speakers-secondary .read-more-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      const bio = btn.parentElement.querySelector('.collapsible-bio');
-      if (bio.classList.contains('expanded')) {
-        bio.classList.remove('expanded');
-        btn.textContent = 'Read More';
-      } else {
-        bio.classList.add('expanded');
-        btn.textContent = 'Read Less';
+      // Find the .collapsible-bio sibling in the same .speaker-info
+      var bio = btn.parentElement.querySelector('.collapsible-bio');
+      if (!bio) {
+        // Try previousElementSibling if not found as a child
+        if (btn.previousElementSibling && btn.previousElementSibling.classList.contains('collapsible-bio')) {
+          bio = btn.previousElementSibling;
+        }
+      }
+      if (bio) {
+        if (bio.classList.contains('expanded')) {
+          bio.classList.remove('expanded');
+          btn.textContent = 'Read More';
+        } else {
+          bio.classList.add('expanded');
+          btn.textContent = 'Read Less';
+        }
       }
     });
   });
