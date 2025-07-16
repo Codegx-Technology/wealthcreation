@@ -946,6 +946,11 @@ footer {
   justify-content: center;
   pointer-events: auto;
   animation: scrollArrowFadeIn 0.7s ease;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 2px;
 }
 @keyframes scrollArrowFadeIn {
   from { opacity: 0; transform: translateY(20px); }
@@ -959,6 +964,8 @@ footer {
 }
 .scroll-up-arrow svg {
   display: block;
+  width: 24px;
+  height: 24px;
 }
 @media (max-width: 900px) {
   .scroll-up-arrow {
