@@ -1028,3 +1028,18 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+// Scroll Up Arrow functionality
+(function() {
+  var scrollArrow = document.querySelector('.scroll-up-arrow');
+  if (scrollArrow) {
+    scrollArrow.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    scrollArrow.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+})();
+
