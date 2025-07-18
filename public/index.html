@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, user-scalable=yes" />
   <meta name="theme-color" content="#0c2340" />
 
   <!-- SEO and Performance Meta Tags -->
@@ -117,6 +117,23 @@
       }
     }
   </style>
+  <style>
+    body, .page-wrapper {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+    header {
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    footer {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
   <meta name="stripe-publishable-key" content="pk_live_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz" />
 </head>
 
@@ -133,11 +150,39 @@
       </div>
     </header>
 
-    <div class="hero-section" style="position: relative; background: #0c2340; width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-      <img src="images/wealth_flier.jpg" 
-           alt="Wealth Creation Conference Flier" 
-           style="max-width: 100%; max-height: 100%; object-fit: contain; display: block; background: #fff; margin: 0;">
-    </div>
+   <!-- Hero Section Flier - Bulletproof Mobile-First, No Margin -->
+<body style="margin: 0; padding: 0;">
+
+  <div style="
+    background: #0c2340;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  ">
+    <img
+      src="images/wealth_flier.jpg"
+      alt="Wealth Creation Conference Flier"
+      style="
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+        background: #fff;
+        margin: 0;
+        padding: 0;
+      "
+    />
+  </div>
+
+</body>
+
 
     <div class="container">
       <div class="form-header">
