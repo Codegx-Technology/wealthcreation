@@ -101,6 +101,25 @@ The site is configured for deployment on Netlify. To deploy:
 3. Configure build settings (not required for static HTML)
 4. Deploy the site
 
+## Local Development (Production-Ready)
+
+To run your app locally in a way that exactly matches production:
+
+1. Make sure your `.env` file is set up with your Stripe keys and `NODE_ENV=development` or `production` as needed.
+2. **Do NOT use `npx serve` or any separate static server.**
+3. In your project root, run:
+   ```
+   npm run dev
+   # or
+   node server.js
+   ```
+4. Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+- Your backend (Express) will serve both the static frontend and all API endpoints.
+- All API calls (e.g., `/api/register`, `/api/create-payment`) will work locally and in production with no code changes.
+- No CORS issues.
+- When ready, commit and push—Railway will deploy the same code and everything will work live.
+
 ## Contributing
 
 1. Fork the repository
