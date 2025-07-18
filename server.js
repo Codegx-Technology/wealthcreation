@@ -187,9 +187,7 @@ app.post('/create-payment-intent', async (req, res) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to pence
       currency: currency,
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      payment_method_types: ['card'],
       metadata: {
         conference: 'Wealth Creation & Leadership Conference',
         amount_gbp: amount.toString(),

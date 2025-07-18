@@ -687,6 +687,11 @@ function validateFormData(data) {
 
 // Handle Stripe payment
 async function handleStripePayment(data, registrationId) {
+  if (!registrationId) {
+    console.error('[STRIPE] Cannot proceed: registrationId is undefined');
+    showFormStatus('Registration failed. Please try again.', 'error');
+    return;
+  }
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   console.log(`[STRIPE ${requestId}] Starting payment process for registration ${registrationId}`);
 
@@ -714,7 +719,7 @@ async function handleStripePayment(data, registrationId) {
 
     console.log(`[STRIPE ${requestId}] Creating payment intent for £${numericAmount} (Registration: ${registrationId})`);
 
-    // Create payment intent
+    // Create payment intent (do NOT send automatic_payment_methods or payment_method_types)
     const response = await fetch('/api/create-payment', {
       method: 'POST',
       headers: { 
