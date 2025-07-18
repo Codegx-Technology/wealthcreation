@@ -1,0 +1,34 @@
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.page-wrapper {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.hero-section {
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+.hero-section img {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
+}
+header {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+.conference-title {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+@media (max-width: 600px) {
+  body, .page-wrapper, .hero-section, .hero-section img, header, .container {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+} 
