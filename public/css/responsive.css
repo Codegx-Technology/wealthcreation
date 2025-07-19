@@ -83,15 +83,6 @@
     font-size: 0.9rem;
   }
 
-  .hero-section {
-    height: 35vh;
-    min-height: 250px;
-    margin-bottom: 30px;
-    margin-top: 15px;
-    animation: pulse 10s infinite ease-in-out;
-    background-position: center 12%;
-  }
-
   .container {
     padding: 30px 20px;
     margin: 30px 15px;
@@ -144,18 +135,6 @@
 
   .guest-speaker {
     font-size: 0.85rem;
-  }
-
-  .hero-section {
-    height: 25vh;
-    min-height: 180px;
-    margin-bottom: 15px;
-    background-position: center 10%;
-    margin-top: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    background-attachment: scroll;
-    animation: none;
-    background-size: cover;
   }
 
   .container {
@@ -504,11 +483,6 @@
   .container::before,
   .container::after {
     display: none;
-  }
-
-  .hero-section::before,
-  .hero-section::after {
-    opacity: 0.6;
   }
 
   .payment-info-icon::after {

@@ -135,6 +135,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
   <meta name="stripe-publishable-key" content="pk_live_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz" />
+
+  <!-- Hero Image Mobile-First Styling -->
+  <style>
+    .hero-image-container {
+      width: 100%;
+      margin: 0 auto 30px auto;
+      text-align: center;
+      background: #0c2340;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-flier-image {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Tablet and larger screens */
+    @media (min-width: 768px) {
+      .hero-image-container {
+        margin: 0 auto 40px auto;
+        border-radius: 16px;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+      }
+      
+      .hero-flier-image {
+        max-height: 70vh;
+      }
+    }
+
+    /* Desktop and larger screens */
+    @media (min-width: 1024px) {
+      .hero-image-container {
+        margin: 0 auto 50px auto;
+        border-radius: 20px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+      }
+      
+      .hero-flier-image {
+        max-height: 80vh;
+      }
+    }
+
+    /* Ensure no conflicts with existing styles */
+    .hero-image-container * {
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 
 <body>
@@ -151,40 +206,18 @@
     </header>
 
    <!-- Hero Section Flier - Bulletproof Mobile-First, No Margin -->
-<body style="margin: 0; padding: 0;">
-
-  <div style="
-    background: #0c2340;
-    height: 100vh;
-    width: 100vw;
-    overflow: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-  ">
-    <img
-      src="images/wealth_flier.jpg"
-      alt="Wealth Creation Conference Flier"
-      style="
-        max-width: 100%;
-        max-height: 100%;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-        display: block;
-        background: #fff;
-        margin: 0;
-        padding: 0;
-      "
-    />
-  </div>
-
-</body>
 
 
     <div class="container">
+      <!-- Hero Image Section - Mobile First -->
+      <div class="hero-image-container">
+        <img 
+          src="images/wealth_flier.jpg" 
+          alt="Wealth Creation Conference Flier"
+          class="hero-flier-image"
+        />
+      </div>
+
       <div class="form-header">
         <h1>Exclusive Registration</h1>
         <h2>Secrets to Wealth Creation & Leadership</h2>
