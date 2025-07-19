@@ -49,9 +49,9 @@ if ($needInstall) {
 # Stop any previous pm2 instance
 pm2 delete wealth-server 2>$null
 
-# Start the server with pm2 in watch mode (auto-restart on changes)
-Write-Host "Starting server with pm2 (watch mode enabled)..."
-pm2 start server.js --name wealth-server --watch
+# Start the server with pm2 using ecosystem file (properly loads .env)
+Write-Host "Starting server with pm2 ecosystem file..."
+pm2 start ecosystem.config.js
 
 # Open the browser ONCE to the app (optional, safe for Windows)
 Start-Process "http://localhost:3000"

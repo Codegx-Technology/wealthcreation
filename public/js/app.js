@@ -546,8 +546,18 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     }
 
     // Show success message
-    showFormStatus('Registration successful! Thank you for registering.', 'success');
+    showFormStatus('🎉 Registration successful! Thank you for registering.', 'success');
+    
+    // Show additional success details
+    setTimeout(() => {
+      showFormStatus('✅ Payment processed successfully! You will receive a confirmation email shortly.', 'success');
+    }, 2000);
+    
+    // Clear form after successful submission
     this.reset();
+    
+    // Scroll to top to show success message
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     
   } catch (error) {
     console.error('[FORM] Registration error:', error);
@@ -592,12 +602,26 @@ function showFormStatus(message, type = 'info') {
   statusElement.textContent = message;
   statusElement.style.display = 'block';
   
-  // Auto-hide after 5 seconds for non-error messages
-  if (type !== 'error') {
-    setTimeout(() => {
-      statusElement.style.display = 'none';
-    }, 5000);
+  // Auto-hide after different times based on message type
+  let hideDelay = 5000; // Default 5 seconds
+  
+  switch(type) {
+    case 'success':
+      hideDelay = 8000; // Keep success messages longer
+      break;
+    case 'error':
+      hideDelay = 10000; // Keep error messages longer so users can read them
+      break;
+    case 'warning':
+      hideDelay = 7000;
+      break;
+    default:
+      hideDelay = 5000;
   }
+  
+  setTimeout(() => {
+    statusElement.style.display = 'none';
+  }, hideDelay);
 }
 
 // Update validateFormData to be more specific about validation errors
@@ -769,7 +793,38 @@ async function handleStripePayment(data, registrationId) {
         message: result.error.message,
         type: result.error.type
       });
-      throw new Error(result.error.message);
+      
+      // Convert technical errors to user-friendly messages
+      let userMessage = 'Payment failed. Please try again.';
+      
+      switch (result.error.code) {
+        case 'incorrect_number':
+          userMessage = 'Please check your card number and try again.';
+          break;
+        case 'invalid_expiry_month':
+        case 'invalid_expiry_year':
+          userMessage = 'Please check your card expiry date and try again.';
+          break;
+        case 'invalid_cvc':
+          userMessage = 'Please check your card security code (CVC) and try again.';
+          break;
+        case 'expired_card':
+          userMessage = 'Your card has expired. Please use a different card.';
+          break;
+        case 'card_declined':
+          userMessage = 'Your card was declined. Please try a different card or contact your bank.';
+          break;
+        case 'insufficient_funds':
+          userMessage = 'Insufficient funds. Please try a different card or contact your bank.';
+          break;
+        case 'processing_error':
+          userMessage = 'There was an error processing your payment. Please try again.';
+          break;
+        default:
+          userMessage = 'Payment failed. Please check your card details and try again.';
+      }
+      
+      throw new Error(userMessage);
     }
 
     console.log(`[STRIPE ${requestId}] Payment confirmed:`, {

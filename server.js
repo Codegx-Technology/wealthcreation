@@ -5,14 +5,26 @@ const path = require('path');
 const Stripe = require('stripe');
 const cookieParser = require('cookie-parser');
 
-// Load environment variables - support both local .env and Vercel environment variables
+// Manual .env file loading (same approach as stripe-server.js)
+const fs = require('fs');
 try {
-const envPath = path.join(__dirname, 'wealthcreation', '.env');
-  console.log('[ENV] Attempting to load .env from:', envPath);
-require('dotenv').config({ path: envPath });
+  const envContent = fs.readFileSync('.env', 'utf8');
+  console.log('[ENV] Loading environment variables from .env file...');
+  
+  // Parse .env content manually
+  envContent.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#')) {
+      const [key, ...valueParts] = trimmed.split('=');
+      if (key && valueParts.length > 0) {
+        const value = valueParts.join('=');
+        process.env[key] = value;
+      }
+    }
+  });
+  console.log('[ENV] Environment variables loaded successfully');
 } catch (error) {
-  console.log('[ENV] No local .env file found, using Vercel environment variables');
-  // Vercel will provide environment variables directly
+  console.error('[ENV] Error reading .env:', error.message);
 }
 
 // Verify environment variables

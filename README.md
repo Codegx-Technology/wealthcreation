@@ -103,22 +103,40 @@ The site is configured for deployment on Netlify. To deploy:
 
 ## Local Development (Production-Ready)
 
-To run your app locally in a way that exactly matches production:
+To run your app locally in a way that exactly matches production, use the provided PowerShell script for a robust, automated workflow:
 
-1. Make sure your `.env` file is set up with your Stripe keys and `NODE_ENV=development` or `production` as needed.
-2. **Do NOT use `npx serve` or any separate static server.**
-3. In your project root, run:
-   ```
-   npm run dev
-   # or
-   node server.js
-   ```
-4. Visit [http://localhost:3000](http://localhost:3000) in your browser.
+### 1. Prerequisites
+- Ensure you have **Node.js** and **npm** installed.
+- Your `.env` file should be in the project root with your Stripe keys and any other required environment variables.
 
-- Your backend (Express) will serve both the static frontend and all API endpoints.
-- All API calls (e.g., `/api/register`, `/api/create-payment`) will work locally and in production with no code changes.
-- No CORS issues.
+### 2. Start the Local Dev Environment
+
+From your project root, run:
+```
+./dev.ps1
+```
+
+This script will:
+- Check for Node.js, npm, and **pm2** (installs pm2 globally if missing)
+- Check and install npm dependencies only if needed (uses cache otherwise)
+- Start your backend server with pm2 in watch mode (auto-restarts on code changes)
+- Serve your frontend from the `public/` directory on [http://localhost:3000](http://localhost:3000)
+- Open your browser automatically
+- Print helpful pm2 commands for logs, stop, delete, and list
+
+### 3. Stopping and Managing the Server
+- To see logs:   `pm2 logs wealth-server`
+- To stop:       `pm2 stop wealth-server`
+- To delete:     `pm2 delete wealth-server`
+- To list:       `pm2 list`
+
+### 4. Workflow Notes
+- All API calls (e.g., `/api/register`, `/api/create-payment`) use relative URLs and work locally and in production with no code changes.
+- No CORS issues, as both frontend and backend are served from the same Express app.
+- When you change dependencies or code, the script and pm2 will handle updates and restarts automatically.
 - When ready, commit and push—Railway will deploy the same code and everything will work live.
+
+---
 
 ## Contributing
 
