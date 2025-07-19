@@ -1,0 +1,5 @@
+[33m1e5f04b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mrailway-deploy[m[33m)[m Improve user experience: add user-friendly payment error messages, better success handling, and enhanced form status styling
+[33m439946e[m[33m ([m[1;31morigin/railway-deploy[m[33m)[m Clean dev.ps1: remove old logic, emoji logs, config vars; pm2-only, no extra terminals
+[33mde2e4c1[m chore: finalize production-ready local dev and deployment workflow
+[33mfa468b0[m chore: update environment and ensure production-ready .env settings
+[33m3f05432[m fix: Stripe payment intent uses only payment_method_types ['card'] for compatibility
