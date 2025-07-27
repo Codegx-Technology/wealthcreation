@@ -174,7 +174,6 @@ app.post('/api/create-payment', async (req, res) => {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amountInPence,
         currency: 'gbp',
-        payment_method_types: ['card'],
         automatic_payment_methods: {
           enabled: true,
           allow_redirects: 'never'
