@@ -171,7 +171,7 @@ app.get('/favicon.ico', (req, res) => {
 
 // Serve the main page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Real Stripe payment intent endpoint
