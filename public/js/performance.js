@@ -1,6 +1,22 @@
 // Performance monitoring and optimization
 const perfStart = performance.now();
 
+// Luxury Preloader Management
+function initPreloader() {
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    // Hide preloader after page load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        preloader.classList.add('fade-out');
+        setTimeout(() => {
+          preloader.style.display = 'none';
+        }, 500);
+      }, 800); // Show for 800ms minimum for luxury feel
+    });
+  }
+}
+
 // Mobile device detection and optimization
 const isMobile = window.innerWidth <= 768;
 const isSlowConnection = navigator.connection && (navigator.connection.effectiveType === 'slow-2g' || navigator.connection.effectiveType === '2g');
@@ -75,6 +91,9 @@ function forceEmojiIcons() {
     console.log('💻 Desktop view - skipping emoji icons');
   }
 }
+
+// Initialize preloader
+initPreloader();
 
 // Performance tracking
 window.addEventListener('load', () => {

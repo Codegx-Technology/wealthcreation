@@ -84,6 +84,7 @@
 
     <!-- Critical CSS for immediate rendering -->
     <link rel="stylesheet" href="css/critical.css" />
+    <link rel="stylesheet" href="css/preloader.css" />
 
     <!-- Combined CSS for better performance -->
     <link rel="stylesheet" href="css/combined.css?v=20250117" />
@@ -121,14 +122,14 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     /></noscript>
 
-    <!-- Critical image preloading with responsive considerations -->
+    <!-- Critical image preloading - mobile first -->
+    <link rel="preload" href="images/wealth-london.png" as="image" />
     <link
       rel="preload"
-      href="images/wealth_flier.jpg"
+      href="images/wealthcreationlondon.png"
       as="image"
       media="(min-width: 769px)"
     />
-    <link rel="preload" href="images/wealthcreationlondon.png" as="image" />
 
     <!-- NUCLEAR BUTTON FIX - Inline styles to override everything -->
     <style>
@@ -269,6 +270,15 @@
   </head>
 
   <body>
+    <!-- Luxury Preloader -->
+    <div id="preloader" class="preloader">
+      <div class="preloader-content">
+        <div class="luxury-spinner"></div>
+        <div class="preloader-text">WEALTH CONFERENCE</div>
+        <div class="preloader-subtitle">Loading Excellence...</div>
+      </div>
+    </div>
+
     <script src="https://js.stripe.com/v3/"></script>
     <div class="page-wrapper">
       <header>
