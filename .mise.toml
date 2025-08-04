@@ -1,8 +1,0 @@
-[tools]
-node = "18.18.2"
-
-[env]
-NODE_ENV = "production"
-
-[settings]
-experimental = true

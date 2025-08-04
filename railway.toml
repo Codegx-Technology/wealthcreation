@@ -3,13 +3,3 @@ builder = "nixpacks"
 
 [deploy]
 startCommand = "npm start"
-healthcheckPath = "/"
-healthcheckTimeout = 300
-restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 3
-
-[environments.production]
-variables = { NODE_ENV = "production" }
-
-[build.env]
-MISE_INSTALL_PATH = "/usr/local/bin"
