@@ -279,6 +279,34 @@
       </div>
     </div>
 
+    <!-- Immediate preloader hide script -->
+    <script>
+      function hidePreloader() {
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+          preloader.classList.add("fade-out");
+          setTimeout(() => {
+            preloader.style.display = "none";
+          }, 500);
+        }
+      }
+
+      // Hide preloader when DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+          setTimeout(hidePreloader, 600);
+        });
+      } else {
+        setTimeout(hidePreloader, 600);
+      }
+
+      // Backup on window load
+      window.addEventListener("load", hidePreloader);
+
+      // Emergency backup
+      setTimeout(hidePreloader, 3000);
+    </script>
+
     <script src="https://js.stripe.com/v3/"></script>
     <div class="page-wrapper">
       <header>

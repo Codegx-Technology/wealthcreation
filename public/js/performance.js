@@ -2,19 +2,35 @@
 const perfStart = performance.now();
 
 // Luxury Preloader Management
-function initPreloader() {
+function hidePreloader() {
   const preloader = document.getElementById('preloader');
   if (preloader) {
-    // Hide preloader after page load
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        preloader.classList.add('fade-out');
-        setTimeout(() => {
-          preloader.style.display = 'none';
-        }, 500);
-      }, 800); // Show for 800ms minimum for luxury feel
-    });
+    preloader.classList.add('fade-out');
+    setTimeout(() => {
+      preloader.style.display = 'none';
+    }, 500);
   }
+}
+
+// Initialize preloader hiding on multiple events
+function initPreloader() {
+  // Hide on DOM content loaded (faster)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(hidePreloader, 600);
+    });
+  } else {
+    // Document already loaded
+    setTimeout(hidePreloader, 600);
+  }
+
+  // Backup: hide on window load
+  window.addEventListener('load', () => {
+    setTimeout(hidePreloader, 100);
+  });
+
+  // Emergency backup: force hide after 3 seconds
+  setTimeout(hidePreloader, 3000);
 }
 
 // Mobile device detection and optimization
@@ -92,8 +108,13 @@ function forceEmojiIcons() {
   }
 }
 
-// Initialize preloader
+// Initialize preloader immediately
 initPreloader();
+
+// Also initialize on script load
+if (document.readyState !== 'loading') {
+  setTimeout(hidePreloader, 500);
+}
 
 // Performance tracking
 window.addEventListener('load', () => {
