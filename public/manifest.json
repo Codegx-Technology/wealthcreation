@@ -1,0 +1,33 @@
+{
+  "name": "Wealth Creation & Leadership Conference",
+  "short_name": "WealthConf",
+  "description": "Secrets to Wealth Creation & Leadership Conference featuring Dr. Cindy Trimm",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c2340",
+  "theme_color": "#0c2340",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["business", "education", "finance"],
+  "icons": [
+    {
+      "src": "/images/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/wealth-london.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/wealth-london.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

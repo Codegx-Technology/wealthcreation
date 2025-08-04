@@ -1,46 +1,44 @@
-// Service Worker for Wealth Creation Conference
-// Version 1.0.0
+// Service Worker for Wealth Creation Conference PWA
+// Version 2.0.0 - Optimized for Performance
 
-const CACHE_NAME = 'wealth-creation-v1';
-const STATIC_CACHE = 'wealth-creation-static-v1';
-const DYNAMIC_CACHE = 'wealth-creation-dynamic-v1';
+const CACHE_NAME = 'wealth-creation-v2';
+const STATIC_CACHE = 'wealth-creation-static-v2';
+const DYNAMIC_CACHE = 'wealth-creation-dynamic-v2';
 
-// Critical resources to cache immediately
+// Ultra-critical resources only (minimal for speed)
 const CRITICAL_RESOURCES = [
   '/',
-  '/index.html',
+  '/favicon.ico',
+  '/css/critical.css',
+  '/js/app.js'
+];
+
+// Load on demand for better performance
+const CACHE_ON_DEMAND = [
   '/css/styles.css',
   '/css/responsive.css',
   '/css/forms.css',
-  '/js/app.js',
-  '/images/wealthcreationlondon.png'
-];
-
-// Non-critical resources to cache on demand
-const CACHE_ON_DEMAND = [
   '/css/sections.css',
   '/css/animations.css',
-  '/images/background.jpg',
-  '/images/london_skyline.jpg',
-  '/images/hero_name.jpg'
+  '/images/wealth-london.png'
 ];
 
-// Install event - cache critical resources
+// Install event - cache critical resources (optimized for speed)
 self.addEventListener('install', event => {
-  console.log('Service Worker installing...');
-  
+  console.log('PWA Service Worker installing...');
+
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then(cache => {
-        console.log('Caching critical resources...');
+        console.log('Caching ultra-critical resources only...');
         return cache.addAll(CRITICAL_RESOURCES);
       })
       .then(() => {
-        console.log('Critical resources cached successfully');
+        console.log('Critical resources cached - PWA ready');
         return self.skipWaiting();
       })
       .catch(error => {
-        console.error('Failed to cache critical resources:', error);
+        console.error('PWA cache failed:', error);
       })
   );
 });
