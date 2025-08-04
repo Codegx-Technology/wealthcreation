@@ -10,3 +10,6 @@ restartPolicyMaxRetries = 3
 
 [environments.production]
 variables = { NODE_ENV = "production" }
+
+[build.env]
+MISE_INSTALL_PATH = "/usr/local/bin"
