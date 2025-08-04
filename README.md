@@ -2,7 +2,7 @@
 
 A responsive web application for managing registrations for the "Secrets to Wealth Creation & Leadership in the Marketplace Conference" in London featuring Dr. Cindy Trimm.
 
-<!-- Updated for Netlify deployment -->
+<!-- Updated for Railway deployment -->
 
 ## Overview
 
@@ -31,7 +31,7 @@ This project provides an elegant, user-friendly registration system for conferen
   - Real-time data synchronization
 
 - **Deployment**:
-  - Netlify (configured for deployment)
+  - Railway (configured for deployment)
 
 ## Setup and Installation
 
@@ -94,11 +94,11 @@ Form submissions are stored in Firebase Firestore in the 'registrations' collect
 
 ## Deployment
 
-The site is configured for deployment on Netlify. To deploy:
+The site is configured for deployment on Railway. To deploy:
 
-1. Create a Netlify account at [netlify.com](https://netlify.com)
+1. Create a Railway account at [railway.app](https://railway.app)
 2. Connect your GitHub repository
-3. Configure build settings (not required for static HTML)
+3. Configure environment variables
 4. Deploy the site
 
 ## Local Development (Production-Ready)
