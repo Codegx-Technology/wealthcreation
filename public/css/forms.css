@@ -383,6 +383,31 @@
   animation-delay: 1s;
 }
 
+/* Desktop form centering */
+@media (min-width: 1024px) {
+  .form-grid {
+    max-width: 900px;
+    margin: 0 auto 10px auto;
+    padding: 0 20px;
+  }
+
+  .payment-info {
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+  }
+
+  .payment-method-section {
+    max-width: 900px;
+    margin: 30px auto;
+  }
+
+  .stripe-payment-section,
+  .bank-transfer-section {
+    max-width: 900px;
+    margin: 25px auto;
+  }
+}
+
 .form-group {
   position: relative;
   overflow: visible;

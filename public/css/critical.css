@@ -51,6 +51,20 @@ body {
   .page-wrapper {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* Ensure all content is centered */
+  .container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 50px 60px;
+  }
+
+  /* Center registration form specifically */
+  .registration-section {
+    max-width: 1000px;
+    margin: 0 auto;
     padding: 0 20px;
   }
 }
@@ -128,6 +142,8 @@ header {
   position: relative;
   z-index: 1;
   backdrop-filter: blur(20px);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* CRITICAL: Button must be immediately visible - Override all animations */
