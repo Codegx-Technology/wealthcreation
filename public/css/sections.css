@@ -466,6 +466,32 @@ footer {
   gap: 20px;
   position: relative;
   overflow: hidden;
+  height: 100%;
+}
+
+/* Surgical fix for secondary speakers card alignment */
+.speakers-secondary .speaker-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 400px;
+}
+
+.speakers-secondary .speaker-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.speakers-secondary .collapsible-bio {
+  flex-grow: 1;
+  margin-bottom: auto;
+}
+
+.speakers-secondary .read-more-btn {
+  margin-top: auto;
+  align-self: flex-start;
 }
 
 .speaker-card::before {
@@ -607,6 +633,7 @@ footer {
   padding: 40px 24px;
   margin: 0 auto 40px auto;
   max-width: 100%;
+  align-items: stretch;
 }
 
 .speakers-secondary .speaker-card {
@@ -692,7 +719,7 @@ footer {
   transition: background 0.3s, box-shadow 0.3s;
 }
 .speakers-secondary .read-more-btn {
-  margin-top: 6px;
+  margin-top: auto;
   background: linear-gradient(90deg, var(--secondary-light), var(--secondary));
   color: var(--dark);
   font-weight: 600;
@@ -710,6 +737,8 @@ footer {
   min-width: 80px;
   min-height: 28px;
   display: inline-block;
+  align-self: flex-start;
+  flex-shrink: 0;
 }
 .speakers-secondary .read-more-btn:hover, .speakers-secondary .read-more-btn:focus {
   background: linear-gradient(90deg, var(--secondary), var(--secondary-dark));
@@ -726,6 +755,9 @@ footer {
   .speakers-secondary .speaker-card {
     padding: 18px 8px 16px 8px;
     border-radius: 12px;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
   }
   .speakers-secondary .speaker-image {
     width: 80px;
@@ -734,10 +766,18 @@ footer {
   }
   .speakers-secondary .speaker-info {
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
   }
   .speakers-secondary .collapsible-bio {
     font-size: 0.97rem;
     padding: 0 6px;
+    flex-grow: 1;
+  }
+  .speakers-secondary .read-more-btn {
+    margin-top: auto;
+    align-self: flex-start;
   }
 }
 
@@ -819,10 +859,12 @@ footer {
   }
   .speakers-secondary .read-more-btn {
     display: block !important;
-    margin: 10px auto 0 auto !important;
+    margin: auto auto 0 auto !important;
     text-align: center !important;
     min-width: 90px !important;
     max-width: 100% !important;
+    align-self: flex-start !important;
+    flex-shrink: 0 !important;
   }
   .speakers-secondary .collapsible-bio {
     padding-left: 4vw !important;
