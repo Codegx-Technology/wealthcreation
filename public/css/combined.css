@@ -266,7 +266,7 @@ header:hover {
   -webkit-backdrop-filter: blur(5px);
 }
 
-/* Container Styles */
+/* Container Styles - Perfect Desktop Centering */
 .container {
   max-width: 900px;
   margin: 60px auto;
@@ -282,6 +282,34 @@ header:hover {
   -webkit-backdrop-filter: blur(20px);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   animation: fadeInScale 1s var(--transition-bounce);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Desktop Perfect Centering */
+@media (min-width: 1024px) {
+  .page-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  #main-content {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
 }
 
 .container:hover {

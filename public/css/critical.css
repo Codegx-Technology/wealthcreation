@@ -46,19 +46,24 @@ body {
   margin: 0 auto;
 }
 
-/* Desktop alignment optimization */
+/* Desktop alignment optimization - Perfect centering */
 @media (min-width: 1024px) {
   .page-wrapper {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  /* Ensure all content is centered */
+  /* Ensure all content is perfectly centered with equal margins */
   .container {
     max-width: 1000px;
     margin: 60px auto;
     padding: 50px 60px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   /* Center registration form specifically */
@@ -66,6 +71,21 @@ body {
     max-width: 1000px;
     margin: 0 auto;
     padding: 0 20px;
+    width: 100%;
+  }
+
+  /* Ensure header is also centered */
+  header {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Center hero section */
+  .hero-section {
+    max-width: 1400px;
+    margin: 20px auto 40px auto;
+    width: 100%;
   }
 }
 
