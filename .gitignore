@@ -75,6 +75,7 @@ node_modules/
 # IDE
 .idea/
 .vscode/
+!.vscode/elite-cursor-snippets/
 *.swp
 *.swo
 
