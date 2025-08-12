@@ -65,7 +65,7 @@
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="WealthConf" />
-    <link rel="apple-touch-icon" href="/images/wealth-london.png" />
+    <link rel="apple-touch-icon" href="/images/flier_latest.jpg" />
 
     <title>
       Secrets to Wealth Creation & Leadership in the Marketplace Conference -
@@ -92,6 +92,8 @@
     <link rel="stylesheet" href="css/sections.css?v=20250117" />
     <!-- SPA Navigation and Page Styles -->
     <link rel="stylesheet" href="css/spa.css" />
+    <!-- Responsive Footer Styles -->
+    <link rel="stylesheet" href="css/footer-responsive.css" />
 
     <!-- DNS Prefetch for Performance -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
@@ -344,7 +346,7 @@
         <!-- Hero Image Section - Mobile First -->
         <div class="hero-image-container">
           <img
-            src="images/wealth-london.png"
+            src="images/flier_latest.jpg"
             alt="Wealth Creation Conference Flier"
             class="hero-flier-image"
           />
@@ -734,8 +736,8 @@
               <label for="ticket-amount">Select Ticket Amount</label>
               <select id="ticket-amount" name="ticketAmount">
                 <option value="">Select Amount</option>
-                <option value="150">Early Bird - £150</option>
-                <option value="200">Standard - £200</option>
+                <option value="150">Regular - £90</option>
+                <option value="200">VIP - £150</option>
                 <option value="custom">Custom Amount</option>
               </select>
             </div>
@@ -844,6 +846,9 @@
             </button>
             <p class="form-note">
               By registering, you agree to our terms and conditions
+            </p>
+            <p class="payment-policy-note">
+              <em>Please note that all payments are non-refundable</em>
             </p>
           </div>
         </form>
@@ -1086,18 +1091,21 @@
 
       <footer>
         <div class="footer-content">
-          <div class="footer-main">
+          <!-- Conference Information Section -->
+          <div class="footer-section footer-conference">
             <div class="footer-logo">
               Secrets to <span>Wealth Creation</span> & Leadership
             </div>
-            <p>
+            <p class="footer-description">
               Empowering financial excellence through expert guidance and proven
               strategies.
             </p>
             <p class="guest-credit">Featuring Dr. Cindy Trimm</p>
+            <p class="event-date">September 20, 2025 | London</p>
           </div>
 
-          <div class="footer-contact">
+          <!-- Contact Information Section -->
+          <div class="footer-section footer-contact">
             <h4>Contact Information</h4>
             <p class="footer-tagline">"Turning Moments into Memories"</p>
             <div class="contact-info">
@@ -1115,6 +1123,13 @@
                   >www.suzzyevents.com</a
                 >
               </div>
+            </div>
+          </div>
+
+          <!-- Email & Director Section -->
+          <div class="footer-section footer-emails">
+            <h4>Get In Touch</h4>
+            <div class="contact-info">
               <div class="contact-item">
                 <i class="fas fa-envelope"></i>
                 <a href="mailto:info@suzzyevents.com">info@suzzyevents.com</a>
@@ -1125,15 +1140,32 @@
               </div>
             </div>
             <div class="director-info">
-              <strong>Susan Kivayi</strong> - Director, Suzzy Ltd
+              <strong>Susan Kivayi</strong><br>
+              <span>Director, Suzzy Ltd</span>
             </div>
           </div>
 
+          <!-- Corporate & Legal Section -->
+          <div class="footer-section footer-corporate">
+            <h4>Corporate Information</h4>
+            <div class="corporate-details">
+              <p><strong>Suzzy Ltd</strong></p>
+              <p>Professional Event Management</p>
+              <p>Registered in England & Wales</p>
+            </div>
+            <div class="payment-notice">
+              <p><em>Please note that all payments are non-refundable</em></p>
+            </div>
+          </div>
+
+          <!-- Bottom Section -->
           <div class="footer-bottom">
-            <p class="copyright">&copy; 2025 Suzzy Ltd | All Rights Reserved</p>
-            <p class="developer-credit">
-              Developed by <span>Codegx Technologies</span>
-            </p>
+            <div class="footer-bottom-content">
+              <p class="copyright">&copy; 2025 Suzzy Ltd | All Rights Reserved</p>
+              <p class="developer-credit">
+                Developed by <span>Codegx Technologies</span>
+              </p>
+            </div>
           </div>
         </div>
         <div
