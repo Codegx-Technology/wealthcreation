@@ -65,7 +65,7 @@
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="WealthConf" />
-    <link rel="apple-touch-icon" href="/images/new_flier.jpg" />
+    <link rel="apple-touch-icon" href="/images/new.jpg" />
 
     <title>
       Secrets to Wealth Creation & Leadership in the Marketplace Conference -
@@ -354,7 +354,7 @@
             <!-- Hero Image Section - Mobile First -->
             <div class="hero-image-container">
               <img
-                src="images/new_flier.jpg"
+                src="images/new.jpg"
                 alt="Wealth Creation Conference Flier"
                 class="hero-flier-image"
               />
@@ -698,10 +698,10 @@
               <!-- Payment Method Selection -->
               <div class="payment-method-section">
                 <h3 id="payment-method-title" class="payment-method-title">
-                  Choose Payment Method
+                  Payment Method
                 </h3>
                 <div class="payment-methods">
-                  <div class="payment-method-option">
+                  <!-- <div class="payment-method-option">
                     <input
                       type="radio"
                       id="stripe-payment"
@@ -717,7 +717,7 @@
                         </div>
                       </div>
                     </label>
-                  </div>
+                  </div> -->
                   <div class="payment-method-option">
                     <input
                       type="radio"
@@ -809,14 +809,16 @@
               <!-- Bank Transfer Section -->
               <div id="bank-transfer-section" class="bank-transfer-section">
                 <div class="form-group">
-                  <label for="manual-amount">Amount Paid *</label>
-                  <input
-                    type="text"
+                  <label for="manual-amount">Amount *</label>
+                  <select
                     id="manual-amount"
                     name="manualAmount"
-                    placeholder="Amount (£)"
                     required
-                  />
+                  >
+                    <option value="">Select Amount</option>
+                    <option value="90">Regular - £90</option>
+                    <option value="150">VIP - £150</option>
+                  </select>
                   <div class="input-icon">
                     <i class="fas fa-pound-sign"></i>
                   </div>
@@ -832,6 +834,14 @@
                   />
                   <div class="input-icon">
                     <i class="fas fa-hashtag"></i>
+                  </div>
+                </div>
+                <div class="form-group full-width">
+                  <label for="payment-confirmation">Payment Confirmation</label>
+                  <div class="payment-info-notice">
+                    <p><strong>Important:</strong> Send amount paid and payment reference to:</p>
+                    <p><strong>Email:</strong> info@suzzyevents.com</p>
+                    <p><strong>Tel:</strong> +447365595954</p>
                   </div>
                 </div>
               </div>

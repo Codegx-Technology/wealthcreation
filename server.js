@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const Stripe = require('stripe');
 const cookieParser = require('cookie-parser');
+const nodemailer = require('nodemailer');
 
 // Manual .env file loading (same approach as stripe-server.js)
 const fs = require('fs');
@@ -85,8 +86,126 @@ try {
   // Don't exit, just continue without Stripe
 }
 
+// Email Configuration
+let emailTransporter;
+try {
+  console.log('[EMAIL] Configuring email transporter...');
+  
+  // Email configuration - you can use Gmail, Outlook, or SMTP service
+  emailTransporter = nodemailer.createTransporter({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER || 'solver.peters@gmail.com',
+      pass: process.env.EMAIL_PASSWORD || 'your-16-character-app-password' // MUST be App Password from Google
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+  
+  console.log('[EMAIL] ✅ Email transporter configured');
+} catch (error) {
+  console.error('[EMAIL] Email configuration error:', error.message);
+  console.log('[EMAIL] ⚠️ Server will continue running but email notifications will be disabled');
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Email sending function
+async function sendRegistrationEmail(registrationData) {
+  if (!emailTransporter) {
+    console.log('[EMAIL] Email transporter not available, skipping email notification');
+    return { success: false, error: 'Email not configured' };
+  }
+
+  try {
+    const { firstName, secondName, email, phone, org, title, paymentMethod, manualAmount, manualReference } = registrationData;
+    
+    // Email content for admin notification
+    const adminEmailContent = `
+      <h2>New Registration - Wealth Creation Conference</h2>
+      <p><strong>Registration Time:</strong> ${new Date().toLocaleString()}</p>
+      
+      <h3>Participant Details:</h3>
+      <ul>
+        <li><strong>Name:</strong> ${title ? title + ' ' : ''}${firstName} ${secondName}</li>
+        <li><strong>Email:</strong> ${email}</li>
+        <li><strong>Phone:</strong> ${phone}</li>
+        <li><strong>Organisation:</strong> ${org || 'Not provided'}</li>
+      </ul>
+      
+      <h3>Payment Information:</h3>
+      <ul>
+        <li><strong>Payment Method:</strong> ${paymentMethod === 'bank' ? 'Bank Transfer' : 'Stripe Card Payment'}</li>
+        <li><strong>Amount:</strong> £${manualAmount || 'Not specified'}</li>
+        <li><strong>Reference:</strong> ${manualReference || 'Not provided'}</li>
+      </ul>
+      
+      <hr>
+      <p><em>This is an automated notification from the Wealth Creation Conference registration system.</em></p>
+    `;
+    
+    // Email content for participant confirmation
+    const participantEmailContent = `
+      <h2>Registration Confirmed - Wealth Creation & Leadership Conference</h2>
+      <p>Dear ${firstName},</p>
+      
+      <p>Thank you for registering for the <strong>Secrets to Wealth Creation & Leadership Conference</strong> featuring Dr. Cindy Trimm.</p>
+      
+      <h3>Event Details:</h3>
+      <ul>
+        <li><strong>Date:</strong> September 20, 2025</li>
+        <li><strong>Time:</strong> 9:00 AM - 5:00 PM</li>
+        <li><strong>Venue:</strong> GRACEPOINT, 161-169 Essex Road, Islington, N1 2SN, London</li>
+      </ul>
+      
+      <h3>Your Registration Details:</h3>
+      <ul>
+        <li><strong>Name:</strong> ${title ? title + ' ' : ''}${firstName} ${secondName}</li>
+        <li><strong>Amount:</strong> £${manualAmount}</li>
+        <li><strong>Payment Reference:</strong> ${manualReference}</li>
+      </ul>
+      
+      <h3>Important Reminders:</h3>
+      <p>Please ensure you have sent your payment confirmation to <strong>info@suzzyevents.com</strong> or call <strong>+447365595954</strong> with your payment reference: <strong>${manualReference}</strong></p>
+      
+      <p>We look forward to seeing you at this transformative event!</p>
+      
+      <p>Best regards,<br>
+      The Suzzy Events Team<br>
+      <a href="https://www.suzzyevents.com">www.suzzyevents.com</a></p>
+    `;
+
+    // Send admin notification
+    const adminEmail = {
+      from: process.env.EMAIL_USER || 'solver.peters@gmail.com',
+      to: process.env.ADMIN_EMAIL || 'solver.peters@gmail.com',
+      subject: `New Registration: ${firstName} ${secondName} - £${manualAmount}`,
+      html: adminEmailContent
+    };
+
+    // Send participant confirmation
+    const participantEmail = {
+      from: process.env.EMAIL_USER || 'solver.peters@gmail.com',
+      to: email,
+      subject: 'Registration Confirmed - Wealth Creation Conference',
+      html: participantEmailContent
+    };
+
+    // Send both emails
+    await emailTransporter.sendMail(adminEmail);
+    console.log(`[EMAIL] Admin notification sent for registration: ${firstName} ${secondName}`);
+    
+    await emailTransporter.sendMail(participantEmail);
+    console.log(`[EMAIL] Confirmation sent to participant: ${email}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error('[EMAIL] Failed to send registration emails:', error);
+    return { success: false, error: error.message };
+  }
+}
 
 // Middleware setup
 app.use(cors({
@@ -272,6 +391,58 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Test email endpoint
+app.post('/test-email', async (req, res) => {
+  console.log('[TEST] Email test requested');
+  
+  try {
+    // Create dummy registration data
+    const dummyRegistration = {
+      firstName: 'John',
+      secondName: 'Doe',
+      email: 'solver.peters@gmail.com', // Send test to your own email
+      phone: '+447365595954',
+      org: 'Test Company Ltd',
+      title: 'Mr',
+      paymentMethod: 'bank',
+      manualAmount: '150',
+      manualReference: 'TEST-REF-' + Date.now(),
+      id: 'test_reg_' + Date.now(),
+      createdAt: new Date().toISOString(),
+      status: 'pending',
+      paymentStatus: 'pending'
+    };
+
+    console.log('[TEST] Sending test emails with dummy data:', dummyRegistration);
+    
+    // Send the test emails
+    const emailResult = await sendRegistrationEmail(dummyRegistration);
+    
+    if (emailResult.success) {
+      console.log('[TEST] ✅ Test emails sent successfully');
+      res.json({
+        success: true,
+        message: 'Test emails sent successfully!',
+        testData: dummyRegistration
+      });
+    } else {
+      console.error('[TEST] ❌ Failed to send test emails:', emailResult.error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to send test emails',
+        error: emailResult.error
+      });
+    }
+  } catch (error) {
+    console.error('[TEST] Email test error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Email test failed',
+      error: error.message
+    });
+  }
+});
+
 // Registration endpoint
 app.post('/api/register', async (req, res) => {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -319,6 +490,17 @@ app.post('/api/register', async (req, res) => {
 
     // Save to database (for now, just log it)
     console.log('New registration:', fullRegistrationData);
+
+    // Send email notifications
+    console.log(`[EMAIL] Sending registration emails for: ${fullRegistrationData.firstName} ${fullRegistrationData.secondName}`);
+    const emailResult = await sendRegistrationEmail(fullRegistrationData);
+    
+    if (emailResult.success) {
+      console.log(`[EMAIL] Registration emails sent successfully`);
+    } else {
+      console.warn(`[EMAIL] Failed to send emails: ${emailResult.error}`);
+      // Don't fail the registration if email fails
+    }
 
     // Set registration cookie
     res.cookie('registration_id', registrationId, {
