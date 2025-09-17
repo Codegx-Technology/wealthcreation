@@ -127,16 +127,55 @@
     /></noscript>
 
     <!-- Critical image preloading - mobile first -->
-    <link rel="preload" href="images/wealth-london.png" as="image" />
+    <link rel="preload" href="images/new.png" as="image" />
     <link
       rel="preload"
-      href="images/wealthcreationlondon.png"
+      href="images/new.png"
       as="image"
       media="(min-width: 769px)"
     />
 
-    <!-- NUCLEAR BUTTON FIX - Inline styles to override everything -->
+    <!-- NUCLEAR BUTTON FIX AND EMERGENCY STYLING - Inline styles to override everything -->
     <style>
+      /* Force body and basic styling */
+      body {
+        font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%) !important;
+        color: #2c3e50 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 100vh !important;
+        line-height: 1.6 !important;
+      }
+      
+      /* Force container visibility */
+      .container {
+        background: rgba(255, 255, 255, 0.95) !important;
+        padding: 40px !important;
+        border-radius: 12px !important;
+        margin: 20px auto !important;
+        max-width: 900px !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+      }
+      
+      /* Force header styling */
+      header {
+        background: rgba(12, 35, 64, 0.95) !important;
+        padding: 20px 0 !important;
+        border-bottom: 1px solid rgba(198, 163, 67, 0.3) !important;
+      }
+      
+      .logo {
+        color: white !important;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+      }
+      
+      .logo span {
+        color: #e9c46a !important;
+      }
+      
       /* Force button visibility with maximum specificity */
       .btn-container,
       div.btn-container,
@@ -154,7 +193,7 @@
         margin: 0 auto !important;
         position: relative !important;
         z-index: 9999 !important;
-        background: #0c2340 !important;
+        background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%) !important;
         color: white !important;
         border: none !important;
         border-radius: 50px !important;
@@ -165,13 +204,788 @@
         animation: none !important;
         animation-delay: 0s !important;
         transform: none !important;
-        transition: none !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(12, 35, 64, 0.3) !important;
+      }
+      
+      button:hover {
+        background: linear-gradient(135deg, #1a3a5f 0%, #0c2340 100%) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(12, 35, 64, 0.4) !important;
       }
 
       .btn-container {
         text-align: center !important;
         margin-top: 40px !important;
       }
+      
+      /* Form styling */
+      .form-group {
+        margin-bottom: 20px !important;
+      }
+      
+      .form-group label {
+        display: block !important;
+        margin-bottom: 8px !important;
+        font-weight: 600 !important;
+        color: #2c3e50 !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        padding: 4px 8px !important;
+        border-radius: 4px !important;
+        font-size: 14px !important;
+      }
+      
+      .form-group input,
+      .form-group select {
+        width: 100% !important;
+        padding: 12px 15px !important;
+        border: 2px solid #e1e8ed !important;
+        border-radius: 8px !important;
+        font-size: 16px !important;
+        background: white !important;
+        color: #2c3e50 !important;
+      }
+      
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: #0c2340 !important;
+        outline: none !important;
+        box-shadow: 0 0 0 3px rgba(12, 35, 64, 0.1) !important;
+      }
+      
+      /* Payment confirmation styling - High visibility */
+      .payment-info-notice {
+        background: rgba(255, 255, 255, 0.95) !important;
+        padding: 20px !important;
+        border-radius: 8px !important;
+        border: 2px solid #0c2340 !important;
+        margin: 15px 0 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+      }
+      
+      .payment-info-notice p {
+        color: #2c3e50 !important;
+        font-weight: 600 !important;
+        margin: 8px 0 !important;
+        font-size: 16px !important;
+      }
+      
+      .payment-info-notice strong {
+        color: #0c2340 !important;
+        font-weight: 700 !important;
+      }
+      
+      /* Payment Method Section Improvements */
+      .payment-method-section {
+        max-width: 600px !important;
+        margin: 30px auto !important;
+        padding: 25px !important;
+        background: rgba(248, 250, 252, 0.8) !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(12, 35, 64, 0.1) !important;
+      }
+      
+      .payment-method-title {
+        font-size: 1.4rem !important;
+        color: #0c2340 !important;
+        font-weight: 600 !important;
+        margin-bottom: 20px !important;
+        text-align: center !important;
+      }
+      
+      .payment-methods {
+        display: flex !important;
+        gap: 15px !important;
+        margin: 20px 0 !important;
+        max-width: 400px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+      
+      .payment-method-option {
+        flex: 1 !important;
+      }
+      
+      .payment-method-label {
+        display: block !important;
+        padding: 20px 15px !important;
+        border: 2px solid #e1e8ed !important;
+        border-radius: 12px !important;
+        cursor: pointer !important;
+        text-align: center !important;
+        background: white !important;
+        transition: all 0.3s ease !important;
+        min-height: 80px !important;
+      }
+      
+      .payment-method-content {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+      
+      .payment-icon {
+        font-size: 1.8rem !important;
+        margin-bottom: 5px !important;
+      }
+      
+      .payment-text span {
+        display: block !important;
+        font-weight: 600 !important;
+        color: #0c2340 !important;
+        margin-bottom: 3px !important;
+      }
+      
+      .payment-text small {
+        color: #666 !important;
+        font-size: 0.85rem !important;
+      }
+      
+      /* Bank Transfer Section Improvements */
+      .bank-transfer-section {
+        max-width: 600px !important;
+        margin: 25px auto !important;
+        padding: 25px !important;
+        background: white !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(12, 35, 64, 0.1) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+      }
+      
+      .bank-transfer-section .form-group {
+        max-width: 100% !important;
+        margin-bottom: 20px !important;
+      }
+      
+      .payment-info-notice {
+        background: rgba(233, 196, 106, 0.1) !important;
+        padding: 20px !important;
+        border-radius: 10px !important;
+        border: 1px solid #e9c46a !important;
+        margin: 20px 0 !important;
+        text-align: center !important;
+      }
+      
+      .payment-info-notice p {
+        color: #0c2340 !important;
+        font-weight: 500 !important;
+        margin: 8px 0 !important;
+        font-size: 0.95rem !important;
+        line-height: 1.5 !important;
+      }
+      
+      .payment-info-notice strong {
+        color: #0c2340 !important;
+        font-weight: 700 !important;
+      }
+      
+      /* Hero image styling */
+      .hero-image-container {
+        margin: 20px auto !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+      }
+      
+      .hero-flier-image {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+        display: block !important;
+      }
+      
+      /* Countdown Timer Styling */
+      .countdown-section {
+        background: linear-gradient(135deg, rgba(12, 35, 64, 0.95) 0%, rgba(26, 58, 95, 0.95) 100%) !important;
+        color: white !important;
+        padding: 30px 20px !important;
+        margin: 30px auto !important;
+        border-radius: 16px !important;
+        text-align: center !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+        border: 1px solid rgba(198, 163, 67, 0.3) !important;
+      }
+      
+      .countdown-title {
+        font-size: 1.8rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 25px !important;
+        color: #e9c46a !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+      }
+      
+      .countdown-timer {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 20px !important;
+        margin-bottom: 20px !important;
+        flex-wrap: wrap !important;
+      }
+      
+      .countdown-item {
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 12px !important;
+        padding: 20px 15px !important;
+        min-width: 80px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .countdown-item:hover {
+        background: rgba(233, 196, 106, 0.2) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 15px rgba(233, 196, 106, 0.3) !important;
+      }
+      
+      .countdown-number {
+        display: block !important;
+        font-size: 2.5rem !important;
+        font-weight: 700 !important;
+        color: #e9c46a !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        margin-bottom: 5px !important;
+      }
+      
+      .countdown-label {
+        display: block !important;
+        font-size: 0.9rem !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        font-weight: 500 !important;
+      }
+      
+      .countdown-event-date {
+        font-size: 1.1rem !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+        margin: 0 !important;
+        font-weight: 500 !important;
+      }
+      
+      /* Enhanced Hero CTA Section Styling */
+      .enhanced-hero-cta {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%) !important;
+        border-radius: 20px !important;
+        padding: 0 !important;
+        margin: 30px auto !important;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+        border: 1px solid rgba(12, 35, 64, 0.1) !important;
+        overflow: hidden !important;
+      }
+      
+      .urgency-banner {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%) !important;
+        color: white !important;
+        padding: 12px 20px !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 15px !important;
+        font-weight: 600 !important;
+        animation: pulse-glow 2s infinite !important;
+      }
+      
+      @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 10px rgba(255, 107, 107, 0.3); }
+        50% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.6); }
+      }
+      
+      .urgency-icon {
+        font-size: 1.2rem !important;
+        animation: bounce 1s infinite !important;
+      }
+      
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-5px); }
+        60% { transform: translateY(-3px); }
+      }
+      
+      .form-header {
+        padding: 40px 30px !important;
+        text-align: center !important;
+      }
+      
+      .cta-badge {
+        display: inline-block !important;
+        background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%) !important;
+        color: white !important;
+        padding: 8px 20px !important;
+        border-radius: 25px !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 1px !important;
+        margin-bottom: 20px !important;
+        text-transform: uppercase !important;
+      }
+      
+      .enhanced-title {
+        font-size: 2.5rem !important;
+        font-weight: 800 !important;
+        color: #0c2340 !important;
+        margin: 15px 0 !important;
+        line-height: 1.2 !important;
+        background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+      }
+      
+      .enhanced-subtitle {
+        font-size: 1.4rem !important;
+        color: #e9c46a !important;
+        font-weight: 600 !important;
+        margin: 10px 0 25px 0 !important;
+      }
+      
+      .enhanced-description {
+        font-size: 1.1rem !important;
+        color: #2c3e50 !important;
+        line-height: 1.6 !important;
+        margin-bottom: 30px !important;
+        max-width: 600px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+      
+      .value-propositions {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+        gap: 20px !important;
+        margin: 30px 0 !important;
+      }
+      
+      .value-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 15px !important;
+        padding: 20px !important;
+        background: rgba(12, 35, 64, 0.05) !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(12, 35, 64, 0.1) !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .value-item:hover {
+        background: rgba(12, 35, 64, 0.1) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 15px rgba(12, 35, 64, 0.1) !important;
+      }
+      
+      .value-icon {
+        font-size: 2rem !important;
+        min-width: 60px !important;
+        text-align: center !important;
+      }
+      
+      .value-text {
+        flex: 1 !important;
+      }
+      
+      .value-text strong {
+        display: block !important;
+        color: #0c2340 !important;
+        font-size: 1.1rem !important;
+        margin-bottom: 5px !important;
+      }
+      
+      .value-text span {
+        color: #666 !important;
+        font-size: 0.95rem !important;
+      }
+      
+      .scarcity-timer {
+        background: linear-gradient(135deg, #e9c46a 0%, #f4a261 100%) !important;
+        padding: 20px !important;
+        border-radius: 12px !important;
+        margin: 25px 0 !important;
+        text-align: center !important;
+        border: 2px solid #e9c46a !important;
+      }
+      
+      .scarcity-text {
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        color: #0c2340 !important;
+        margin-bottom: 10px !important;
+      }
+      
+      .price-comparison {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 15px !important;
+        flex-wrap: wrap !important;
+      }
+      
+      .old-price {
+        font-size: 1.2rem !important;
+        color: #666 !important;
+        text-decoration: line-through !important;
+      }
+      
+      .current-price {
+        font-size: 2rem !important;
+        font-weight: 800 !important;
+        color: #0c2340 !important;
+      }
+      
+      .savings {
+        background: #ff6b6b !important;
+        color: white !important;
+        padding: 5px 12px !important;
+        border-radius: 20px !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+      }
+      
+      /* Trust Badges Section Styling */
+      .trust-badges-section {
+        background: rgba(248, 250, 252, 0.8) !important;
+        padding: 40px 30px !important;
+        border-radius: 16px !important;
+        margin: 30px auto !important;
+        border: 1px solid rgba(12, 35, 64, 0.1) !important;
+      }
+      
+      .trust-header {
+        text-align: center !important;
+        margin-bottom: 30px !important;
+      }
+      
+      .trust-header h3 {
+        font-size: 1.8rem !important;
+        color: #0c2340 !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+      }
+      
+      .trust-elements {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+        gap: 20px !important;
+        margin-bottom: 40px !important;
+      }
+      
+      .trust-badge {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding: 20px !important;
+        background: white !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+        border: 1px solid rgba(12, 35, 64, 0.1) !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .trust-badge:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
+      }
+      
+      .badge-icon {
+        font-size: 1.8rem !important;
+        min-width: 50px !important;
+        text-align: center !important;
+      }
+      
+      .badge-content strong {
+        display: block !important;
+        color: #0c2340 !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 2px !important;
+      }
+      
+      .badge-content span {
+        color: #666 !important;
+        font-size: 0.9rem !important;
+      }
+      
+      .testimonials-preview {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+        gap: 25px !important;
+        margin-bottom: 30px !important;
+      }
+      
+      .testimonial-item {
+        background: white !important;
+        padding: 25px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+        border-left: 4px solid #e9c46a !important;
+      }
+      
+      .testimonial-content {
+        font-style: italic !important;
+        color: #2c3e50 !important;
+        line-height: 1.6 !important;
+        margin-bottom: 15px !important;
+        font-size: 1rem !important;
+      }
+      
+      .testimonial-author {
+        color: #0c2340 !important;
+        font-size: 0.9rem !important;
+      }
+      
+      .security-badges {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 30px !important;
+        flex-wrap: wrap !important;
+        margin-top: 20px !important;
+      }
+      
+      .security-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        color: #0c2340 !important;
+        font-weight: 500 !important;
+        font-size: 0.95rem !important;
+        padding: 8px 12px !important;
+        background: rgba(12, 35, 64, 0.05) !important;
+        border-radius: 8px !important;
+        min-width: fit-content !important;
+        white-space: nowrap !important;
+      }
+      
+      .security-icon {
+        font-size: 1.2rem !important;
+        flex-shrink: 0 !important;
+      }
+      
+      /* Mobile Sticky Registration Button */
+      .mobile-sticky-cta {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%) !important;
+        padding: 15px 20px !important;
+        z-index: 10000 !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2) !important;
+        border-top: 2px solid #e9c46a !important;
+        display: none !important;
+        animation: slideUpFromBottom 0.5s ease !important;
+      }
+      
+      @keyframes slideUpFromBottom {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      
+      .mobile-sticky-content {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        max-width: 100% !important;
+        gap: 15px !important;
+      }
+      
+      .sticky-info {
+        flex: 1 !important;
+        color: white !important;
+      }
+      
+      .sticky-price {
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        color: #e9c46a !important;
+      }
+      
+      .sticky-seats {
+        font-size: 0.8rem !important;
+        opacity: 0.9 !important;
+      }
+      
+      .sticky-register-btn {
+        background: #e9c46a !important;
+        color: #0c2340 !important;
+        padding: 12px 24px !important;
+        border-radius: 25px !important;
+        border: none !important;
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        white-space: nowrap !important;
+      }
+      
+      .sticky-register-btn:hover {
+        background: #f4a261 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 15px rgba(233, 196, 106, 0.4) !important;
+      }
+      
+      /* Show mobile sticky on smaller screens */
+      @media (max-width: 768px) {
+        .mobile-sticky-cta.show {
+          display: block !important;
+        }
+        
+        /* Add bottom padding to prevent content from being hidden behind sticky */
+        body.sticky-active {
+          padding-bottom: 80px !important;
+        }
+      }      
+      /* Mobile Responsive Enhancements */
+      @media (max-width: 768px) {
+        .enhanced-hero-cta {
+          margin: 20px 10px !important;
+          border-radius: 16px !important;
+        }
+        
+        .form-header {
+          padding: 30px 20px !important;
+        }
+        
+        .enhanced-title {
+          font-size: 2rem !important;
+        }
+        
+        .enhanced-subtitle {
+          font-size: 1.2rem !important;
+        }
+        
+        .enhanced-description {
+          font-size: 1rem !important;
+        }
+        
+        .value-propositions {
+          grid-template-columns: 1fr !important;
+        }
+        
+        .value-item {
+          padding: 15px !important;
+        }
+        
+        .trust-badges-section {
+          margin: 20px 10px !important;
+          padding: 30px 20px !important;
+        }
+        
+        .trust-elements {
+          grid-template-columns: repeat(2, 1fr) !important;
+          gap: 15px !important;
+        }
+        
+        .trust-badge {
+          padding: 15px !important;
+          flex-direction: column !important;
+          text-align: center !important;
+          gap: 8px !important;
+        }
+        
+        .testimonials-preview {
+          grid-template-columns: 1fr !important;
+        }
+        
+        .testimonial-item {
+          padding: 20px !important;
+        }
+        
+        .security-badges {
+          gap: 15px !important;
+          justify-content: space-around !important;
+        }
+        
+        .security-item {
+          font-size: 0.85rem !important;
+          padding: 10px 8px !important;
+          min-width: 120px !important;
+          justify-content: center !important;
+        }
+        
+        .security-icon {
+          font-size: 1.1rem !important;
+        }
+        
+        .payment-method-section {
+          margin: 20px 10px !important;
+          padding: 20px 15px !important;
+        }
+        
+        .payment-methods {
+          max-width: 100% !important;
+          flex-direction: column !important;
+        }
+        
+        .payment-method-label {
+          padding: 15px 10px !important;
+          min-height: 60px !important;
+        }
+        
+        .bank-transfer-section {
+          margin: 20px 10px !important;
+          padding: 20px 15px !important;
+        }
+        
+        .payment-info-notice {
+          padding: 15px !important;
+          font-size: 0.9rem !important;
+        }
+        
+        .price-comparison {
+          flex-direction: column !important;
+          gap: 10px !important;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .urgency-banner {
+          padding: 10px 15px !important;
+          font-size: 0.9rem !important;
+        }
+        
+        .enhanced-title {
+          font-size: 1.7rem !important;
+        }
+        
+        .trust-elements {
+          grid-template-columns: 1fr !important;
+        }
+        
+        .security-badges {
+          gap: 10px !important;
+          justify-content: center !important;
+        }
+        
+        .security-item {
+          font-size: 0.8rem !important;
+          padding: 8px 6px !important;
+          min-width: 100px !important;
+          flex-direction: column !important;
+          text-align: center !important;
+          gap: 4px !important;
+        }
+        
+        .payment-method-section {
+          margin: 15px 5px !important;
+          padding: 15px 10px !important;
+        }
+        
+        .payment-method-title {
+          font-size: 1.2rem !important;
+        }
+        
+        .sticky-info {
+          font-size: 0.9rem !important;
+        }
+        
+        .sticky-register-btn {
+          padding: 10px 20px !important;
+          font-size: 0.9rem !important;
+        }
+      }
+      
       .hero-section {
         margin: 0 !important;
         padding: 0 !important;
@@ -188,6 +1002,15 @@
         .hero-section img {
           margin: 0 !important;
           padding: 0 !important;
+        }
+        
+        .container {
+          margin: 10px !important;
+          padding: 20px !important;
+        }
+        
+        .payment-methods {
+          flex-direction: column !important;
         }
       }
     </style>
@@ -212,10 +1035,12 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
 
+    <!-- Stripe disabled - using bank transfer only
     <meta
       name="stripe-publishable-key"
       content="pk_live_51RSwMYHJXlyttSrEkl62MQWevo8uCIv3g7VghWNHomq73nPJxqO0VtKIxmxTcJmcXHLRbSWNO8X2IGEHqYT4CVRG00dW3xOhDz"
     />
+    -->
 
     <!-- Hero Image Mobile-First Styling -->
     <style>
@@ -369,9 +1194,216 @@
 
       // Emergency backup
       setTimeout(hidePreloader, 3000);
+      
+      // Emergency button click handler
+      function handleButtonClick(event) {
+        console.log('Emergency button click handler triggered');
+        event.preventDefault();
+        
+        const form = document.getElementById('registrationForm');
+        if (!form) {
+          console.error('Form not found');
+          return;
+        }
+        
+        // Validate form
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+        
+        // Collect form data
+        const formData = new FormData(form);
+        const data = {};
+        
+        for (const [key, value] of formData.entries()) {
+          data[key] = value.trim();
+        }
+        
+        // Ensure payment method is set to bank
+        data.paymentMethod = 'bank';
+        
+        console.log('Emergency submission data:', data);
+        
+        // Basic validation
+        if (!data.firstName || !data.secondName || !data.email || !data.phone || !data.manualAmount || !data.manualReference) {
+          alert('Please fill in all required fields');
+          return;
+        }
+        
+        // Show processing
+        const submitButton = document.getElementById('submitButton');
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Processing...';
+        }
+        
+        // Submit to server
+        fetch('/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...data,
+            timestamp: new Date().toISOString(),
+            status: 'pending',
+            paymentMethod: 'bank',
+            paymentStatus: 'pending',
+            paymentDetails: {
+              type: 'bank_transfer',
+              amount: data.manualAmount,
+              reference: data.manualReference,
+              status: 'pending'
+            }
+          })
+        })
+        .then(response => response.json())
+        .then(result => {
+          console.log('Registration successful:', result);
+          alert('Registration successful! You will receive a confirmation email shortly.');
+          form.reset();
+        })
+        .catch(error => {
+          console.error('Registration failed:', error);
+          alert('Registration failed. Please try again.');
+        })
+        .finally(() => {
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Complete Registration';
+          }
+        });
+      }
+      
+      // Countdown Timer Functionality
+      function initCountdownTimer() {
+        // Event date: September 20, 2025 at 9:00 AM London time
+        const eventDate = new Date('2025-09-20T09:00:00+01:00').getTime();
+        
+        function updateCountdown() {
+          const now = new Date().getTime();
+          const timeLeft = eventDate - now;
+          
+          if (timeLeft > 0) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+          } else {
+            // Event has started or passed
+            document.getElementById('days').textContent = '00';
+            document.getElementById('hours').textContent = '00';
+            document.getElementById('minutes').textContent = '00';
+            document.getElementById('seconds').textContent = '00';
+            
+            const countdownTitle = document.querySelector('.countdown-title');
+            if (countdownTitle) {
+              countdownTitle.textContent = 'Event is Live Now!';
+            }
+          }
+        }
+        
+        // Update immediately and then every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      }
+      
+      // Initialize countdown when DOM is loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCountdownTimer);
+      } else {
+        initCountdownTimer();
+      }
+      
+      // Mobile Sticky Registration CTA Functionality
+      function initMobileStickyCart() {
+        const stickyCart = document.getElementById('mobileStickyCart');
+        const registrationForm = document.getElementById('registrationForm');
+        
+        if (!stickyCart || !registrationForm) return;
+        
+        let isVisible = false;
+        
+        function checkScroll() {
+          // Only show on mobile devices
+          if (window.innerWidth > 768) {
+            stickyCart.classList.remove('show');
+            document.body.classList.remove('sticky-active');
+            return;
+          }
+          
+          const formRect = registrationForm.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          
+          // Show sticky when form is not visible or partially visible
+          const shouldShow = formRect.top > windowHeight * 0.8 || formRect.bottom < 100;
+          
+          if (shouldShow && !isVisible) {
+            stickyCart.classList.add('show');
+            document.body.classList.add('sticky-active');
+            isVisible = true;
+          } else if (!shouldShow && isVisible) {
+            stickyCart.classList.remove('show');
+            document.body.classList.remove('sticky-active');
+            isVisible = false;
+          }
+        }
+        
+        // Check on scroll and resize
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('resize', checkScroll);
+        
+        // Initial check
+        setTimeout(checkScroll, 1000);
+      }
+      
+      // Scroll to registration function
+      function scrollToRegistration() {
+        const registrationForm = document.getElementById('registrationForm');
+        if (registrationForm) {
+          registrationForm.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+          
+          // Focus on first input after scrolling
+          setTimeout(() => {
+            const firstInput = registrationForm.querySelector('input, select');
+            if (firstInput) {
+              firstInput.focus();
+            }
+          }, 800);
+        }
+      }
+      
+      // Initialize mobile sticky cart when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileStickyCart);
+      } else {
+        initMobileStickyCart();
+      }
     </script>
 
-    <script src="https://js.stripe.com/v3/"></script>
+    <!-- Mobile Sticky Registration CTA -->
+    <div id="mobileStickyCart" class="mobile-sticky-cta">
+      <div class="mobile-sticky-content">
+        <div class="sticky-info">
+          <div class="sticky-price">From £90</div>
+          <div class="sticky-seats">Limited seats available</div>
+        </div>
+        <button class="sticky-register-btn" onclick="scrollToRegistration()">
+          Register Now
+        </button>
+      </div>
+    </div>
+
+    <!-- <script src="https://js.stripe.com/v3/"></script> -->
     <div class="page-wrapper">
       <header>
         <div class="header-content">
@@ -420,14 +1452,125 @@
               />
             </div>
 
-            <div class="form-header">
-              <h1>Exclusive Registration</h1>
-              <h2>Secrets to Wealth Creation & Leadership</h2>
-              <p class="subtitle">
-                Complete your registration for our exclusive conference and
-                secure your position. Learn from Dr. Cindy Trimm and other
-                industry leaders.
-              </p>
+            <!-- Event Countdown Timer -->
+            <div class="countdown-section">
+              <h2 class="countdown-title">Event Starts In:</h2>
+              <div class="countdown-timer" id="countdownTimer">
+                <div class="countdown-item">
+                  <span class="countdown-number" id="days">00</span>
+                  <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                  <span class="countdown-number" id="hours">00</span>
+                  <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                  <span class="countdown-number" id="minutes">00</span>
+                  <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                  <span class="countdown-number" id="seconds">00</span>
+                  <span class="countdown-label">Seconds</span>
+                </div>
+              </div>
+              <p class="countdown-event-date">September 20, 2025 • 9:00 AM • London</p>
+            </div>
+
+            <!-- Enhanced Hero CTA Section -->
+            <div class="enhanced-hero-cta">
+              <div class="urgency-banner">
+                <div class="urgency-icon">🔥</div>
+                <div class="urgency-text">
+                  <strong>Limited Seats Available!</strong> Only 150 exclusive spots remaining
+                </div>
+                <div class="urgency-icon">🔥</div>
+              </div>
+              
+              <div class="form-header">
+                <div class="cta-badge">
+                  <span class="badge-text">EXCLUSIVE INVITATION</span>
+                </div>
+                <h1 class="enhanced-title">Transform Your Financial Future</h1>
+                <h2 class="enhanced-subtitle">Wealth Creation & Leadership Conference</h2>
+                <p class="enhanced-description">
+                  Join Dr. Cindy Trimm and industry leaders for comprehensive wealth creation strategies. 
+                  <strong>Learn proven techniques that generate millions</strong> and discover your pathway to financial freedom.
+                </p>
+                
+                <div class="value-propositions">
+                  <div class="value-item">
+                    <div class="value-icon">💰</div>
+                    <div class="value-text">
+                      <strong>Proven Strategies</strong>
+                      <span>Real wealth-building from successful entrepreneurs</span>
+                    </div>
+                  </div>
+                  <div class="value-item">
+                    <div class="value-icon">🎯</div>
+                    <div class="value-text">
+                      <strong>Expert Guidance</strong>
+                      <span>Direct access to industry leaders</span>
+                    </div>
+                  </div>
+                  <div class="value-item">
+                    <div class="value-icon">🚀</div>
+                    <div class="value-text">
+                      <strong>Immediate Action</strong>
+                      <span>Actionable plans you can implement today</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="scarcity-timer">
+                  <div class="scarcity-text">⚡ Early Bird Pricing Ends Soon</div>
+                  <div class="price-comparison">
+                    <span class="old-price">£150</span>
+                    <span class="current-price">£90</span>
+                    <span class="savings">Save £60!</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Trust Badges & Social Proof Section -->
+            <div class="trust-badges-section">
+              <div class="trust-header">
+                <h3>Trusted by Industry Leaders</h3>
+              </div>
+              
+              <div class="trust-elements">
+                <div class="trust-badge">
+                  <div class="badge-icon">🎓</div>
+                  <div class="badge-content">
+                    <strong>Oxford & Harvard</strong>
+                    <span>Trained Speakers</span>
+                  </div>
+                </div>
+                
+                <div class="trust-badge">
+                  <div class="badge-icon">💼</div>
+                  <div class="badge-content">
+                    <strong>£1.5B+</strong>
+                    <span>Combined Portfolio Value</span>
+                  </div>
+                </div>
+              </div>
+
+              
+              <div class="security-badges">
+                <div class="security-item">
+                  <div class="security-icon">🔒</div>
+                  <span>Secure Registration</span>
+                </div>
+                <div class="security-item">
+                  <div class="security-icon">✅</div>
+                  <span>Instant Confirmation</span>
+                </div>
+                <div class="security-item">
+                  <div class="security-icon">📧</div>
+                  <span>Email Support</span>
+                </div>
+              </div>
             </div>
 
             <!-- Featured Speakers Section -->
@@ -446,23 +1589,14 @@
                     <img
                       src="images/hero_name.jpg"
                       alt="Dr. Cindy Trimm"
-                      onerror="this.src='images/wealthcreationlondon.png'"
+                      onerror="this.onerror=null;this.src='images/new.png'"
                     />
                   </div>
                   <div class="speaker-info">
                     <h3 class="speaker-name">Dr. Cindy Trimm</h3>
                     <p class="speaker-title">CEO & Transformational Leader</p>
                     <p class="speaker-bio">
-                      Dr. Cindy Trimm is a former senator and CEO of a
-                      conglomerate of companies. Trained in Strategic Leadership
-                      at Oxford University's Saïd Business School and Corporate
-                      Governance from Harvard University. She is listed among
-                      the world's top 500 Leaders of Influence and has received
-                      multiple honors including the Life Time Achievement Award
-                      from President Barack Obama. Founder of The Trimm
-                      Institute for Global Leadership, she has authored over 30
-                      books including bestsellers Commanding Your Morning and
-                      The Rules of Engagement for Spiritual Warfare.
+                      Former senator and CEO trained at Oxford and Harvard. Listed among world's top 500 Leaders of Influence. Life Time Achievement Award from President Obama. Founder of The Trimm Institute for Global Leadership. Author of 30+ books including bestsellers Commanding Your Morning and The Rules of Engagement.
                     </p>
                   </div>
                 </div>
@@ -474,24 +1608,14 @@
                       <img
                         src="images/jonathan.jpg"
                         alt="Jonathan Jackson"
-                        onerror="this.src='images/wealthcreationlondon.png'"
+                        onerror="this.onerror=null;this.src='images/new.png'"
                       />
                     </div>
                     <div class="speaker-info">
                       <h3 class="speaker-name">Jonathan Jackson</h3>
                       <p class="speaker-title">Chairman - Lordship Group</p>
                       <p class="speaker-bio collapsible-bio">
-                        Chairman of Lordship Group, a leading real estate
-                        development company with over 7 million ft² of property
-                        valued at $1.5 billion USD across Central Europe and
-                        East Africa. With 30+ years of experience, Lordship
-                        delivers award-winning mixed-use developments including
-                        hotels, retail, residential and commercial properties.
-                        Today, Lordship‘s portfolio reflects the aspirations of
-                        a much broader range of investment opportunities,
-                        encompassing medium to large-scale mixed-used schemes of
-                        hotel & leisure, retail, residential and commercial
-                        developments.
+                        Chairman of Lordship Group, a real estate company with 7M ft² valued at $1.5B across Central Europe and East Africa. 30+ years experience delivering mixed-use developments including hotels, retail, residential and commercial properties.
                       </p>
                       <button class="read-more-btn">Read More</button>
                     </div>
@@ -502,7 +1626,7 @@
                       <img
                         src="images/masha.jpg?v=20250111"
                         alt="Caroline Marsh"
-                        onerror="this.src='images/wealthcreationlondon.png'"
+                        onerror="this.onerror=null;this.src='images/new.png'"
                       />
                     </div>
                     <div class="speaker-info">
@@ -528,18 +1652,14 @@
                       <img
                         src="images/joan.jpg"
                         alt="Joanne Muturi"
-                        onerror="this.src='images/wealthcreationlondon.png'"
+                        onerror="this.onerror=null;this.src='images/new.png'"
                       />
                     </div>
                     <div class="speaker-info">
                       <h3 class="speaker-name">Joanne Muturi</h3>
                       <p class="speaker-title">Life & Business Coach</p>
                       <p class="speaker-bio collapsible-bio">
-                        Life and business coach dedicated to empowering women to
-                        achieve clarity in their life direction and reach their
-                        full potential. She focuses on helping women in
-                        corporate settings align their lives with their unique
-                        purpose.
+                        Life coach empowering women to achieve clarity and reach their potential in corporate settings.
                       </p>
                       <button class="read-more-btn">Read More</button>
                     </div>
@@ -550,21 +1670,14 @@
                       <img
                         src="images/eduardo.jpg"
                         alt="Mr. Eduardo Ramos"
-                        onerror="this.src='images/wealthcreationlondon.png'"
+                        onerror="this.onerror=null;this.src='images/new.png'"
                       />
                     </div>
                     <div class="speaker-info">
                       <h3 class="speaker-name">Mr. Eduardo Ramos</h3>
                       <p class="speaker-title">Co-Founder, Nuova Corporation</p>
                       <p class="speaker-bio collapsible-bio">
-                        Mr. Ramos is part of a globally experienced leadership
-                        team with strong backgrounds in energy and mining. Nuova
-                        specializes in responsible mineral extraction and
-                        strategic investments in critical supply chains. The
-                        company supports the global energy transition by
-                        delivering essential commodities and promoting
-                        sustainable development across energy and mining
-                        sectors..
+                        Globally experienced leader in energy and mining. Nuova Corporation specializes in responsible mineral extraction and strategic supply chain investments supporting global energy transition.
                       </p>
                       <button class="read-more-btn">Read More</button>
                     </div>
@@ -575,7 +1688,7 @@
                       <img
                         src="images/shan.jpg"
                         alt="Dr Shan Rajegopal"
-                        onerror="this.src='images/wealthcreationlondon.png'"
+                        onerror="this.onerror=null;this.src='images/new.png'"
                       />
                     </div>
                     <div class="speaker-info">
@@ -584,22 +1697,7 @@
                         Board Director, El Camino Duro Investments
                       </p>
                       <p class="speaker-bio collapsible-bio">
-                        Dr Shan Rajegopal, a Singapore-born British citizen, has
-                        40 years of experience in project, program, and
-                        portfolio management, overseeing multi-million dollar
-                        portfolios globally. He is a board director for El
-                        Camino Duro Investments Limited, funding private and
-                        public projects worldwide. In this capacity, he has set
-                        up SPVs, project governance, funding, and oversight for
-                        complex projects including hotels in Neom (Saudi
-                        Arabia), mixed developments at Jeddah Airport, resorts
-                        in UAE, and renewable energy projects in Saudi Arabia,
-                        Ghana, Nigeria, and India. He is also a strategic
-                        advisor for Al-Ruqi Company (gold and jewellery, Saudi
-                        Arabia), working closely with the Ministry of Minerals
-                        and the Central Bank. Shan collaborates with HNWIs,
-                        investment groups, funding consortiums, lawyers,
-                        consultants, and contractors.
+                        40 years experience in project and portfolio management overseeing multi-million dollar portfolios. Board director for El Camino Duro Investments funding global projects. Strategic advisor for Al-Ruqi Company (gold & jewellery, Saudi Arabia).
                       </p>
                       <button class="read-more-btn">Read More</button>
                     </div>
@@ -610,7 +1708,7 @@
                       <img
                         src="images/arinze.jpg"
                         alt="Arinze Nwanna"
-                        onerror="this.src='images/wealthcreationlondon.png'"
+                        onerror="this.onerror=null;this.src='images/new.png'"
                       />
                     </div>
                     <div class="speaker-info">
@@ -619,12 +1717,7 @@
                         Investment Professional & Master of Ceremony
                       </p>
                       <p class="speaker-bio collapsible-bio">
-                        Dynamic leader and investment professional with
-                        background in global finance and real estate private
-                        equity. Former J.P. Morgan investment banker, now
-                        leading strategic acquisitions at a UK-based private
-                        equity firm. Graduate of UCL and Imperial, serving in
-                        pastoral leadership since age 20.
+                        Investment professional with global finance and real estate private equity background. Former J.P. Morgan banker, now leading acquisitions at UK private equity firm. UCL and Imperial graduate.
                       </p>
                       <button class="read-more-btn">Read More</button>
                     </div>
@@ -799,72 +1892,15 @@
                 </div>
               </div>
 
-              <!-- Stripe Payment Section (hidden by default) -->
+              <!-- Stripe Payment Section (completely removed for bank transfer only)
               <div
                 id="stripe-payment-section"
                 class="stripe-payment-section"
-                style="display: none"
+                style="display: none !important; visibility: hidden !important;"
               >
-                <h3 class="stripe-title">Secure Payment</h3>
-                <div class="amount-selection">
-                  <label for="ticket-amount">Select Ticket Amount</label>
-                  <select id="ticket-amount" name="ticketAmount">
-                    <option value="">Select Amount</option>
-                    <option value="150">Regular - £90</option>
-                    <option value="200">VIP - £150</option>
-                    <option value="custom">Custom Amount</option>
-                  </select>
-                </div>
-                <div
-                  id="custom-amount-section"
-                  class="custom-amount-section"
-                  style="display: none"
-                >
-                  <label for="custom-amount-input"
-                    >Enter Custom Amount (£)</label
-                  >
-                  <input
-                    type="number"
-                    id="custom-amount-input"
-                    name="customAmount"
-                    min="1"
-                    max="10000"
-                    step="1"
-                    placeholder="Enter amount"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="stripe-reference">Payment Reference *</label>
-                  <input
-                    type="text"
-                    id="stripe-reference"
-                    name="stripeReference"
-                    placeholder="Payment Reference"
-                    required
-                  />
-                  <div class="input-icon">
-                    <i class="fas fa-hashtag"></i>
-                  </div>
-                </div>
-                <!-- Stripe Card Element restored here -->
-                <div class="form-group">
-                  <label for="card-element">Card Details *</label>
-                  <div
-                    id="card-element"
-                    style="
-                      background: #fff;
-                      padding: 12px;
-                      border-radius: 6px;
-                      border: 1px solid #ccc;
-                    "
-                  ></div>
-                  <div
-                    id="card-errors"
-                    role="alert"
-                    style="color: #d9534f; margin-top: 8px"
-                  ></div>
-                </div>
+                <!-- Stripe functionality disabled -->
               </div>
+              -->
 
               <!-- Bank Transfer Section -->
               <div id="bank-transfer-section" class="bank-transfer-section">
@@ -919,6 +1955,7 @@
                 <button
                   type="submit"
                   id="submitButton"
+                  onclick="handleButtonClick(event)"
                   style="
                     opacity: 1 !important;
                     display: inline-block !important;
@@ -926,6 +1963,8 @@
                     min-width: 250px !important;
                     min-height: 48px !important;
                     padding: 18px 40px !important;
+                    pointer-events: auto !important;
+                    cursor: pointer !important;
                   "
                 >
                   Complete Registration <i class="fas fa-arrow-right"></i>
@@ -948,8 +1987,7 @@
             <div class="faq-header">
               <h1>Frequently Asked Questions</h1>
               <p class="subtitle">
-                Everything you need to know about the Wealth Creation &
-                Leadership Conference
+                Key information about the conference
               </p>
             </div>
 
@@ -961,8 +1999,7 @@
                 </div>
                 <div class="faq-answer">
                   <p>
-                    The event will be held on 20th September 2025 from 9.00 a.m.
-                    to 5.00 p.m.
+                    September 20, 2025 | 9:00 AM - 5:00 PM
                   </p>
                 </div>
               </div>
@@ -974,8 +2011,7 @@
                 </div>
                 <div class="faq-answer">
                   <p>
-                    This will take place at GRACEPOINT, 161-169 ESSEX ROAD,
-                    ISLINGTON, NI 2SN, LONDON.
+                    GRACEPOINT, 161-169 Essex Road, Islington, N1 2SN, London
                   </p>
                 </div>
               </div>
@@ -987,8 +2023,7 @@
                 </div>
                 <div class="faq-answer">
                   <p>
-                    The charges are 150 pounds per person for VIP and 90 pounds
-                    per person for the regular attendees.
+                    £150 VIP | £90 Regular
                   </p>
                 </div>
               </div>
@@ -1000,19 +2035,10 @@
                 </div>
                 <div class="faq-answer">
                   <ul>
-                    <li>
-                      Priority access to the meeting with reserved seating
-                      specifically for you
-                    </li>
+                    <li>Priority seating and reserved access</li>
                     <li>Exclusive VIP gift pack</li>
-                    <li>
-                      Enhanced Networking Opportunity and visibility during the
-                      event
-                    </li>
-                    <li>
-                      Competitive advantage and exclusive meet with speakers
-                      before sessions and during breaks
-                    </li>
+                    <li>Enhanced networking opportunities</li>
+                    <li>Meet speakers before sessions and during breaks</li>
                   </ul>
                 </div>
               </div>
@@ -1023,9 +2049,7 @@
                   <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                  <p>
-                    Yes, we shall have lunch served to all the participants.
-                  </p>
+                  <p>Yes, lunch is included for all participants.</p>
                 </div>
               </div>
 
@@ -1273,8 +2297,7 @@
               Secrets to <span>Wealth Creation</span> & Leadership
             </div>
             <p class="footer-description">
-              Empowering financial excellence through expert guidance and proven
-              strategies.
+              Expert guidance and proven wealth strategies.
             </p>
             <p class="guest-credit">Featuring Dr. Cindy Trimm</p>
             <p class="event-date">September 20, 2025 | London</p>
@@ -1282,13 +2305,8 @@
 
           <!-- Contact Information Section -->
           <div class="footer-section footer-contact">
-            <h4>Contact Information</h4>
-            <p class="footer-tagline">"Turning Moments into Memories"</p>
+            <h4>Contact</h4>
             <div class="contact-info">
-              <div class="contact-item">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>South Gate House, Basildon, SS14 1BN</span>
-              </div>
               <div class="contact-item">
                 <i class="fas fa-phone"></i>
                 <a href="tel:07454035688">07454 035688</a>
@@ -1296,7 +2314,7 @@
               <div class="contact-item">
                 <i class="fas fa-globe"></i>
                 <a href="https://www.suzzyevents.com" target="_blank"
-                  >www.suzzyevents.com</a
+                  >suzzyevents.com</a
                 >
               </div>
             </div>
@@ -1304,33 +2322,28 @@
 
           <!-- Email & Director Section -->
           <div class="footer-section footer-emails">
-            <h4>Get In Touch</h4>
+            <h4>Email</h4>
             <div class="contact-info">
               <div class="contact-item">
                 <i class="fas fa-envelope"></i>
                 <a href="mailto:info@suzzyevents.com">info@suzzyevents.com</a>
               </div>
-              <div class="contact-item">
-                <i class="fas fa-envelope"></i>
-                <a href="mailto:susan@suzzyevents.com">susan@suzzyevents.com</a>
-              </div>
             </div>
             <div class="director-info">
               <strong>Susan Kivayi</strong><br />
-              <span>Director, Suzzy Ltd</span>
+              <span>Director</span>
             </div>
           </div>
 
           <!-- Corporate & Legal Section -->
           <div class="footer-section footer-corporate">
-            <h4>Corporate Information</h4>
+            <h4>Legal</h4>
             <div class="corporate-details">
               <p><strong>Suzzy Ltd</strong></p>
-              <p>Professional Event Management</p>
-              <p>Registered in England & Wales</p>
+              <p>England & Wales</p>
             </div>
             <div class="payment-notice">
-              <p><em>Please note that all payments are non-refundable</em></p>
+              <p><em>Payments are non-refundable</em></p>
             </div>
           </div>
 

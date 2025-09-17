@@ -1,26 +1,25 @@
-// Wealth Creation Registration Form - Main JavaScript
+// Wealth Creation Registration Form - Main JavaScript (Bank Transfer Only)
 
-// Constants
+// Constants - Stripe disabled
 const IS_PRODUCTION = window.location.protocol === 'https:';
-// Get Stripe key from meta tag instead of process.env
-const STRIPE_PUBLISHABLE_KEY = document.querySelector('meta[name="stripe-publishable-key"]')?.content;
+// Stripe functionality disabled - using bank transfer only
+const STRIPE_DISABLED = true;
 
-// Stripe configuration - LIVE KEYS (PRODUCTION READY)
-let stripe;
-let elements;
-let cardElement;
+// Stripe configuration - DISABLED (Bank Transfer Only)
+let stripe = null;
+let elements = null;
+let cardElement = null;
 
 // Initialize application when DOM is loaded
-function tryInitializeAppWithStripe() {
-  if (typeof Stripe !== 'undefined') {
-    initializeApp();
-  } else {
-    console.warn('[INIT] Stripe SDK not loaded yet, retrying in 200ms...');
-    setTimeout(tryInitializeAppWithStripe, 200);
+function initializeApp() {
+  if (typeof Stripe !== 'undefined' && !STRIPE_DISABLED) {
+    console.log('[INIT] Stripe SDK loaded but disabled - using bank transfer only');
   }
+  // Skip Stripe initialization as it's disabled
+  initializeBankTransferOnly();
 }
 document.addEventListener('DOMContentLoaded', function() {
-  console.log("DOM loaded, initializing application");
+  console.log('DOM loaded, initializing bank transfer only application');
 
   // Ensure critical elements exist before proceeding
   const form = document.getElementById('registrationForm');
@@ -30,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error('Critical form elements missing - retrying in 500ms');
     setTimeout(() => {
       if (document.getElementById('registrationForm') && document.getElementById('submitButton')) {
-        tryInitializeAppWithStripe();
+        initializeApp();
       } else {
         console.error('Form elements still missing after retry');
       }
@@ -38,21 +37,18 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  tryInitializeAppWithStripe();
+  initializeApp();
 });
 
 async function initializeApp() {
   try {
-    console.log('[INIT] Initializing application...');
+    console.log('[INIT] Initializing application (Bank Transfer Only)...');
     
-    // Initialize Stripe
-    await initializeStripe();
+    // Skip Stripe initialization since it's disabled
+    // await initializeStripe();
     
-    // Initialize payment methods
+    // Initialize payment methods (Bank Transfer Only)
     initializePaymentMethods();
-    
-    // Initialize custom amount functionality
-    initializeCustomAmount();
     
     // Initialize form submission
     initializeFormSubmission();
@@ -145,181 +141,83 @@ async function initializeStripe() {
   }
 }
 
-// Initialize payment method handling
+// Initialize payment method handling - BANK TRANSFER ONLY
 function initializePaymentMethods() {
-  console.log('[PAYMENT] Initializing payment methods...');
+  console.log('[PAYMENT] Initializing bank transfer only payment methods...');
   
-  const stripeRadio = document.getElementById('stripe-payment');
   const bankRadio = document.getElementById('bank-transfer');
-  const stripeSection = document.getElementById('stripe-payment-section');
   const bankSection = document.getElementById('bank-transfer-section');
+  const stripeSection = document.getElementById('stripe-payment-section');
   const manualAmountField = document.getElementById('manual-amount');
   const manualReferenceField = document.getElementById('manual-reference');
 
   console.log('[PAYMENT] Elements found:', {
-    stripeRadio: !!stripeRadio,
     bankRadio: !!bankRadio,
-    stripeSection: !!stripeSection,
-    bankSection: !!bankSection
+    bankSection: !!bankSection,
+    stripeSection: !!stripeSection
   });
 
-  if (!stripeRadio || !bankRadio || !stripeSection || !bankSection) {
-    console.error('[PAYMENT] Required payment elements not found');
-    return;
-  }
-
-  function togglePaymentSections() {
-    console.log('[PAYMENT] Toggling payment sections...');
-    
-    if (stripeRadio.checked) {
-      console.log('[PAYMENT] Switching to Stripe payment');
-      stripeSection.style.display = 'block';
-      stripeSection.style.opacity = '1';
-      bankSection.style.display = 'none';
-      bankSection.style.opacity = '0';
-      if (manualAmountField) manualAmountField.removeAttribute('required');
-      if (manualReferenceField) manualReferenceField.removeAttribute('required');
-    } else {
-      console.log('[PAYMENT] Switching to bank transfer');
-      stripeSection.style.display = 'none';
-      stripeSection.style.opacity = '0';
-      bankSection.style.display = 'block';
-      bankSection.style.opacity = '1';
-      if (manualAmountField) manualAmountField.setAttribute('required', 'required');
-      if (manualReferenceField) manualReferenceField.setAttribute('required', 'required');
-    }
-  }
-
-  // Add event listeners
-  stripeRadio.addEventListener('change', function() {
-    console.log('[PAYMENT] Stripe radio changed:', this.checked);
-    togglePaymentSections();
-  });
-  
-  bankRadio.addEventListener('change', function() {
-    console.log('[PAYMENT] Bank radio changed:', this.checked);
-    togglePaymentSections();
-  });
-
-  // Add click event listeners to labels as well
-  const stripeLabel = document.querySelector('label[for="stripe-payment"]');
-  const bankLabel = document.querySelector('label[for="bank-transfer"]');
-  
-  if (stripeLabel) {
-    stripeLabel.addEventListener('click', function() {
-      console.log('[PAYMENT] Stripe label clicked');
-      stripeRadio.checked = true;
-      togglePaymentSections();
-    });
+  // Ensure bank transfer is selected and visible
+  if (bankRadio) {
+    bankRadio.checked = true;
   }
   
-  if (bankLabel) {
-    bankLabel.addEventListener('click', function() {
-      console.log('[PAYMENT] Bank label clicked');
-      bankRadio.checked = true;
-      togglePaymentSections();
-    });
+  if (bankSection) {
+    bankSection.style.display = 'block';
+    bankSection.style.opacity = '1';
   }
-
-  // Initial setup
-  togglePaymentSections();
-  console.log('[PAYMENT] Payment methods initialized');
+  
+  // Hide Stripe section completely since it's disabled
+  if (stripeSection) {
+    stripeSection.style.display = 'none';
+    stripeSection.style.opacity = '0';
+  }
+  
+  // Set required attributes for bank transfer fields
+  if (manualAmountField) manualAmountField.setAttribute('required', 'required');
+  if (manualReferenceField) manualReferenceField.setAttribute('required', 'required');
+  
+  console.log('[PAYMENT] Bank transfer payment method initialized');
 }
 
-// Toggle custom amount section visibility
+// Toggle custom amount section visibility - DISABLED for bank transfer only
 function toggleCustomAmount() {
-  const ticketAmountSelect = document.getElementById('ticket-amount');
-  const customAmountSection = document.getElementById('custom-amount-section');
-  const customAmountInput = document.getElementById('custom-amount-input');
-
-  if (!ticketAmountSelect || !customAmountSection) {
-    console.warn('[CUSTOM AMOUNT] Required elements not found');
-    return;
-  }
-
-  if (ticketAmountSelect.value === 'custom') {
-    customAmountSection.style.display = 'block';
-    if (customAmountInput) {
-      customAmountInput.setAttribute('required', 'required');
-      customAmountInput.focus();
-    }
-    console.log('[CUSTOM AMOUNT] Custom amount section shown');
-  } else {
-    customAmountSection.style.display = 'none';
-    if (customAmountInput) {
-      customAmountInput.removeAttribute('required');
-      customAmountInput.value = '';
-    }
-    console.log('[CUSTOM AMOUNT] Custom amount section hidden');
-  }
+  console.log('[CUSTOM AMOUNT] Custom amount functionality disabled - bank transfer uses fixed amounts');
+  // Custom amounts not used in bank transfer, keeping function for compatibility
 }
 
-// Initialize custom amount functionality
+// Initialize custom amount functionality - DISABLED
 function initializeCustomAmount() {
-  const ticketAmountSelect = document.getElementById('ticket-amount');
-
-  if (ticketAmountSelect) {
-    // Add event listener for amount selection change
-    ticketAmountSelect.addEventListener('change', function() {
-      console.log('[CUSTOM AMOUNT] Ticket amount changed to:', this.value);
-      toggleCustomAmount();
-    });
-
-    // Initial call to set correct state
-    toggleCustomAmount();
-
-    console.log('[CUSTOM AMOUNT] Custom amount functionality initialized');
-  } else {
-    console.warn('[CUSTOM AMOUNT] Ticket amount select not found - custom amount functionality disabled');
-  }
+  console.log('[CUSTOM AMOUNT] Custom amount functionality disabled for bank transfer only');
+  // Disabled for bank transfer only mode
 }
 
-// Initialize form submission (fallback if Firebase fails)
+// Initialize form submission - SIMPLIFIED
 function initializeFormSubmission() {
+  console.log('[FORM] Initializing form submission...');
+  
   const form = document.getElementById('registrationForm');
   const submitButton = document.getElementById('submitButton');
 
-  if (!form || !submitButton) return;
+  if (!form || !submitButton) {
+    console.error('[FORM] Form or submit button not found');
+    return;
+  }
 
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      alert('Please fill in all required fields correctly.');
-      return;
-    }
-
-    submitButton.disabled = true;
-    submitButton.textContent = 'Processing...';
-
-    try {
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      // Handle payment based on selected method
-      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
-      
-      if (paymentMethod === 'stripe') {
-        await handleStripePayment(data);
-      } else if (paymentMethod === 'bank') {
-        await handleBankTransfer(data);
-      } else {
-        throw new Error('Please select a payment method');
-      }
-
-      // Save to Firebase
-      // await saveToFirebase(data); // REMOVED
-      
-      alert('Registration successful!');
-      form.reset();
-    } catch (error) {
-      console.error('Registration error:', error);
-      alert('Registration failed: ' + error.message);
-    } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = 'Complete Registration';
+  // Ensure button is clickable
+  submitButton.style.pointerEvents = 'auto';
+  submitButton.style.cursor = 'pointer';
+  
+  // Add direct click event listener to button as backup
+  submitButton.addEventListener('click', function(e) {
+    console.log('[FORM] Submit button clicked directly');
+    if (form.checkValidity()) {
+      e.preventDefault();
+      handleFormSubmission.call(form, e);
     }
   });
+  
+  console.log('[FORM] Form submission handler initialized');
 }
 
 // Initialize Firebase
@@ -477,8 +375,8 @@ async function saveRegistration(formData) {
   }
 }
 
-// Handle form submission
-document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+// Handle form submission function (extracted for reuse)
+async function handleFormSubmission(e) {
   e.preventDefault();
   console.log('[FORM] Form submission started');
 
@@ -538,12 +436,8 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const registrationId = await saveRegistration(data);
     console.log('[FORM] Registration saved with ID:', registrationId);
 
-    // Handle payment based on method
-    if (data.paymentMethod === 'stripe') {
-      await handleStripePayment(data, registrationId);
-    } else {
-      await handleBankTransfer(data, registrationId);
-    }
+    // Handle payment - BANK TRANSFER ONLY
+    await handleBankTransfer(data, registrationId);
 
     // Show success message
     showFormStatus('🎉 Registration successful! Thank you for registering.', 'success');
@@ -567,9 +461,37 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const submitButton = document.getElementById('submitButton');
     if (submitButton) {
       submitButton.disabled = false;
-      submitButton.textContent = 'Register Now';
+      submitButton.textContent = 'Complete Registration';
     }
   }
+}
+
+// Handle form submission
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('[FORM] DOM loaded, attaching form handlers...');
+  
+  // Wait a bit for all elements to be ready
+  setTimeout(() => {
+    const form = document.getElementById('registrationForm');
+    const submitButton = document.getElementById('submitButton');
+    
+    if (form) {
+      // Remove any existing listeners
+      form.removeEventListener('submit', handleFormSubmission);
+      
+      // Attach fresh form submission handler
+      form.addEventListener('submit', handleFormSubmission);
+      console.log('[FORM] Form submission handler attached');
+    }
+    
+    if (submitButton) {
+      // Ensure button is fully functional
+      submitButton.disabled = false;
+      submitButton.style.pointerEvents = 'auto';
+      submitButton.style.cursor = 'pointer';
+      console.log('[FORM] Submit button enabled');
+    }
+  }, 100);
 });
 
 // Form status display function
@@ -667,42 +589,25 @@ function validateFormData(data) {
     return false;
   }
 
-  // Payment method specific validation
-  if (data.paymentMethod === 'bank') {
-    if (!data.manualAmount || data.manualAmount.trim() === '') {
-      showFormStatus('Please enter the bank transfer amount', 'error');
-      return false;
-    }
-    if (!data.manualReference || data.manualReference.trim() === '') {
-      showFormStatus('Please enter the bank transfer reference', 'error');
-      return false;
-    }
-    // Validate amount format
-    const amountRegex = /^[£]?\d+(\.\d{1,2})?$/;
-    if (!amountRegex.test(data.manualAmount.replace(/[£,\s]/g, ''))) {
-      showFormStatus('Please enter a valid amount (e.g., £150 or 150)', 'error');
-      return false;
-    }
-  } else if (data.paymentMethod === 'stripe') {
-    if (!data.ticketAmount) {
-      showFormStatus('Please select a ticket amount', 'error');
-      return false;
-    }
-    if (data.ticketAmount === 'custom') {
-      if (!data.customAmount || data.customAmount.trim() === '') {
-        showFormStatus('Please enter a custom amount', 'error');
-        return false;
-      }
-      const customAmount = parseFloat(data.customAmount);
-      if (isNaN(customAmount) || customAmount <= 0 || customAmount > 10000) {
-        showFormStatus('Please enter a valid custom amount between £1 and £10,000', 'error');
-        return false;
-      }
-    }
-    if (!data.stripeReference || data.stripeReference.trim() === '') {
-      showFormStatus('Please enter a payment reference for Stripe payment', 'error');
-      return false;
-    }
+  // Payment method specific validation - BANK TRANSFER ONLY
+  if (data.paymentMethod !== 'bank') {
+    showFormStatus('Only bank transfer payments are accepted', 'error');
+    return false;
+  }
+  
+  if (!data.manualAmount || data.manualAmount.trim() === '') {
+    showFormStatus('Please select the bank transfer amount', 'error');
+    return false;
+  }
+  if (!data.manualReference || data.manualReference.trim() === '') {
+    showFormStatus('Please enter the bank transfer reference', 'error');
+    return false;
+  }
+  // Validate amount format
+  const amountRegex = /^[£]?\d+(\.\d{1,2})?$/;
+  if (!amountRegex.test(data.manualAmount.replace(/[£,\s]/g, ''))) {
+    showFormStatus('Please enter a valid amount (e.g., £150 or 150)', 'error');
+    return false;
   }
 
   console.log('[FORM] Form data validation successful');

@@ -92,7 +92,7 @@ try {
   console.log('[EMAIL] Configuring email transporter...');
   
   // Email configuration - you can use Gmail, Outlook, or SMTP service
-  emailTransporter = nodemailer.createTransporter({
+  emailTransporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER || 'solver.peters@gmail.com',
