@@ -26,6 +26,10 @@
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid transparent;
   backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .nav-link:hover {

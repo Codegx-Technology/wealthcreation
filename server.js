@@ -86,41 +86,69 @@ try {
   // Don't exit, just continue without Stripe
 }
 
-// Email Configuration
+// Email Configuration with enhanced logging
 let emailTransporter;
 try {
   console.log('[EMAIL] Configuring email transporter...');
+  console.log('[EMAIL] Environment check:', {
+    EMAIL_USER: !!process.env.EMAIL_USER,
+    EMAIL_PASSWORD: !!process.env.EMAIL_PASSWORD,
+    ADMIN_EMAIL: !!process.env.ADMIN_EMAIL,
+    userValue: process.env.EMAIL_USER || 'not set',
+    passwordLength: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.length : 0
+  });
   
-  // Email configuration - you can use Gmail, Outlook, or SMTP service
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+    throw new Error('EMAIL_USER or EMAIL_PASSWORD not found in environment variables');
+  }
+  
+  // Email configuration - Gmail with App Password
   emailTransporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER || 'solver.peters@gmail.com',
-      pass: process.env.EMAIL_PASSWORD || 'your-16-character-app-password' // MUST be App Password from Google
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
     },
     tls: {
       rejectUnauthorized: false
+    },
+    timeout: 10000 // 10 second timeout
+  });
+  
+  // Test email connection
+  emailTransporter.verify((error, success) => {
+    if (error) {
+      console.error('[EMAIL] ❌ Email verification failed:', error.message);
+      console.log('[EMAIL] ⚠️ Email notifications will be disabled');
+      emailTransporter = null;
+    } else {
+      console.log('[EMAIL] ✅ Email transporter verified and ready');
     }
   });
   
-  console.log('[EMAIL] ✅ Email transporter configured');
 } catch (error) {
   console.error('[EMAIL] Email configuration error:', error.message);
   console.log('[EMAIL] ⚠️ Server will continue running but email notifications will be disabled');
+  emailTransporter = null;
 }
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Email sending function
+// Email sending function with enhanced error handling
 async function sendRegistrationEmail(registrationData) {
+  console.log('[EMAIL] Attempting to send registration emails...');
+  
   if (!emailTransporter) {
-    console.log('[EMAIL] Email transporter not available, skipping email notification');
-    return { success: false, error: 'Email not configured' };
+    const error = 'Email transporter not available - check environment variables';
+    console.error('[EMAIL]', error);
+    return { success: false, error };
   }
 
   try {
     const { firstName, secondName, email, phone, org, title, paymentMethod, manualAmount, manualReference } = registrationData;
+    
+    console.log('[EMAIL] Preparing emails for:', { firstName, secondName, email });
     
     // Email content for admin notification
     const adminEmailContent = `
@@ -179,30 +207,35 @@ async function sendRegistrationEmail(registrationData) {
 
     // Send admin notification
     const adminEmail = {
-      from: process.env.EMAIL_USER || 'solver.peters@gmail.com',
-      to: process.env.ADMIN_EMAIL || 'solver.peters@gmail.com',
+      from: process.env.EMAIL_USER,
+      to: process.env.ADMIN_EMAIL || process.env.EMAIL_USER,
       subject: `New Registration: ${firstName} ${secondName} - £${manualAmount}`,
       html: adminEmailContent
     };
 
     // Send participant confirmation
     const participantEmail = {
-      from: process.env.EMAIL_USER || 'solver.peters@gmail.com',
+      from: process.env.EMAIL_USER,
       to: email,
       subject: 'Registration Confirmed - Wealth Creation Conference',
       html: participantEmailContent
     };
 
-    // Send both emails
+    console.log('[EMAIL] Sending admin notification...');
     await emailTransporter.sendMail(adminEmail);
-    console.log(`[EMAIL] Admin notification sent for registration: ${firstName} ${secondName}`);
+    console.log(`[EMAIL] ✅ Admin notification sent for registration: ${firstName} ${secondName}`);
     
+    console.log('[EMAIL] Sending participant confirmation...');
     await emailTransporter.sendMail(participantEmail);
-    console.log(`[EMAIL] Confirmation sent to participant: ${email}`);
+    console.log(`[EMAIL] ✅ Confirmation sent to participant: ${email}`);
 
     return { success: true };
   } catch (error) {
-    console.error('[EMAIL] Failed to send registration emails:', error);
+    console.error('[EMAIL] ❌ Failed to send registration emails:', {
+      message: error.message,
+      code: error.code,
+      response: error.response
+    });
     return { success: false, error: error.message };
   }
 }
