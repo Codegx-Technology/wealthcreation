@@ -59,7 +59,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <!-- Debug timestamp: 2025-09-17 23:05:00 - ALL FAQ/CONTACT CSS REMOVED -->
+    <!-- Debug timestamp: 2025-09-17 23:20:00 - CONTACT PAGE VENUE UPDATED -->
 
     <!-- PWA Manifest and Mobile App Meta Tags -->
     <link rel="manifest" href="/manifest.json" />
@@ -92,11 +92,11 @@
     <link rel="stylesheet" href="css/preloader.css" />
 
     <!-- Combined CSS for better performance -->  
-    <link rel="stylesheet" href="css/combined.css?v=20250917230500" />
+    <link rel="stylesheet" href="css/combined.css?v=20250917232000" />
     <!-- Ensure latest section styles override combined -->
-    <link rel="stylesheet" href="css/sections.css?v=20250917230500" />
+    <link rel="stylesheet" href="css/sections.css?v=20250917232000" />
     <!-- SPA Navigation and Page Styles -->
-    <link rel="stylesheet" href="css/spa.css?v=20250917230500" />
+    <link rel="stylesheet" href="css/spa.css?v=20250917232000" />
     <!-- Responsive Footer Styles -->
     <link rel="stylesheet" href="css/footer-responsive.css" />
 
@@ -553,7 +553,7 @@
         display: block !important;
       }
       
-      /* CLEAN START - NO FAQ/CONTACT CSS */
+      /* CLEAN START + ULTRA-TIGHT MARGINS - FAQ/CONTACT STYLING */
       * {
         box-sizing: border-box !important;
       }
@@ -591,6 +591,40 @@
       
       .page-content.active {
         display: block !important;
+      }
+      
+      /* ULTRA-TIGHT MARGINS - FAQ and Contact Pages */
+      #faq-page,
+      #contact-page {
+        margin: 0 !important;
+        padding: 2px 0 !important;
+        transform: translateY(-10px) !important;
+      }
+      
+      #faq-page .container,
+      #contact-page .container {
+        margin: 0 auto !important;
+        padding: 2px 20px !important;
+        max-width: 900px !important;
+        transform: translateY(0) !important;
+      }
+      
+      .faq-header,
+      .contact-header {
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: translateY(0) !important;
+        text-align: center !important;
+      }
+      
+      .faq-header h1,
+      .contact-header h1 {
+        margin: 0 !important;
+        padding: 0 0 5px 0 !important;
+        transform: translateY(0) !important;
+        color: #0c2340 !important;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
       }
       .enhanced-hero-cta {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%) !important;
@@ -2395,7 +2429,7 @@
                 <div class="contact-section">
                   <h3><i class="fas fa-map-marker-alt"></i> Event Venue</h3>
                   <p>
-                    GRACEPOINT<br />161-169 ESSEX ROAD<br />ISLINGTON, NI 2SN<br />LONDON
+                    CEME LTD - EVENTS<br />1 Marsh Way, Rainham<br />Essex RM13 8EU<br />UK
                   </p>
                 </div>
 
