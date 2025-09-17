@@ -65,7 +65,7 @@
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="WealthConf" />
-    <link rel="apple-touch-icon" href="/images/new.png" />
+    <link rel="apple-touch-icon" href="/images/new_flier.png" />
 
     <title>
       Secrets to Wealth Creation & Leadership in the Marketplace Conference -
@@ -267,13 +267,44 @@
           max-height: 80vh;
         }
       }
+      
+      /* Ensure QR code and other images are NOT affected */
+      .qr-image, .speaker-image img, img:not(.hero-flier-image) {
+        image-rendering: auto !important;
+        filter: none !important;
+        mix-blend-mode: normal !important;
+      }
+      @media (max-width: 768px) {
+        .hero-image-container {
+          margin: 0 auto 20px auto;
+          border-radius: 8px;
+          max-width: 95vw;
+        }
+        
+        .hero-flier-image {
+          max-height: 60vh;
+          width: 100%;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .hero-image-container {
+          margin: 0 auto 15px auto;
+          border-radius: 6px;
+          max-width: 98vw;
+        }
+        
+        .hero-flier-image {
+          max-height: 50vh;
+        }
+      }
 
       /* Ensure no conflicts with existing styles */
       .hero-image-container * {
         box-sizing: border-box;
       }
       
-      /* Better image rendering to minimize white gaps */
+      /* Better image rendering ONLY for hero image */
       .hero-flier-image {
         image-rendering: -webkit-optimize-contrast;
         image-rendering: crisp-edges;
@@ -282,14 +313,14 @@
         outline: none;
       }
       
-      /* Alternative: If image has internal white borders, use this class to blend them */
+      /* Alternative: If HERO image has internal white borders, use this class to blend them */
       .hero-flier-image.blend-borders {
         filter: contrast(1.1) brightness(0.98);
         background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%);
         mix-blend-mode: multiply;
       }
       
-      /* Alternative: For images with significant white padding, use this to tighten */
+      /* Alternative: For HERO image container with significant white padding */
       .hero-image-container.tight-fit {
         background: transparent;
         padding: 2px;
@@ -383,7 +414,7 @@
             <!-- Hero Image Section - Mobile First -->
             <div class="hero-image-container">
               <img
-                src="images/new.png"
+                src="images/new_flier.png"
                 alt="Wealth Creation Conference Flier"
                 class="hero-flier-image"
               />
