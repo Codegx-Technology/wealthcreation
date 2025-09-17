@@ -8,18 +8,17 @@ const DYNAMIC_CACHE = 'wealth-creation-dynamic-v2';
 // Ultra-critical resources only (minimal for speed)
 const CRITICAL_RESOURCES = [
   '/',
-  '/favicon.ico',
-  '/css/critical.css',
-  '/js/app.js'
+  '/favicon.ico'
 ];
 
 // Load on demand for better performance
 const CACHE_ON_DEMAND = [
   '/css/styles.css',
-  '/css/responsive.css',
+  '/css/responsive.css', 
   '/css/forms.css',
   '/css/sections.css',
   '/css/animations.css',
+  '/js/app.js',
   '/images/wealth-london.png'
 ];
 
@@ -31,7 +30,15 @@ self.addEventListener('install', event => {
     caches.open(STATIC_CACHE)
       .then(cache => {
         console.log('Caching ultra-critical resources only...');
-        return cache.addAll(CRITICAL_RESOURCES);
+        // Use addAll with error handling for individual resources
+        return Promise.allSettled(
+          CRITICAL_RESOURCES.map(resource => 
+            cache.add(resource).catch(err => {
+              console.warn(`Failed to cache resource: ${resource}`, err);
+              return null;
+            })
+          )
+        );
       })
       .then(() => {
         console.log('Critical resources cached - PWA ready');
