@@ -157,7 +157,7 @@ async function sendRegistrationEmail(registrationData) {
       <ul>
         <li><strong>Date:</strong> September 20, 2025</li>
         <li><strong>Time:</strong> 9:00 AM - 5:00 PM</li>
-        <li><strong>Venue:</strong> GRACEPOINT, 161-169 Essex Road, Islington, N1 2SN, London</li>
+        <li><strong>Venue:</strong> CEME LTD - EVENTS, 1 Marsh Way, Rainham, Essex RM13 8EU UK</li>
       </ul>
       
       <h3>Your Registration Details:</h3>
