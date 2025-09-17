@@ -65,7 +65,7 @@
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="WealthConf" />
-    <link rel="apple-touch-icon" href="/images/new.jpg" />
+    <link rel="apple-touch-icon" href="/images/new.png" />
 
     <title>
       Secrets to Wealth Creation & Leadership in the Marketplace Conference -
@@ -223,10 +223,13 @@
         width: 100%;
         margin: 0 auto 30px auto;
         text-align: center;
-        background: #0c2340;
+        background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%);
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: relative;
+        padding: 0;
+        line-height: 0;
       }
 
       .hero-flier-image {
@@ -235,7 +238,6 @@
         height: auto;
         display: block;
         object-fit: contain;
-        background: #fff;
         margin: 0;
         padding: 0;
       }
@@ -269,6 +271,33 @@
       /* Ensure no conflicts with existing styles */
       .hero-image-container * {
         box-sizing: border-box;
+      }
+      
+      /* Better image rendering to minimize white gaps */
+      .hero-flier-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+        vertical-align: top;
+        border: none;
+        outline: none;
+      }
+      
+      /* Alternative: If image has internal white borders, use this class to blend them */
+      .hero-flier-image.blend-borders {
+        filter: contrast(1.1) brightness(0.98);
+        background: linear-gradient(135deg, #0c2340 0%, #1a3a5f 100%);
+        mix-blend-mode: multiply;
+      }
+      
+      /* Alternative: For images with significant white padding, use this to tighten */
+      .hero-image-container.tight-fit {
+        background: transparent;
+        padding: 2px;
+      }
+      
+      .hero-image-container.tight-fit .hero-flier-image {
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
       }
     </style>
   </head>
@@ -354,7 +383,7 @@
             <!-- Hero Image Section - Mobile First -->
             <div class="hero-image-container">
               <img
-                src="images/new.jpg"
+                src="images/new.png"
                 alt="Wealth Creation Conference Flier"
                 class="hero-flier-image"
               />
