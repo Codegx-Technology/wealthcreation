@@ -436,8 +436,9 @@ async function handleFormSubmission(e) {
     const registrationId = await saveRegistration(data);
     console.log('[FORM] Registration saved with ID:', registrationId);
 
-    // Handle payment - BANK TRANSFER ONLY
-    await handleBankTransfer(data, registrationId);
+    // Bank transfer processing - no additional API call needed
+    // Registration already includes bank transfer details
+    console.log('[BANK] Bank transfer registration completed successfully');
 
     // Show success message
     showFormStatus('🎉 Registration successful! Thank you for registering.', 'success');
@@ -768,38 +769,8 @@ async function handleStripePayment(data, registrationId) {
 }
 
 // Handle bank transfer
-async function handleBankTransfer(data, registrationId) {
-  try {
-    console.log('[BANK] Processing bank transfer...');
-    
-    // Update registration with bank transfer details using Vercel API
-    const response = await fetch('/api/update-payment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        registrationId: registrationId,
-        paymentDetails: {
-          type: 'bank_transfer',
-          amount: data.manualAmount,
-          reference: data.manualReference,
-          status: 'pending_verification'
-        }
-      })
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to update bank transfer details');
-    }
-
-    console.log('[BANK] Bank transfer details saved');
-    return true;
-    
-  } catch (error) {
-    console.error('[BANK] Bank transfer error:', error);
-    throw error;
-  }
-}
+// Bank transfer details are handled within the main registration flow
+// No separate API call needed for bank transfer payments
 
 // Performance optimizations
 function initializePerformanceOptimizations() {
