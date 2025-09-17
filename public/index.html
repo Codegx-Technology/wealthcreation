@@ -977,6 +977,16 @@
         cursor: pointer !important;
         transition: all 0.3s ease !important;
         white-space: nowrap !important;
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: rgba(233, 196, 106, 0.3) !important;
+        position: relative !important;
+        z-index: 10001 !important;
+        min-height: 44px !important;
+        min-width: 120px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
       }
       
       .sticky-register-btn:hover {
@@ -1499,12 +1509,52 @@
         initCountdownTimer();
       }
       
-      // Mobile Sticky Registration CTA Functionality
+      // Mobile Sticky Registration CTA Functionality with Redundant Event Handling
       function initMobileStickyCart() {
         const stickyCart = document.getElementById('mobileStickyCart');
         const registrationForm = document.getElementById('registrationForm');
+        const stickyBtn = document.getElementById('stickyRegisterBtn');
         
-        if (!stickyCart || !registrationForm) return;
+        if (!stickyCart || !registrationForm) {
+          console.error('[STICKY] Required elements not found');
+          return;
+        }
+        
+        // Multiple redundant event handlers for critical button reliability
+        if (stickyBtn) {
+          // Method 1: Direct click listener (primary)
+          stickyBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('[STICKY] Direct click handler triggered');
+            scrollToRegistration();
+          });
+          
+          // Method 2: Touch events for mobile reliability
+          stickyBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            console.log('[STICKY] Touch handler triggered');
+            scrollToRegistration();
+          });
+          
+          // Method 3: Mouse events backup
+          stickyBtn.addEventListener('mouseup', function(e) {
+            e.preventDefault();
+            console.log('[STICKY] Mouse handler triggered');
+            scrollToRegistration();
+          });
+          
+          // Method 4: Keyboard accessibility
+          stickyBtn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              console.log('[STICKY] Keyboard handler triggered');
+              scrollToRegistration();
+            }
+          });
+          
+          // Emergency inline handler backup (already exists in HTML)
+          console.log('[STICKY] All event handlers attached to sticky button');
+        }
         
         let isVisible = false;
         
@@ -1541,22 +1591,56 @@
         setTimeout(checkScroll, 1000);
       }
       
-      // Scroll to registration function
+      // Scroll to registration function with multiple fallbacks
       function scrollToRegistration() {
+        console.log('[STICKY] Scroll to registration triggered');
+        
         const registrationForm = document.getElementById('registrationForm');
         if (registrationForm) {
-          registrationForm.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-          });
+          // Multiple scroll methods for reliability
+          try {
+            // Primary method: smooth scroll
+            registrationForm.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start',
+              inline: 'nearest'
+            });
+          } catch (e) {
+            // Fallback 1: Basic scroll into view
+            registrationForm.scrollIntoView();
+          }
+          
+          // Fallback 2: Manual scroll calculation
+          setTimeout(() => {
+            try {
+              const rect = registrationForm.getBoundingClientRect();
+              const scrollTop = window.pageYOffset + rect.top - 100;
+              window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+            } catch (e) {
+              // Fallback 3: Immediate scroll
+              window.scrollTo(0, registrationForm.offsetTop - 100);
+            }
+          }, 100);
           
           // Focus on first input after scrolling
           setTimeout(() => {
-            const firstInput = registrationForm.querySelector('input, select');
+            const firstInput = registrationForm.querySelector('input:not([type="hidden"]), select');
             if (firstInput) {
               firstInput.focus();
+              console.log('[STICKY] Focused on first input');
             }
           }, 800);
+          
+          // Hide sticky button after successful scroll
+          setTimeout(() => {
+            const stickyCart = document.getElementById('mobileStickyCart');
+            if (stickyCart) {
+              stickyCart.classList.remove('show');
+              document.body.classList.remove('sticky-active');
+            }
+          }, 1000);
+        } else {
+          console.error('[STICKY] Registration form not found');
         }
       }
       
@@ -1604,14 +1688,17 @@
       }
     </script>
 
-    <!-- Mobile Sticky Registration CTA -->
+    <!-- Mobile Sticky Registration CTA with Redundant Event Handlers -->
     <div id="mobileStickyCart" class="mobile-sticky-cta">
       <div class="mobile-sticky-content">
         <div class="sticky-info">
           <div class="sticky-price">From £90</div>
           <div class="sticky-seats">Limited seats available</div>
         </div>
-        <button class="sticky-register-btn" onclick="scrollToRegistration()">
+        <button 
+          class="sticky-register-btn" 
+          id="stickyRegisterBtn"
+          onclick="scrollToRegistration()">
           Register Now
         </button>
       </div>
