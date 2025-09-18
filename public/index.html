@@ -467,73 +467,333 @@
         display: block !important;
       }
       
-      /* Countdown Timer Styling */
+      /* Countdown Timer Styling - Luxurious Wealth Design */
       .countdown-section {
-        background: linear-gradient(135deg, rgba(12, 35, 64, 0.95) 0%, rgba(26, 58, 95, 0.95) 100%) !important;
+        background: linear-gradient(135deg, 
+          rgba(12, 35, 64, 0.98) 0%, 
+          rgba(26, 58, 95, 0.96) 50%, 
+          rgba(35, 70, 110, 0.98) 100%) !important;
         color: white !important;
-        padding: 30px 20px !important;
+        padding: 40px 15px !important;
         margin: 30px auto !important;
-        border-radius: 16px !important;
+        border-radius: 20px !important;
         text-align: center !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
-        border: 1px solid rgba(198, 163, 67, 0.3) !important;
+        box-shadow: 
+          0 15px 50px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 0 30px rgba(233, 196, 106, 0.2) !important;
+        border: 2px solid rgba(233, 196, 106, 0.4) !important;
+        position: relative !important;
+        overflow: hidden !important;
+      }
+      
+      .countdown-section::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: radial-gradient(circle at 30% 20%, rgba(233, 196, 106, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%) !important;
+        pointer-events: none !important;
+        z-index: 1 !important;
+      }
+      
+      .countdown-section > * {
+        position: relative !important;
+        z-index: 2 !important;
       }
       
       .countdown-title {
-        font-size: 1.8rem !important;
-        font-weight: 700 !important;
-        margin-bottom: 25px !important;
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
+        margin-bottom: 35px !important;
         color: #e9c46a !important;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        text-shadow: 
+          0 3px 6px rgba(0, 0, 0, 0.4),
+          0 0 20px rgba(233, 196, 106, 0.6) !important;
+        background: linear-gradient(135deg, #e9c46a 0%, #f4a261 50%, #ffd700 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        text-transform: uppercase !important;
+        letter-spacing: 2px !important;
       }
       
       .countdown-timer {
         display: flex !important;
         justify-content: center !important;
-        gap: 20px !important;
-        margin-bottom: 20px !important;
-        flex-wrap: wrap !important;
+        gap: 8px !important;
+        margin-bottom: 25px !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        padding: 0 5px !important;
+        /* Ensure horizontal scrolling on very small screens */
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+      }
+      
+      .countdown-timer::-webkit-scrollbar {
+        display: none !important;
       }
       
       .countdown-item {
-        background: rgba(255, 255, 255, 0.1) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 12px !important;
-        padding: 20px 15px !important;
-        min-width: 80px !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        transition: all 0.3s ease !important;
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.15) 0%, 
+          rgba(255, 255, 255, 0.08) 50%, 
+          rgba(255, 255, 255, 0.12) 100%) !important;
+        backdrop-filter: blur(15px) !important;
+        border-radius: 16px !important;
+        padding: 15px 8px !important;
+        min-width: 70px !important;
+        flex: 1 !important;
+        max-width: 85px !important;
+        border: 2px solid rgba(233, 196, 106, 0.3) !important;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 
+          0 8px 25px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2),
+          0 0 15px rgba(233, 196, 106, 0.1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+      }
+      
+      .countdown-item::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: linear-gradient(135deg, 
+          rgba(233, 196, 106, 0.1) 0%, 
+          transparent 50%, 
+          rgba(255, 215, 0, 0.1) 100%) !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease !important;
+        pointer-events: none !important;
       }
       
       .countdown-item:hover {
-        background: rgba(233, 196, 106, 0.2) !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 15px rgba(233, 196, 106, 0.3) !important;
+        background: linear-gradient(135deg, 
+          rgba(233, 196, 106, 0.25) 0%, 
+          rgba(233, 196, 106, 0.15) 50%, 
+          rgba(255, 215, 0, 0.2) 100%) !important;
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: 
+          0 15px 35px rgba(0, 0, 0, 0.3),
+          0 0 30px rgba(233, 196, 106, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+        border-color: rgba(233, 196, 106, 0.6) !important;
+      }
+      
+      .countdown-item:hover::before {
+        opacity: 1 !important;
       }
       
       .countdown-number {
         display: block !important;
-        font-size: 2.5rem !important;
-        font-weight: 700 !important;
+        font-size: 1.8rem !important;
+        font-weight: 900 !important;
         color: #e9c46a !important;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
-        margin-bottom: 5px !important;
+        text-shadow: 
+          0 2px 4px rgba(0, 0, 0, 0.4),
+          0 0 15px rgba(233, 196, 106, 0.8) !important;
+        margin-bottom: 4px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        background: linear-gradient(135deg, #e9c46a 0%, #ffd700 50%, #f4a261 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        line-height: 1 !important;
       }
       
       .countdown-label {
         display: block !important;
-        font-size: 0.9rem !important;
-        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 0.7rem !important;
+        color: rgba(255, 255, 255, 0.95) !important;
         text-transform: uppercase !important;
-        letter-spacing: 1px !important;
-        font-weight: 500 !important;
+        letter-spacing: 1.2px !important;
+        font-weight: 600 !important;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
       }
       
       .countdown-event-date {
-        font-size: 1.1rem !important;
-        color: rgba(255, 255, 255, 0.8) !important;
+        font-size: 1.3rem !important;
+        color: rgba(255, 255, 255, 0.9) !important;
         margin: 0 !important;
-        font-weight: 500 !important;
+        font-weight: 600 !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(233, 196, 106, 0.8) 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        letter-spacing: 1px !important;
+      }
+      
+      /* Mobile Responsive Timer Enhancements */
+      @media (max-width: 480px) {
+        .countdown-section {
+          padding: 30px 10px !important;
+          margin: 20px 10px !important;
+        }
+        
+        .countdown-title {
+          font-size: 1.6rem !important;
+          margin-bottom: 25px !important;
+          letter-spacing: 1px !important;
+        }
+        
+        .countdown-timer {
+          gap: 6px !important;
+          padding: 0 2px !important;
+        }
+        
+        .countdown-item {
+          padding: 12px 6px !important;
+          min-width: 65px !important;
+          max-width: 75px !important;
+          border-radius: 12px !important;
+        }
+        
+        .countdown-number {
+          font-size: 1.5rem !important;
+          margin-bottom: 3px !important;
+        }
+        
+        .countdown-label {
+          font-size: 0.65rem !important;
+          letter-spacing: 0.8px !important;
+        }
+        
+        .countdown-event-date {
+          font-size: 1.1rem !important;
+          letter-spacing: 0.5px !important;
+        }
+      }
+      
+      @media (max-width: 360px) {
+        .countdown-timer {
+          gap: 4px !important;
+        }
+        
+        .countdown-item {
+          padding: 10px 4px !important;
+          min-width: 60px !important;
+          max-width: 70px !important;
+        }
+        
+        .countdown-number {
+          font-size: 1.3rem !important;
+        }
+        
+        .countdown-label {
+          font-size: 0.6rem !important;
+        }
+      }
+      
+      /* CRITICAL: Mobile Animation Overrides - Force urgency animations to work on mobile */
+      @media (max-width: 768px) {
+        /* Override critical.css animation disabling for urgency elements */
+        .urgency-banner {
+          animation: urgency-pulse 2s infinite !important;
+          animation-duration: 2s !important;
+          animation-delay: 0s !important;
+        }
+        
+        .urgency-text {
+          animation: text-pop 3s infinite !important;
+          animation-duration: 3s !important;
+          animation-delay: 0s !important;
+        }
+        
+        .urgency-icon {
+          animation: flame-flicker 1.5s infinite !important;
+          animation-duration: 1.5s !important;
+          animation-delay: 0s !important;
+        }
+        
+        .scarcity-timer {
+          animation: scarcity-pulse 2.5s infinite !important;
+          animation-duration: 2.5s !important;
+          animation-delay: 0s !important;
+        }
+        
+        .scarcity-text {
+          animation: urgency-flash 3s infinite !important;
+          animation-duration: 3s !important;
+          animation-delay: 0s !important;
+        }
+        
+        .current-price {
+          animation: price-pulse 2s infinite !important;
+          animation-duration: 2s !important;
+          animation-delay: 0s !important;
+        }
+        
+        .savings {
+          animation: savings-bounce 1.8s infinite !important;
+          animation-duration: 1.8s !important;
+          animation-delay: 0s !important;
+        }
+        
+        /* Ensure mobile responsiveness for urgency elements */
+        .urgency-banner {
+          padding: 10px 15px !important;
+          gap: 10px !important;
+          font-size: 0.9rem !important;
+        }
+        
+        .scarcity-timer {
+          padding: 15px !important;
+          margin: 20px 0 !important;
+        }
+        
+        .price-comparison {
+          gap: 10px !important;
+          flex-wrap: wrap !important;
+        }
+        
+        .current-price {
+          font-size: 1.6rem !important;
+        }
+        
+        .old-price {
+          font-size: 1rem !important;
+        }
+        
+        .savings {
+          font-size: 0.8rem !important;
+          padding: 4px 10px !important;
+        }
+        
+        .scarcity-text {
+          font-size: 1rem !important;
+          margin-bottom: 8px !important;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .urgency-banner {
+          padding: 8px 12px !important;
+          gap: 8px !important;
+          font-size: 0.85rem !important;
+          flex-direction: column !important;
+        }
+        
+        .urgency-text {
+          text-align: center !important;
+        }
+        
+        .current-price {
+          font-size: 1.4rem !important;
+        }
+        
+        .savings {
+          font-size: 0.75rem !important;
+          padding: 3px 8px !important;
+        }
       }
       
       /* Collapsible Bio Functionality CSS - Enhanced with Stronger Overrides */
