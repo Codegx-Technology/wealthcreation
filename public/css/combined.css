@@ -987,29 +987,13 @@ h2 {
     opacity: 0 !important;
   }
 
-  /* Force icon visibility with emoji fallback */
+  /* Force icon visibility with Font Awesome icons */
   .payment-method-content .fa-credit-card {
     font-family: "Font Awesome 6 Free", "FontAwesome", sans-serif !important;
   }
 
-  .payment-method-content .fa-credit-card:empty::after {
-    content: "💳" !important;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-    display: inline-block !important;
-    font-size: inherit !important;
-    color: inherit !important;
-  }
-
   .payment-method-content .fa-university {
     font-family: "Font Awesome 6 Free", "FontAwesome", sans-serif !important;
-  }
-
-  .payment-method-content .fa-university:empty::after {
-    content: "🏦" !important;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
-    display: inline-block !important;
-    font-size: inherit !important;
-    color: inherit !important;
   }
 
   /* Ensure payment method labels are clickable */

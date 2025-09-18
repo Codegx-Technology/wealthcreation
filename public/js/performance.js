@@ -59,10 +59,10 @@ if (!isMobile && !isSlowConnection) {
   });
 }
 
-// Icon fallback for mobile devices - Force emoji display
+// Icon fallback for mobile devices - Use professional Font Awesome icons
 function forceEmojiIcons() {
   const isMobile = window.innerWidth <= 768;
-  console.log('🔧 forceEmojiIcons called - isMobile:', isMobile, 'width:', window.innerWidth);
+  console.log('🔧 forceProfessionalIcons called - isMobile:', isMobile, 'width:', window.innerWidth);
 
   if (isMobile) {
     const paymentIcons = document.querySelectorAll('.payment-method-content i');
@@ -71,19 +71,7 @@ function forceEmojiIcons() {
     paymentIcons.forEach((icon, index) => {
       console.log(`🎯 Processing icon ${index}:`, icon.className);
 
-      if (icon.classList.contains('fa-credit-card')) {
-        icon.innerHTML = '💳';
-        icon.style.fontFamily = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
-        icon.classList.add('emoji-fallback');
-        console.log('💳 Set credit card emoji');
-      } else if (icon.classList.contains('fa-university')) {
-        icon.innerHTML = '🏦';
-        icon.style.fontFamily = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
-        icon.classList.add('emoji-fallback');
-        console.log('🏦 Set bank emoji');
-      }
-
-      // Ensure visibility
+      // Ensure Font Awesome icons are properly displayed
       icon.style.fontSize = '2.5rem';
       icon.style.lineHeight = '1';
       icon.style.textAlign = 'center';
@@ -100,11 +88,13 @@ function forceEmojiIcons() {
       icon.style.textShadow = 'none';
       icon.style.filter = 'none';
       icon.style.transform = 'none';
+      
+      console.log('✅ Font Awesome icon styled:', icon.className);
     });
 
-    console.log('✅ Mobile emoji icons applied');
+    console.log('✅ Professional icons applied');
   } else {
-    console.log('💻 Desktop view - skipping emoji icons');
+    console.log('💻 Desktop view - icons already professional');
   }
 }
 
@@ -126,13 +116,13 @@ window.addEventListener('load', () => {
     console.warn('Slow page load detected:', loadTime);
   }
 
-  // Force emoji icons on mobile
+  // Force professional icons on mobile
   setTimeout(forceEmojiIcons, 100);
 });
 
 // Also run immediately when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM loaded, forcing emoji icons...');
+  console.log('DOM loaded, applying professional icons...');
   forceEmojiIcons();
   // Run again after a short delay
   setTimeout(forceEmojiIcons, 500);
@@ -145,7 +135,7 @@ if (document.readyState === 'loading') {
   // DOM is still loading
 } else {
   // DOM is already loaded
-  console.log('DOM already loaded, forcing emoji icons immediately...');
+  console.log('DOM already loaded, applying professional icons immediately...');
   forceEmojiIcons();
 }
 
@@ -187,7 +177,7 @@ async function initializePerformanceOptimizations() {
     // Register service worker
     await registerServiceWorker();
     
-    // Force emoji icons on mobile
+    // Force professional icons on mobile
     forceEmojiIcons();
     
     // Track page load time

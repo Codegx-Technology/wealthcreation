@@ -652,23 +652,53 @@
         justify-content: center !important;
         gap: 15px !important;
         font-weight: 600 !important;
-        animation: pulse-glow 2s infinite !important;
+        animation: urgency-pulse 2s infinite !important;
       }
       
-      @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 10px rgba(255, 107, 107, 0.3); }
-        50% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.6); }
+      @keyframes urgency-pulse {
+        0%, 100% { 
+          transform: scale(1);
+          box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+          background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        }
+        50% { 
+          transform: scale(1.02);
+          box-shadow: 0 0 25px rgba(255, 107, 107, 0.8);
+          background: linear-gradient(135deg, #ff8e53 0%, #ff6b6b 100%);
+        }
+      }
+      
+      .urgency-text {
+        animation: text-pop 3s infinite !important;
+      }
+      
+      @keyframes text-pop {
+        0%, 90%, 100% { transform: scale(1); }
+        95% { transform: scale(1.05); }
       }
       
       .urgency-icon {
         font-size: 1.2rem !important;
-        animation: bounce 1s infinite !important;
+        animation: flame-flicker 1.5s infinite !important;
       }
       
-      @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-5px); }
-        60% { transform: translateY(-3px); }
+      @keyframes flame-flicker {
+        0%, 100% { 
+          transform: translateY(0) scale(1);
+          filter: brightness(1);
+        }
+        25% { 
+          transform: translateY(-3px) scale(1.1);
+          filter: brightness(1.2);
+        }
+        50% { 
+          transform: translateY(-1px) scale(1.05);
+          filter: brightness(1.1);
+        }
+        75% { 
+          transform: translateY(-2px) scale(1.08);
+          filter: brightness(1.15);
+        }
       }
       
       .form-header {
@@ -771,6 +801,20 @@
         margin: 25px 0 !important;
         text-align: center !important;
         border: 2px solid #e9c46a !important;
+        animation: scarcity-pulse 2.5s infinite !important;
+      }
+      
+      @keyframes scarcity-pulse {
+        0%, 100% { 
+          transform: scale(1);
+          box-shadow: 0 4px 15px rgba(233, 196, 106, 0.3);
+          border-color: #e9c46a;
+        }
+        50% { 
+          transform: scale(1.03);
+          box-shadow: 0 8px 25px rgba(233, 196, 106, 0.6);
+          border-color: #f4a261;
+        }
       }
       
       .scarcity-text {
@@ -778,6 +822,12 @@
         font-weight: 600 !important;
         color: #0c2340 !important;
         margin-bottom: 10px !important;
+        animation: urgency-flash 3s infinite !important;
+      }
+      
+      @keyframes urgency-flash {
+        0%, 85%, 100% { opacity: 1; }
+        90%, 95% { opacity: 0.7; }
       }
       
       .price-comparison {
@@ -798,6 +848,18 @@
         font-size: 2rem !important;
         font-weight: 800 !important;
         color: #0c2340 !important;
+        animation: price-pulse 2s infinite !important;
+      }
+      
+      @keyframes price-pulse {
+        0%, 100% { 
+          transform: scale(1);
+          text-shadow: 0 0 10px rgba(12, 35, 64, 0.3);
+        }
+        50% { 
+          transform: scale(1.05);
+          text-shadow: 0 0 20px rgba(12, 35, 64, 0.6);
+        }
       }
       
       .savings {
@@ -807,6 +869,22 @@
         border-radius: 20px !important;
         font-weight: 600 !important;
         font-size: 0.9rem !important;
+        animation: savings-bounce 1.8s infinite !important;
+      }
+      
+      @keyframes savings-bounce {
+        0%, 100% { 
+          transform: scale(1) rotate(0deg);
+          box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+        25% { 
+          transform: scale(1.08) rotate(-1deg);
+          box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+        75% { 
+          transform: scale(1.08) rotate(1deg);
+          box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
       }
       
       /* Trust Badges Section Styling */
@@ -1740,12 +1818,13 @@
                   >Home</a
                 >
               </li>
-              <li><a href="#faq" class="nav-link" data-page="faq">FAQ</a></li>
-              <li>
+              <!-- FAQ and Contact links hidden due to ongoing issues -->
+              <!-- <li><a href="#faq" class="nav-link" data-page="faq">FAQ</a></li> -->
+              <!-- <li>
                 <a href="#contact" class="nav-link" data-page="contact"
                   >Contact</a
                 >
-              </li>
+              </li> -->
             </ul>
           </nav>
         </div>
@@ -1794,11 +1873,11 @@
             <!-- Enhanced Hero CTA Section -->
             <div class="enhanced-hero-cta">
               <div class="urgency-banner">
-                <div class="urgency-icon">🔥</div>
+                <div class="urgency-icon"><i class="fas fa-flame"></i></div>
                 <div class="urgency-text">
                   <strong>Limited Seats Available!</strong> Only 150 exclusive spots remaining
                 </div>
-                <div class="urgency-icon">🔥</div>
+                <div class="urgency-icon"><i class="fas fa-flame"></i></div>
               </div>
               
               <div class="form-header">
@@ -1814,21 +1893,21 @@
                 
                 <div class="value-propositions">
                   <div class="value-item">
-                    <div class="value-icon">💰</div>
+                    <div class="value-icon"><i class="fas fa-dollar-sign"></i></div>
                     <div class="value-text">
                       <strong>Proven Strategies</strong>
                       <span>Real wealth-building from successful entrepreneurs</span>
                     </div>
                   </div>
                   <div class="value-item">
-                    <div class="value-icon">🎯</div>
+                    <div class="value-icon"><i class="fas fa-bullseye"></i></div>
                     <div class="value-text">
                       <strong>Expert Guidance</strong>
                       <span>Direct access to industry leaders</span>
                     </div>
                   </div>
                   <div class="value-item">
-                    <div class="value-icon">🚀</div>
+                    <div class="value-icon"><i class="fas fa-rocket"></i></div>
                     <div class="value-text">
                       <strong>Immediate Action</strong>
                       <span>Actionable plans you can implement today</span>
@@ -1837,7 +1916,7 @@
                 </div>
                 
                 <div class="scarcity-timer">
-                  <div class="scarcity-text">⚡ Early Bird Pricing Ends Soon</div>
+                  <div class="scarcity-text"><i class="fas fa-bolt"></i> Early Bird Pricing Ends Soon</div>
                   <div class="price-comparison">
                     <span class="old-price">£150</span>
                     <span class="current-price">£90</span>
@@ -1855,7 +1934,7 @@
               
               <div class="trust-elements">
                 <div class="trust-badge">
-                  <div class="badge-icon">🎓</div>
+                  <div class="badge-icon"><i class="fas fa-graduation-cap"></i></div>
                   <div class="badge-content">
                     <strong>Oxford & Harvard</strong>
                     <span>Trained Speakers</span>
@@ -1863,7 +1942,7 @@
                 </div>
                 
                 <div class="trust-badge">
-                  <div class="badge-icon">💼</div>
+                  <div class="badge-icon"><i class="fas fa-briefcase"></i></div>
                   <div class="badge-content">
                     <strong>£1.5B+</strong>
                     <span>Combined Portfolio Value</span>
@@ -1874,15 +1953,15 @@
               
               <div class="security-badges">
                 <div class="security-item">
-                  <div class="security-icon">🔒</div>
+                  <div class="security-icon"><i class="fas fa-lock"></i></div>
                   <span>Secure Registration</span>
                 </div>
                 <div class="security-item">
-                  <div class="security-icon">✅</div>
+                  <div class="security-icon"><i class="fas fa-check-circle"></i></div>
                   <span>Instant Confirmation</span>
                 </div>
                 <div class="security-item">
-                  <div class="security-icon">📧</div>
+                  <div class="security-icon"><i class="fas fa-envelope"></i></div>
                   <span>Email Support</span>
                 </div>
               </div>
@@ -2196,7 +2275,7 @@
                     />
                     <label for="bank-transfer" class="payment-method-label">
                       <div class="payment-method-content">
-                        <div class="payment-icon">🏦</div>
+                        <div class="payment-icon"><i class="fas fa-university"></i></div>
                         <div class="payment-text">
                           <span>Bank Transfer</span>
                           <small>Manual bank transfer</small>
